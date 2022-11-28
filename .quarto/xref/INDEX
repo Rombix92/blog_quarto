@@ -1,0 +1,51 @@
+{
+  "index.qmd": {
+    "index.html": "babac509"
+  },
+  "posts/post-with-code/index.qmd": {
+    "index.html": "ae3d5205"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "038bcdb8"
+  },
+  "about.qmd": {
+    "about.html": "8d917867"
+  },
+  "posts/2022-06-01 rmarkdown/1_R_markdown.qmd": {
+    "1_R_markdown.html": "e68ebb1c"
+  },
+  "posts/2022-11-05 data.table/R_data.table.qmd": {
+    "R_data.table.html": "272b14e2"
+  },
+  "posts/2022-06-02 statistics/3_Statistics.qmd": {
+    "3_Statistics.html": "b59e1bfa"
+  },
+  "posts/2022-11-11-unit-tests/index.qmd": {
+    "index.html": "573fb6a9"
+  },
+  "posts/2022-11-21-ts-forecast/index.qmd": {
+    "index.html": "c20802ef"
+  },
+  "posts/2022-11-10 TS_missing_data_imputation/index.qmd": {
+    "index.html": "84b4b4be"
+  },
+  "posts/2022-06-01-grow_of_metropolis/index.en.markdown": {
+    "index.en.html": "a23b54df"
+  },
+  "posts/2022-06-01-grow_of_metropolis/index.qmd": {
+    "index.html": "659422ff"
+  },
+  "posts/2022-10-29-graph-dataset/artykuł.qmd": {
+    "artykuł.html": "bcc740d9"
+  },
+  "posts/2022-11-27-monte-carlo-simulation/index.qmd": {
+    "index.md": "58d265be",
+    "index.html": "ca51a3f0"
+  },
+  "posts/2022-06-01 rmarkdown/index.qmd": {
+    "index.html": "c732982b"
+  },
+  "posts/draft/index.qmd": {
+    "index.html": "c0a91ea0"
+  }
+}

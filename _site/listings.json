@@ -1,0 +1,16 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2022-11-27-monte-carlo-simulation/index.html",
+      "/posts/2022-11-21-ts-forecast/index.html",
+      "/posts/2022-11-10 TS_missing_data_imputation/index.html",
+      "/posts/2022-11-11-unit-tests/index.html",
+      "/posts/2022-11-05 data.table/R_data.table.html",
+      "/posts/2022-10-29-graph-dataset/artykuł.html",
+      "/posts/2022-06-01 rmarkdown/index.html",
+      "/posts/2022-06-02 statistics/3_Statistics.html",
+      "/posts/2022-06-01-grow_of_metropolis/index.html"
+    ]
+  }
+]

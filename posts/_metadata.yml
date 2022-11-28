@@ -1,0 +1,22 @@
+# options specified here will apply to all posts in this folder
+
+# freeze computational output
+# (see https://quarto.org/docs/projects/code-execution.html#freeze)
+execute:
+  freeze: true
+
+# Enable banner style title blocks
+title-block-banner: true
+
+#Fold code (initially hidden)
+format:
+  html:
+    code-copy: true
+    code-line-numbers: true
+    code-fold: true
+    code-tools: true
+    code-summary: "Show the code"
+## niebieska belka po lewej stronie kodu
+    code-block-border-left: "#31BAE9"
+## style podswietlenia kodu ala github
+highlight-style: github

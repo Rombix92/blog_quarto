@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-10-26">
+<meta name="description" content="Describing statistical methods">
+
+<title>Lukasz Rabalski blog - Statistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Lukasz Rabalski blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">Łukasz Rąbalski blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Rombix92?tab=repositories"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/%C5%82ukasz-r%C4%85balski-2892b8102/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Statistics</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+                  <div>
+        <div class="description">
+          Describing statistical methods
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Statistics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 26, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link active" data-scroll-target="#logistic-regression">Logistic Regression</a>
+  <ul class="collapse">
+  <li><a href="#matematyczna-interpretacja-modelu" id="toc-matematyczna-interpretacja-modelu" class="nav-link" data-scroll-target="#matematyczna-interpretacja-modelu">Matematyczna interpretacja modelu</a></li>
+  <li><a href="#graficzna-interpretacja-modelu" id="toc-graficzna-interpretacja-modelu" class="nav-link" data-scroll-target="#graficzna-interpretacja-modelu">Graficzna interpretacja modelu</a></li>
+  </ul></li>
+  <li><a href="#bayesian-statistics---introduction" id="toc-bayesian-statistics---introduction" class="nav-link" data-scroll-target="#bayesian-statistics---introduction">Bayesian Statistics - Introduction</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#priors" id="toc-priors" class="nav-link" data-scroll-target="#priors">Priors</a></li>
+  <li><a href="#contrasts-and-comparison" id="toc-contrasts-and-comparison" class="nav-link" data-scroll-target="#contrasts-and-comparison">Contrasts and comparison</a></li>
+  <li><a href="#dealing-with-2-parameter-model" id="toc-dealing-with-2-parameter-model" class="nav-link" data-scroll-target="#dealing-with-2-parameter-model">Dealing with 2 parameter model</a></li>
+  <li><a href="#automatisation---best-package" id="toc-automatisation---best-package" class="nav-link" data-scroll-target="#automatisation---best-package">Automatisation - BEST package</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
+  </ul></li>
+  <li><a href="#bayesian-statistics---intermediate" id="toc-bayesian-statistics---intermediate" class="nav-link" data-scroll-target="#bayesian-statistics---intermediate">Bayesian Statistics - Intermediate</a>
+  <ul class="collapse">
+  <li><a href="#likelihood" id="toc-likelihood" class="nav-link" data-scroll-target="#likelihood">Likelihood</a></li>
+  <li><a href="#posterior" id="toc-posterior" class="nav-link" data-scroll-target="#posterior">Posterior</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="logistic-regression">Logistic Regression</h2>
+<p><a href="https://bookdown.org/yihui/rmarkdown/html-document.html"><em>Markdown Tutorial</em></a></p>
+<section id="matematyczna-interpretacja-modelu" class="level3">
+<h3 class="anchored" data-anchor-id="matematyczna-interpretacja-modelu">Matematyczna interpretacja modelu</h3>
+<p>Quiz correct answers: d.&nbsp;Hint: <code>Remember</code>, the coefficient in a logistic regression model is the expected increase in the log odds given a one unit increase in the explanatory variable.</p>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Survived</th>
+<th style="text-align: right;">Fare</th>
+<th style="text-align: right;">Fare_log</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7.2500</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">71.2833</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.9250</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">53.1000</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8.0500</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8.4583</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Wyliczanie modelu logistycznego.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">data=</span>df_titanic, Survived <span class="sc">~</span> Fare_log, <span class="at">family =</span> <span class="st">'binomial'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">tidy</span>(model)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">caption=</span><span class="st">'Table 1. Summary statistics for logistic regression model'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Table 1. Summary statistics for logistic regression model</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-2.3337286</td>
+<td style="text-align: right;">0.2452271</td>
+<td style="text-align: right;">-9.516601</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fare_log</td>
+<td style="text-align: right;">0.6442428</td>
+<td style="text-align: right;">0.0792358</td>
+<td style="text-align: right;">8.130706</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">coef</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    Fare_log 
+ -2.3337286   0.6442428 </code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#Tak przemnozone wspolczynniki interpretujemy nastepujaco:</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#  o ile % wzrosnie odds wystapienia zdarzenia jezeli wzrosnie nam wartosc predyktora o 1</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">exp</span>(<span class="fu">coef</span>(model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    Fare_log 
+ 0.09693365  1.90454431 </code></pre>
+</div>
+</div>
+<p>Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzrostu parametra stajacego przy predyktorze.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, <span class="at">type.predict =</span> <span class="st">"response"</span>) <span class="co"># without response argument, the fitted value will be on log-odds scale</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>p3 <span class="ot">=</span> df_aug<span class="sc">$</span>.fitted[df_aug<span class="sc">$</span>Fare_log<span class="sc">==</span><span class="dv">3</span>][<span class="dv">1</span>]</span>
+<span id="cb6-4"><a href="#cb6-4"></a>p2 <span class="ot">=</span> df_aug<span class="sc">$</span>.fitted[df_aug<span class="sc">$</span>Fare_log<span class="sc">==</span><span class="dv">2</span>][<span class="dv">1</span>]</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>x <span class="ot">&lt;-</span> <span class="fu">round</span>(p3<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p3)<span class="sc">/</span>(p2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p2)),<span class="dv">5</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># i sprawdzenie czy dobrze rozumiem zależnosc</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>x1<span class="ot">&lt;-</span><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">coef</span>(model))[<span class="st">'Fare_log'</span>],<span class="dv">5</span>)</span>
+<span id="cb6-10"><a href="#cb6-10"></a>x1<span class="sc">==</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fare_log 
+    TRUE </code></pre>
+</div>
+</div>
+<p>Prob for Fare_log = 2 was equal to 0.2601396 while for Fare_log = 3 was equal to 0.401072. The odds increase by 1.90454. The same what model results suggests -&gt; 1.90454.</p>
+<p>Quiz</p>
+<p>The fitted coefficient from the medical school logistic regression model is 5.45. The exponential of this is 233.73.</p>
+<p>Donald’s GPA is 2.9, and thus the model predicts that the probability of him getting into medical school is 3.26%. The odds of Donald getting into medical school are 0.0337, or—phrased in gambling terms—29.6:1. If Donald hacks the school’s registrar and changes his GPA to 3.9, then which of the following statements is FALSE:</p>
+<p>Possible Answers</p>
+<ol type="a">
+<li>His expected odds of getting into medical school improve to 7.8833 (or about 9:8).</li>
+<li>His expected probability of getting into medical school improves to 88.7%.</li>
+<li>His expected log-odds of getting into medical school improve by 5.45.</li>
+<li>His expected probability of getting into medical school improves to 7.9%.</li>
+</ol>
+<p>Correct answers on the top of the page</p>
+</section>
+<section id="graficzna-interpretacja-modelu" class="level3">
+<h3 class="anchored" data-anchor-id="graficzna-interpretacja-modelu">Graficzna interpretacja modelu</h3>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df_aug <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Survived_hat=</span><span class="fu">round</span>(.fitted)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">select</span>(Survived, Survived_hat) <span class="sc">%&gt;%</span> table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Survived_hat
+Survived   0   1
+       0 462  83
+       1 219 123</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#Out of sample predictions</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>DiCaprio<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">Fare_log=</span><span class="dv">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="fu">augment</span>(model, <span class="at">newdata =</span> DiCaprio, <span class="at">type.predict =</span> <span class="st">'response'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  Fare_log .fitted
+     &lt;dbl&gt;   &lt;dbl&gt;
+1        1   0.156</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="bayesian-statistics---introduction" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-statistics---introduction">Bayesian Statistics - Introduction</h2>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>The role of probability distributions in Bayesian data analysis is to represent uncertainty, and the role of Bayesian inference is to update these probability distributions to reflect what has been learned from data.</p>
+<p>Let say I want to set an advertisement on social media. They claim, adds on their surface has 10% of clicks. I a bit sceptical and asses probable efectivnes may range between 0 and 0.20. I assume that binomial model will imitate process generating visitors. Binomial model is my generative model then.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>proportion_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_samples, <span class="at">min =</span> <span class="fl">0.0</span>, <span class="at">max =</span> <span class="fl">0.2</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_samples, <span class="at">size =</span> n_ads_shown, <span class="at">prob =</span> proportion_clicks)</span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co"># Visualize proportion clicks</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="fu">hist</span>(proportion_clicks)</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co"># Visualize n_visitors</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="fu">hist</span>(n_visitors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Below I present joint distribution over both the underlying proportion of clicks and how many visitors I would get.</p>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I ran my ad campaign, and 13 people clicked and visited your site when the ad was shown a 100 times. I would now like to use this new information to update the Bayesian model. The reason that we call it posterior is because it represents the uncertainty after (that is, posterior to) having included the information in the data.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Create the posterior data frame</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>posterior <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">13</span>, ]</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co"># Visualize posterior proportion clicks - below I condition the joint distribution - of prior distribution of proportion_clicks and distribution of n_visitors </span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>proportion_clicks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we want to use this updated proportion_clicks to predict how many visitors we would get if we reran the ad campaign.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Assign posterior to a new variable called prior</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>prior <span class="ot">&lt;-</span> posterior</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co"># Take a look at the first rows in prior</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="fu">head</span>(prior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    proportion_clicks n_visitors
+1           0.1467209         13
+14          0.1514527         13
+79          0.1440560         13
+160         0.1312125         13
+180         0.1109677         13
+190         0.1470336         13</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Replace prior$n_visitors with a new sample and visualize the result</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>n_samples <span class="ot">&lt;-</span>  <span class="fu">nrow</span>(prior)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>prior<span class="sc">$</span>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n_samples, <span class="at">size =</span> n_ads_shown, <span class="at">prob =</span> prior<span class="sc">$</span>proportion_clicks)</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="fu">hist</span>(prior<span class="sc">$</span>n_visitors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="priors" class="level3">
+<h3 class="anchored" data-anchor-id="priors">Priors</h3>
+<section id="beta-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="beta-distribution">Beta distribution</h4>
+<p>The Beta distribution is a useful probability distribution when you want model uncertainty over a parameter bounded between 0 and 1. Here you’ll explore how the two parameters of the Beta distribution determine its shape.</p>
+<p>So the larger the shape parameters are, the more concentrated the beta distribution becomes.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Explore using the rbeta function</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>beta_1 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>beta_2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">100</span>, <span class="at">shape2 =</span> <span class="dv">100</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>beta_3 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">100</span>, <span class="at">shape2 =</span> <span class="dv">20</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>beta_4 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">5</span>, <span class="at">shape2 =</span> <span class="dv">95</span>)</span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="fu">hist</span>(beta_1, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 1, shape2 = 1"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="fu">hist</span>(beta_2, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 100, shape2 = 100"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="fu">hist</span>(beta_3, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 100, shape2 = 20"</span>)</span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="fu">hist</span>(beta_4, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 5, shape2 = 95"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The 4th graphs represents the best following setence: <em>Most ads get clicked on 5% of the time, but for some ads it is as low as 2% and for others as high as 8%.</em></p>
+</section>
+</section>
+<section id="contrasts-and-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="contrasts-and-comparison">Contrasts and comparison</h3>
+<p>Let say, I initialize also text add campaign, get 6 visitors out of 100 views and now I want to compare which one video or text add is more cost effective.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>n_draws <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>proportion_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_draws, <span class="at">min =</span> <span class="fl">0.0</span>, <span class="at">max =</span> <span class="fl">0.2</span>)</span>
+<span id="cb18-5"><a href="#cb18-5"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_draws, <span class="at">size =</span> n_ads_shown, </span>
+<span id="cb18-6"><a href="#cb18-6"></a>                     <span class="at">prob =</span> proportion_clicks)</span>
+<span id="cb18-7"><a href="#cb18-7"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(proportion_clicks, n_visitors)</span>
+<span id="cb18-8"><a href="#cb18-8"></a></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co"># Create the posteriors for video and text ads</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>posterior_video <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">13</span>, ]</span>
+<span id="cb18-11"><a href="#cb18-11"></a>posterior_text <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">6</span>, ]</span>
+<span id="cb18-12"><a href="#cb18-12"></a></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co"># Visualize the posteriors</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="fu">hist</span>(posterior_video<span class="sc">$</span>proportion_clicks, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">hist</span>(posterior_text<span class="sc">$</span>proportion_clicks, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>posterior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">video_prop =</span> posterior_video<span class="sc">$</span>proportion_clicks[<span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>],</span>
+<span id="cb20-2"><a href="#cb20-2"></a>                        <span class="at">text_prop =</span> posterior_text<span class="sc">$</span>proportion_click[<span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>])</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># Calculate the posterior difference: video_prop - text_prop</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>posterior<span class="sc">$</span>prop_diff <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_prop <span class="sc">-</span> posterior<span class="sc">$</span>text_prop </span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co"># Visualize prop_diff</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>prop_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Calculate the median of prop_diff</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="fu">median</span>(posterior<span class="sc">$</span>prop_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.06589016</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Calculate the proportion</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>prop_diff <span class="sc">&gt;</span> <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9495</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co">#Different adds have differnt costs then:</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>visitor_spend <span class="ot">&lt;-</span> <span class="fl">2.53</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>video_cost <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a>text_cost <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="co"># Add the column posterior$video_profit</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a>posterior<span class="sc">$</span>video_profit <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_prop <span class="sc">*</span> visitor_spend <span class="sc">-</span> video_cost</span>
+<span id="cb25-8"><a href="#cb25-8"></a></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="co"># Add the column posterior$text_profit</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a>posterior<span class="sc">$</span>text_profit <span class="ot">&lt;-</span> posterior<span class="sc">$</span>text_prop <span class="sc">*</span> visitor_spend <span class="sc">-</span> text_cost</span>
+<span id="cb25-11"><a href="#cb25-11"></a></span>
+<span id="cb25-12"><a href="#cb25-12"></a><span class="co"># Visualize the video_profit and text_profit columns</span></span>
+<span id="cb25-13"><a href="#cb25-13"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>video_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>text_profit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Add the column posterior$profit_diff</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>posterior<span class="sc">$</span>profit_diff <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_profit <span class="sc">-</span> posterior<span class="sc">$</span>text_profit</span>
+<span id="cb27-3"><a href="#cb27-3"></a></span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co"># Visualize posterior$profit_diff</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>profit_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-12-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Calculate a "best guess" for the difference in profits</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="fu">median</span>(posterior<span class="sc">$</span>profit_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.03329788</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Calculate the probability that text ads are better than video ads</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>profit_diff <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6325</code></pre>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co">#So it seems that the evidence does not strongly favor neither text nor video ads. But if forced to choose the text ads is better.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="changeing-generative-model" class="level4">
+<h4 class="anchored" data-anchor-id="changeing-generative-model">Changeing Generative model</h4>
+<p>Company has changed the way how they price adds. Now they take money just for full day of exposition. Binomial model, which approximate participation of succes in all trials (click in all views) is no longer valid. For new scenario. <strong>Poison distribution</strong> is now needed.</p>
+<p><strong>The Poison distribution takes only one parameter which is the mean number of events per time unit</strong></p>
+<p>In R you can simulate from a Poisson distribution using rpois where lambda is the average number of occurrences:</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Change the model according to instructions</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>n_draws <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>mean_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_draws, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">80</span>) <span class="co">#this is my prior</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> n_draws, mean_clicks)</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(mean_clicks, n_visitors)</span>
+<span id="cb33-7"><a href="#cb33-7"></a>posterior <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">19</span>, ]</span>
+<span id="cb33-8"><a href="#cb33-8"></a></span>
+<span id="cb33-9"><a href="#cb33-9"></a><span class="fu">hist</span>(prior<span class="sc">$</span>mean_clicks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>mean_clicks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dealing-with-2-parameter-model" class="level3">
+<h3 class="anchored" data-anchor-id="dealing-with-2-parameter-model">Dealing with 2 parameter model</h3>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co">#  the temperatures of Sweden water in 21 th of June in few following year</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>temp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">23</span>,<span class="dv">20</span>,<span class="dv">17</span>,<span class="dv">23</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="co"># Defining the parameter grid - here are are my priors about the posible values of parameters of distribution</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>pars <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">mu =</span> <span class="fu">seq</span>(<span class="dv">8</span>,<span class="dv">30</span>, <span class="at">by =</span> <span class="fl">0.5</span>), </span>
+<span id="cb35-5"><a href="#cb35-5"></a>                    <span class="at">sigma =</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="dv">10</span>, <span class="at">by=</span> <span class="fl">0.3</span>))</span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="co"># Defining and calculating the prior density for each parameter combination</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>pars<span class="sc">$</span>mu_prior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(pars<span class="sc">$</span>mu, <span class="at">mean =</span> <span class="dv">18</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb35-8"><a href="#cb35-8"></a>pars<span class="sc">$</span>sigma_prior <span class="ot">&lt;-</span> <span class="fu">dunif</span>(pars<span class="sc">$</span>sigma, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">10</span>)</span>
+<span id="cb35-9"><a href="#cb35-9"></a>pars<span class="sc">$</span>prior <span class="ot">&lt;-</span> pars<span class="sc">$</span>mu_prior <span class="sc">*</span> pars<span class="sc">$</span>sigma_prior</span>
+<span id="cb35-10"><a href="#cb35-10"></a><span class="co"># Calculating the likelihood for each parameter combination</span></span>
+<span id="cb35-11"><a href="#cb35-11"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pars)) {</span>
+<span id="cb35-12"><a href="#cb35-12"></a>  likelihoods <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(temp, pars<span class="sc">$</span>mu[i], pars<span class="sc">$</span>sigma[i])</span>
+<span id="cb35-13"><a href="#cb35-13"></a>  pars<span class="sc">$</span>likelihood[i] <span class="ot">&lt;-</span> <span class="fu">prod</span>(likelihoods)</span>
+<span id="cb35-14"><a href="#cb35-14"></a>}</span>
+<span id="cb35-15"><a href="#cb35-15"></a><span class="co"># Calculate the probability of each parameter combination</span></span>
+<span id="cb35-16"><a href="#cb35-16"></a>pars<span class="sc">$</span>probability <span class="ot">&lt;-</span> pars<span class="sc">$</span>likelihood <span class="sc">*</span> pars<span class="sc">$</span>prior</span>
+<span id="cb35-17"><a href="#cb35-17"></a>pars<span class="sc">$</span>probability <span class="ot">&lt;-</span> pars<span class="sc">$</span>probability <span class="sc">/</span> <span class="fu">sum</span>(pars<span class="sc">$</span>probability )</span>
+<span id="cb35-18"><a href="#cb35-18"></a></span>
+<span id="cb35-19"><a href="#cb35-19"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb35-20"><a href="#cb35-20"></a><span class="fu">levelplot</span>(probability <span class="sc">~</span> mu <span class="sc">*</span> sigma, <span class="at">data =</span> pars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What’s likely the average water temperature for this lake on 20th of Julys, and what’s the probability the water temperature is going to be 18 or more on the next 20th?</p>
+<p>Right now the posterior probability distribution is represented as a data frame with one row per parameter combination with the corresponding probability.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">head</span>(pars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    mu sigma   mu_prior sigma_prior       prior likelihood probability
+1  8.0   0.1 0.01079819         0.1 0.001079819          0           0
+2  8.5   0.1 0.01312316         0.1 0.001312316          0           0
+3  9.0   0.1 0.01579003         0.1 0.001579003          0           0
+4  9.5   0.1 0.01880982         0.1 0.001880982          0           0
+5 10.0   0.1 0.02218417         0.1 0.002218417          0           0
+6 10.5   0.1 0.02590352         0.1 0.002590352          0           0</code></pre>
+</div>
+</div>
+<p>But my questions are much easier to answer if the posterior is represented as a large number of samples, like in earlier chapters. So, let’s draw a sample from this posterior.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>sample_indices <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pars), <span class="at">size=</span><span class="dv">10000</span>, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span>pars<span class="sc">$</span>probability)</span>
+<span id="cb38-2"><a href="#cb38-2"></a>pars_sample <span class="ot">&lt;-</span> pars[sample_indices,<span class="fu">c</span>(<span class="st">"mu"</span>,<span class="st">"sigma"</span>)]</span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="fu">head</span>(pars_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       mu sigma
+1252 26.0   8.2
+525  22.5   3.4
+388  21.5   2.5
+612  21.0   4.0
+522  21.0   3.4
+429  19.5   2.8</code></pre>
+</div>
+</div>
+<p>What is probabibility of temperature being 18 or above? Not mean temperature, the actual temperature.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co">#rnorm is vectorized and implicitly loops over mu and sigma</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>pred_temp<span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="at">mean=</span>pars_sample<span class="sc">$</span>mu, <span class="at">sd=</span>pars_sample<span class="sc">$</span>sigma)</span>
+<span id="cb40-3"><a href="#cb40-3"></a></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="fu">hist</span>(pars_sample<span class="sc">$</span>mu,<span class="dv">30</span>, <span class="at">main =</span> <span class="st">'probability distribution of mean temperature'</span>)</span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="fu">hist</span>(pred_temp,<span class="dv">30</span>, <span class="at">main =</span> <span class="st">'probability distribution of tempeture'</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="3_Statistics_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">mean</span>(pred_temp<span class="sc">&gt;=</span><span class="dv">18</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.736</code></pre>
+</div>
+</div>
+</section>
+<section id="automatisation---best-package" class="level3">
+<h3 class="anchored" data-anchor-id="automatisation---best-package">Automatisation - BEST package</h3>
+<p>The Bayesian model behind BEST assumes that the generative model for the data is a t-distribution; a more flexible distribution than the normal distribution as it assumes that data points might be outliers to some degree. This makes BEST’s estimate of the mean difference robust to outliers in the data.</p>
+<p>The t-distribution is just like the normal distribution, a generative model with a mean and a standard deviation that generates heap shaped data. The difference is that the t-distribution has an extra parameter, sometimes called the degrees-of-freedom parameter, that governs how likely the t-distribution is to generate outliers far from its center.</p>
+<p>Another way in which BEST is different is that BEST uses a so-called Markov chain Monte Carlo method to fit the model. Markov chain Monte Carlo, or MCMC for short, returns a table of samples from the posterior, we can work with the output just like before.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># The IQ of zombies on a regular diet and a brain based diet.</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a>iq_brains <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">44</span>, <span class="dv">52</span>, <span class="dv">42</span>, <span class="dv">66</span>, <span class="dv">53</span>, <span class="dv">42</span>, <span class="dv">55</span>, <span class="dv">57</span>, <span class="dv">56</span>, <span class="dv">51</span>)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>iq_regular <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">44</span>, <span class="dv">34</span>, <span class="dv">18</span>, <span class="dv">51</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">49</span>, <span class="dv">48</span>, <span class="dv">46</span>)</span>
+<span id="cb43-4"><a href="#cb43-4"></a></span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="co"># Calculate the mean difference in IQ between the two groups</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="fu">mean</span>(iq_brains) <span class="sc">-</span> <span class="fu">mean</span>(iq_regular)</span>
+<span id="cb43-7"><a href="#cb43-7"></a></span>
+<span id="cb43-8"><a href="#cb43-8"></a><span class="co"># Fit the BEST model to the data from both groups</span></span>
+<span id="cb43-9"><a href="#cb43-9"></a><span class="fu">library</span>(BEST)</span>
+<span id="cb43-10"><a href="#cb43-10"></a><span class="fu">library</span>(rjags)</span>
+<span id="cb43-11"><a href="#cb43-11"></a>best_posterior <span class="ot">&lt;-</span> <span class="fu">BESTmcmc</span>(iq_brains, iq_regular)</span>
+<span id="cb43-12"><a href="#cb43-12"></a></span>
+<span id="cb43-13"><a href="#cb43-13"></a><span class="co"># Plot the model result</span></span>
+<span id="cb43-14"><a href="#cb43-14"></a><span class="fu">plot</span>(best_posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Assume that a super smart mutant zombie (IQ = 150) got into the iq_regular group by mistake. This might mess up the results as you and your colleagues really were interested in how diet affects normal zombies.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># The IQ of zombies given a regular diet and a brain based diet.</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>iq_brains <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">44</span>, <span class="dv">52</span>, <span class="dv">42</span>, <span class="dv">66</span>, <span class="dv">53</span>, <span class="dv">42</span>, <span class="dv">55</span>, <span class="dv">57</span>, <span class="dv">56</span>, <span class="dv">51</span>)</span>
+<span id="cb44-3"><a href="#cb44-3"></a>iq_regular <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">44</span>, <span class="dv">34</span>, <span class="dv">18</span>, <span class="dv">51</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">49</span>, <span class="dv">48</span>, </span>
+<span id="cb44-4"><a href="#cb44-4"></a>                <span class="dv">150</span>) <span class="co"># &lt;- Mutant zombie</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a></span>
+<span id="cb44-6"><a href="#cb44-6"></a><span class="co"># Modify the data above and calculate the difference in means</span></span>
+<span id="cb44-7"><a href="#cb44-7"></a><span class="fu">mean</span>(iq_brains) <span class="sc">-</span> <span class="fu">mean</span>(iq_regular)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Fit the BEST model to the modified data and plot the result</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="fu">library</span>(BEST)</span>
+<span id="cb45-3"><a href="#cb45-3"></a>best_posterior <span class="ot">&lt;-</span> <span class="fu">BESTmcmc</span>(iq_brains, iq_regular)</span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="fu">plot</span>(best_posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="conclusions" class="level3">
+<h3 class="anchored" data-anchor-id="conclusions">Conclusions</h3>
+<p>Bayes allows you to tweak, change and tinker with the model to better fit the data analytical problem you have. But a last reason to use Bayes is because it is optimal, kind of. It can be shown, theoretically, that no other method learns as efficiently from data as Bayesian inference.</p>
+<p>In above examples I show what Bayesian model is about: * I describe my expectations of proportion_clicks as uniform distribution (prior) * Then i describe a generative model which will be responsible for generating views based on proportion_clicks - the second source of variability. For this aim I use two diffrent distribution - binomial and poison - depending on specifity of exercise. * I was able to say which add wass better, more, I was able to say which add was better in probability way.</p>
+</section>
+</section>
+<section id="bayesian-statistics---intermediate" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-statistics---intermediate">Bayesian Statistics - Intermediate</h2>
+<section id="likelihood" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood">Likelihood</h3>
+<p>On the example of poll. Imagine I am taking part in election to local goverment. Based on many historical election poles I can count on 45% of votes. Votes chances are approximate by bheta function.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">sample=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>),</span>
+<span id="cb46-2"><a href="#cb46-2"></a>               <span class="at">density=</span><span class="fu">dbeta</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>),<span class="at">shape1=</span><span class="dv">45</span>,<span class="at">shape2=</span><span class="dv">55</span>))</span>
+<span id="cb46-3"><a href="#cb46-3"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sample,<span class="at">y=</span>density))<span class="sc">+</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"Density function"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Lets imagine that i receive 60% of votes in ellection pole. I can assume that binomial distribution is well suited for generative model responsible for how many votes I am geting. Then I may ask myself: **How probable would be obtaining such a results (60%) of votes under different succes_rate (paramter of Binomial distribution).</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">likelihood=</span><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">6</span>,<span class="at">size=</span><span class="dv">10</span>,<span class="at">prob=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)), </span>
+<span id="cb47-2"><a href="#cb47-2"></a>               <span class="at">parameter_p=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>))</span>
+<span id="cb47-3"><a href="#cb47-3"></a></span>
+<span id="cb47-4"><a href="#cb47-4"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>parameter_p,<span class="at">y=</span>likelihood))<span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a>  <span class="fu">ggtitle</span>(<span class="st">"Likelihood distribution over different succes_rate parameters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The likelihood function summarizes the likelihood of observing polling data X under different values of the underlying support parameter p. Thus, the likelihood is a function of p that depends upon the observed data X</p>
+</section>
+<section id="posterior" class="level3">
+<h3 class="anchored" data-anchor-id="posterior">Posterior</h3>
+<p>Since I’ve got the prior &amp; likelihood:</p>
+<ul>
+<li><p>prior: let say based on the historical pole % of votes I can count on is described by betha distribution Betha(45.55) –&gt; most probable is geting 45% votes</p></li>
+<li><p>likelihood: is denoting to the most recent data shown above</p></li>
+</ul>
+<p>I can approach now to modeling <strong>posterior model of p</strong> According to Bayes rules posterior is calculating by:</p>
+<p><em>posterior</em> = prior * likelihood</p>
+<p>However, in more sophisticated model settings, tidy, closed-form solutions to this formula might not exist. Very loosely speaking, the goal here is to send information out to the JAGS program, which will then design an algorithm to sample from the posterior, based on which I will then simulate the posterior.</p>
+<section id="compiling-rjags-model" class="level4">
+<h4 class="anchored" data-anchor-id="compiling-rjags-model">Compiling rjags model</h4>
+<p>Built from previous polls &amp; election data, my prior model of is a Beta(,) with shape parameters a=45 and b=55. For added insight into <strong>p</strong>, I also polled potential voters. The dependence of X, the number of these voters that support you, on <strong>p</strong> is modeled by the Bin(<strong>n</strong>,<strong>p</strong>) distribution.</p>
+<p>In the completed poll, X=6 of n=10 voters supported you. The next goal is to update my model of in light of these observed polling data! To this end, I will use the rjags package to approximate the posterior model of . This exercise will be break down into the 3 rjags steps: define, compile, simulate.</p>
+<div class="cell" data-layout-align="left">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">library</span>(rjags)</span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="co"># DEFINE the model</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a>vote_model <span class="ot">&lt;-</span> <span class="st">"model{</span></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="st">    # Likelihood model for X</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a><span class="st">    X ~ dbin(p, n)</span></span>
+<span id="cb48-7"><a href="#cb48-7"></a><span class="st">    </span></span>
+<span id="cb48-8"><a href="#cb48-8"></a><span class="st">    # Prior model for p</span></span>
+<span id="cb48-9"><a href="#cb48-9"></a><span class="st">    p ~ dbeta(a, b)</span></span>
+<span id="cb48-10"><a href="#cb48-10"></a><span class="st">}"</span></span>
+<span id="cb48-11"><a href="#cb48-11"></a></span>
+<span id="cb48-12"><a href="#cb48-12"></a><span class="co"># COMPILE the model    </span></span>
+<span id="cb48-13"><a href="#cb48-13"></a>vote_jags <span class="ot">&lt;-</span> <span class="fu">jags.model</span>(<span class="fu">textConnection</span>(vote_model), </span>
+<span id="cb48-14"><a href="#cb48-14"></a>    <span class="at">data =</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="dv">45</span>, <span class="at">b =</span> <span class="dv">55</span>, <span class="at">X =</span> <span class="dv">6</span>, <span class="at">n =</span> <span class="dv">10</span>),</span>
+<span id="cb48-15"><a href="#cb48-15"></a>    <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">.RNG.name =</span> <span class="st">"base::Wichmann-Hill"</span>, <span class="at">.RNG.seed =</span> <span class="dv">100</span>))</span>
+<span id="cb48-16"><a href="#cb48-16"></a></span>
+<span id="cb48-17"><a href="#cb48-17"></a><span class="co"># SIMULATE the posterior</span></span>
+<span id="cb48-18"><a href="#cb48-18"></a>vote_sim <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(<span class="at">model =</span> vote_jags, <span class="at">variable.names =</span> <span class="fu">c</span>(<span class="st">"p"</span>), <span class="at">n.iter =</span> <span class="dv">10000</span>)</span>
+<span id="cb48-19"><a href="#cb48-19"></a></span>
+<span id="cb48-20"><a href="#cb48-20"></a><span class="co"># PLOT the posterior</span></span>
+<span id="cb48-21"><a href="#cb48-21"></a><span class="fu">plot</span>(vote_sim, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+<!-- -->
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb49" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb49-1"><a href="#cb49-1"></a><span class="co">---</span></span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="an">description:</span><span class="co"> Describing statistical methods</span></span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="an">title:</span><span class="co"> Statistics</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a><span class="an">categories:</span><span class="co"> ["Statistics"]</span></span>
+<span id="cb49-5"><a href="#cb49-5"></a><span class="an">tags:</span><span class="co"> ["R", "Statistics", "Bayes"]</span></span>
+<span id="cb49-6"><a href="#cb49-6"></a><span class="an">date:</span><span class="co"> '2022-10-26'</span></span>
+<span id="cb49-7"><a href="#cb49-7"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb49-8"><a href="#cb49-8"></a><span class="co">---</span></span>
+<span id="cb49-9"><a href="#cb49-9"></a></span>
+<span id="cb49-10"><a href="#cb49-10"></a></span>
+<span id="cb49-11"><a href="#cb49-11"></a></span>
+<span id="cb49-12"><a href="#cb49-12"></a><span class="fu">## Logistic Regression</span></span>
+<span id="cb49-13"><a href="#cb49-13"></a></span>
+<span id="cb49-14"><a href="#cb49-14"></a>[*Markdown</span>
+<span id="cb49-15"><a href="#cb49-15"></a>Tutorial*](https://bookdown.org/yihui/rmarkdown/html-document.html)</span>
+<span id="cb49-16"><a href="#cb49-16"></a></span>
+<span id="cb49-17"><a href="#cb49-17"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb49-18"><a href="#cb49-18"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">fig.align=</span><span class="st">'left'</span>, <span class="at">echo=</span><span class="cn">TRUE</span>, <span class="at">error=</span><span class="cn">FALSE</span>)</span>
+<span id="cb49-19"><a href="#cb49-19"></a><span class="in">```</span></span>
+<span id="cb49-20"><a href="#cb49-20"></a></span>
+<span id="cb49-21"><a href="#cb49-21"></a><span class="in">```{r,include=FALSE}</span></span>
+<span id="cb49-22"><a href="#cb49-22"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb49-23"><a href="#cb49-23"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb49-24"><a href="#cb49-24"></a><span class="fu">library</span>(broom)</span>
+<span id="cb49-25"><a href="#cb49-25"></a><span class="fu">library</span>(moderndive)</span>
+<span id="cb49-26"><a href="#cb49-26"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb49-27"><a href="#cb49-27"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb49-28"><a href="#cb49-28"></a><span class="in">```</span></span>
+<span id="cb49-29"><a href="#cb49-29"></a></span>
+<span id="cb49-30"><a href="#cb49-30"></a><span class="in">```{r data, include=FALSE}</span></span>
+<span id="cb49-31"><a href="#cb49-31"></a>df_titanic<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb49-32"><a href="#cb49-32"></a>  <span class="fu">mutate</span>(<span class="at">Fare_log=</span><span class="fu">round</span>(<span class="fu">log</span>(Fare<span class="fl">+0.001</span>)))</span>
+<span id="cb49-33"><a href="#cb49-33"></a><span class="in">```</span></span>
+<span id="cb49-34"><a href="#cb49-34"></a></span>
+<span id="cb49-35"><a href="#cb49-35"></a><span class="fu">### Matematyczna interpretacja modelu</span></span>
+<span id="cb49-36"><a href="#cb49-36"></a></span>
+<span id="cb49-37"><a href="#cb49-37"></a>Quiz correct answers: d. Hint: <span class="in">`Remember`</span>, the coefficient in a logistic</span>
+<span id="cb49-38"><a href="#cb49-38"></a>regression model is the expected increase in the log odds given a one</span>
+<span id="cb49-39"><a href="#cb49-39"></a>unit increase in the explanatory variable.</span>
+<span id="cb49-40"><a href="#cb49-40"></a></span>
+<span id="cb49-41"><a href="#cb49-41"></a><span class="in">```{r echo=FALSE}</span></span>
+<span id="cb49-42"><a href="#cb49-42"></a>df_titanic <span class="sc">%&gt;%</span> <span class="fu">select</span>(Survived,Fare,Fare_log) <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span>
+<span id="cb49-43"><a href="#cb49-43"></a><span class="in">```</span></span>
+<span id="cb49-44"><a href="#cb49-44"></a></span>
+<span id="cb49-45"><a href="#cb49-45"></a>Wyliczanie modelu logistycznego.</span>
+<span id="cb49-46"><a href="#cb49-46"></a></span>
+<span id="cb49-49"><a href="#cb49-49"></a><span class="in">```{r}</span></span>
+<span id="cb49-50"><a href="#cb49-50"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">data=</span>df_titanic, Survived <span class="sc">~</span> Fare_log, <span class="at">family =</span> <span class="st">'binomial'</span>)</span>
+<span id="cb49-51"><a href="#cb49-51"></a></span>
+<span id="cb49-52"><a href="#cb49-52"></a><span class="fu">tidy</span>(model)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">caption=</span><span class="st">'Table 1. Summary statistics for logistic regression model'</span>)</span>
+<span id="cb49-53"><a href="#cb49-53"></a><span class="in">```</span></span>
+<span id="cb49-54"><a href="#cb49-54"></a></span>
+<span id="cb49-55"><a href="#cb49-55"></a></span>
+<span id="cb49-56"><a href="#cb49-56"></a></span>
+<span id="cb49-57"><a href="#cb49-57"></a></span>
+<span id="cb49-60"><a href="#cb49-60"></a><span class="in">```{r}</span></span>
+<span id="cb49-61"><a href="#cb49-61"></a><span class="fu">coef</span>(model)</span>
+<span id="cb49-62"><a href="#cb49-62"></a></span>
+<span id="cb49-63"><a href="#cb49-63"></a><span class="co">#Tak przemnozone wspolczynniki interpretujemy nastepujaco:</span></span>
+<span id="cb49-64"><a href="#cb49-64"></a><span class="co">#  o ile % wzrosnie odds wystapienia zdarzenia jezeli wzrosnie nam wartosc predyktora o 1</span></span>
+<span id="cb49-65"><a href="#cb49-65"></a></span>
+<span id="cb49-66"><a href="#cb49-66"></a><span class="fu">exp</span>(<span class="fu">coef</span>(model))</span>
+<span id="cb49-67"><a href="#cb49-67"></a></span>
+<span id="cb49-68"><a href="#cb49-68"></a><span class="in">```</span></span>
+<span id="cb49-69"><a href="#cb49-69"></a></span>
+<span id="cb49-70"><a href="#cb49-70"></a>Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza</span>
+<span id="cb49-71"><a href="#cb49-71"></a>interpretacja wzrostu parametra stajacego przy predyktorze.</span>
+<span id="cb49-72"><a href="#cb49-72"></a></span>
+<span id="cb49-75"><a href="#cb49-75"></a><span class="in">```{r}</span></span>
+<span id="cb49-76"><a href="#cb49-76"></a>df_aug <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, <span class="at">type.predict =</span> <span class="st">"response"</span>) <span class="co"># without response argument, the fitted value will be on log-odds scale</span></span>
+<span id="cb49-77"><a href="#cb49-77"></a></span>
+<span id="cb49-78"><a href="#cb49-78"></a>p3 <span class="ot">=</span> df_aug<span class="sc">$</span>.fitted[df_aug<span class="sc">$</span>Fare_log<span class="sc">==</span><span class="dv">3</span>][<span class="dv">1</span>]</span>
+<span id="cb49-79"><a href="#cb49-79"></a>p2 <span class="ot">=</span> df_aug<span class="sc">$</span>.fitted[df_aug<span class="sc">$</span>Fare_log<span class="sc">==</span><span class="dv">2</span>][<span class="dv">1</span>]</span>
+<span id="cb49-80"><a href="#cb49-80"></a></span>
+<span id="cb49-81"><a href="#cb49-81"></a>x <span class="ot">&lt;-</span> <span class="fu">round</span>(p3<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p3)<span class="sc">/</span>(p2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p2)),<span class="dv">5</span>)</span>
+<span id="cb49-82"><a href="#cb49-82"></a></span>
+<span id="cb49-83"><a href="#cb49-83"></a><span class="co"># i sprawdzenie czy dobrze rozumiem zależnosc</span></span>
+<span id="cb49-84"><a href="#cb49-84"></a>x1<span class="ot">&lt;-</span><span class="fu">round</span>(<span class="fu">exp</span>(<span class="fu">coef</span>(model))[<span class="st">'Fare_log'</span>],<span class="dv">5</span>)</span>
+<span id="cb49-85"><a href="#cb49-85"></a>x1<span class="sc">==</span>x</span>
+<span id="cb49-86"><a href="#cb49-86"></a><span class="in">```</span></span>
+<span id="cb49-87"><a href="#cb49-87"></a></span>
+<span id="cb49-88"><a href="#cb49-88"></a>Prob for Fare_log = 2 was equal to <span class="in">`r p2`</span> while for Fare_log = 3 was</span>
+<span id="cb49-89"><a href="#cb49-89"></a>equal to <span class="in">`r p3`</span>. The odds increase by <span class="in">`r x`</span>. The same what model results</span>
+<span id="cb49-90"><a href="#cb49-90"></a>suggests -<span class="sc">\&gt;</span> <span class="in">`r x1`</span>.</span>
+<span id="cb49-91"><a href="#cb49-91"></a></span>
+<span id="cb49-92"><a href="#cb49-92"></a>Quiz</span>
+<span id="cb49-93"><a href="#cb49-93"></a></span>
+<span id="cb49-94"><a href="#cb49-94"></a>The fitted coefficient from the medical school logistic regression model</span>
+<span id="cb49-95"><a href="#cb49-95"></a>is 5.45. The exponential of this is 233.73.</span>
+<span id="cb49-96"><a href="#cb49-96"></a></span>
+<span id="cb49-97"><a href="#cb49-97"></a>Donald's GPA is 2.9, and thus the model predicts that the probability of</span>
+<span id="cb49-98"><a href="#cb49-98"></a>him getting into medical school is 3.26%. The odds of Donald getting</span>
+<span id="cb49-99"><a href="#cb49-99"></a>into medical school are 0.0337, or---phrased in gambling terms---29.6:1.</span>
+<span id="cb49-100"><a href="#cb49-100"></a>If Donald hacks the school's registrar and changes his GPA to 3.9, then</span>
+<span id="cb49-101"><a href="#cb49-101"></a>which of the following statements is FALSE:</span>
+<span id="cb49-102"><a href="#cb49-102"></a></span>
+<span id="cb49-103"><a href="#cb49-103"></a>Possible Answers</span>
+<span id="cb49-104"><a href="#cb49-104"></a></span>
+<span id="cb49-105"><a href="#cb49-105"></a>a)  His expected odds of getting into medical school improve to 7.8833</span>
+<span id="cb49-106"><a href="#cb49-106"></a>    (or about 9:8).</span>
+<span id="cb49-107"><a href="#cb49-107"></a>b)  His expected probability of getting into medical school improves to</span>
+<span id="cb49-108"><a href="#cb49-108"></a>    88.7%.</span>
+<span id="cb49-109"><a href="#cb49-109"></a>c)  His expected log-odds of getting into medical school improve by</span>
+<span id="cb49-110"><a href="#cb49-110"></a>    5.45.</span>
+<span id="cb49-111"><a href="#cb49-111"></a>d)  His expected probability of getting into medical school improves to</span>
+<span id="cb49-112"><a href="#cb49-112"></a>    7.9%.</span>
+<span id="cb49-113"><a href="#cb49-113"></a></span>
+<span id="cb49-114"><a href="#cb49-114"></a>Correct answers on the top of the page</span>
+<span id="cb49-115"><a href="#cb49-115"></a></span>
+<span id="cb49-116"><a href="#cb49-116"></a><span class="fu">### Graficzna interpretacja modelu</span></span>
+<span id="cb49-117"><a href="#cb49-117"></a></span>
+<span id="cb49-118"><a href="#cb49-118"></a><span class="in">```{r, collapse = TRUE, echo=FALSE, warning=FALSE}</span></span>
+<span id="cb49-119"><a href="#cb49-119"></a></span>
+<span id="cb49-120"><a href="#cb49-120"></a><span class="co">#While the odds scale is more useful than the probability scale for certain things, it isn't entirely satisfying. Statisticians also think about logistic regression models on the log-odds scale, which is formed by taking the natural log of the odds. </span></span>
+<span id="cb49-121"><a href="#cb49-121"></a></span>
+<span id="cb49-122"><a href="#cb49-122"></a><span class="co">#The benefit to this approach is clear: now the logistic regression model can be visualized as a line! Unfortunately, understanding what the log of the odds of an event means is very difficult for humans. </span></span>
+<span id="cb49-123"><a href="#cb49-123"></a></span>
+<span id="cb49-124"><a href="#cb49-124"></a>df_aug <span class="ot">&lt;-</span> df_aug <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">odds=</span>(.fitted<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>.fitted)), <span class="at">log_odds=</span><span class="fu">log</span>(odds))</span>
+<span id="cb49-125"><a href="#cb49-125"></a></span>
+<span id="cb49-126"><a href="#cb49-126"></a>df_aug <span class="sc">%&gt;%</span> </span>
+<span id="cb49-127"><a href="#cb49-127"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb49-128"><a href="#cb49-128"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>Fare_log,<span class="at">y=</span>.fitted), <span class="at">color=</span><span class="st">'green'</span>)<span class="sc">+</span></span>
+<span id="cb49-129"><a href="#cb49-129"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>Fare_log,<span class="at">y=</span>odds ), <span class="at">color=</span><span class="st">'red'</span>)<span class="sc">+</span></span>
+<span id="cb49-130"><a href="#cb49-130"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>Fare_log,<span class="at">y=</span>log_odds ), <span class="at">color=</span><span class="st">'blue'</span>, <span class="at">label=</span><span class="st">'log_odds'</span>)</span>
+<span id="cb49-131"><a href="#cb49-131"></a><span class="in">```</span></span>
+<span id="cb49-132"><a href="#cb49-132"></a></span>
+<span id="cb49-133"><a href="#cb49-133"></a></span>
+<span id="cb49-134"><a href="#cb49-134"></a></span>
+<span id="cb49-135"><a href="#cb49-135"></a><span class="in">```{r evaluating model quality}</span></span>
+<span id="cb49-136"><a href="#cb49-136"></a>df_aug <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Survived_hat=</span><span class="fu">round</span>(.fitted)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-137"><a href="#cb49-137"></a>  <span class="fu">select</span>(Survived, Survived_hat) <span class="sc">%&gt;%</span> table</span>
+<span id="cb49-138"><a href="#cb49-138"></a></span>
+<span id="cb49-139"><a href="#cb49-139"></a><span class="co">#Out of sample predictions</span></span>
+<span id="cb49-140"><a href="#cb49-140"></a>DiCaprio<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">Fare_log=</span><span class="dv">1</span>)</span>
+<span id="cb49-141"><a href="#cb49-141"></a><span class="fu">augment</span>(model, <span class="at">newdata =</span> DiCaprio, <span class="at">type.predict =</span> <span class="st">'response'</span>)</span>
+<span id="cb49-142"><a href="#cb49-142"></a></span>
+<span id="cb49-143"><a href="#cb49-143"></a><span class="in">```</span></span>
+<span id="cb49-144"><a href="#cb49-144"></a></span>
+<span id="cb49-145"><a href="#cb49-145"></a><span class="fu">## Bayesian Statistics - Introduction</span></span>
+<span id="cb49-146"><a href="#cb49-146"></a></span>
+<span id="cb49-147"><a href="#cb49-147"></a><span class="fu">### Introduction</span></span>
+<span id="cb49-148"><a href="#cb49-148"></a></span>
+<span id="cb49-149"><a href="#cb49-149"></a>The role of probability distributions in Bayesian data analysis is to</span>
+<span id="cb49-150"><a href="#cb49-150"></a>represent uncertainty, and the role of Bayesian inference is to update</span>
+<span id="cb49-151"><a href="#cb49-151"></a>these probability distributions to reflect what has been learned from</span>
+<span id="cb49-152"><a href="#cb49-152"></a>data.</span>
+<span id="cb49-153"><a href="#cb49-153"></a></span>
+<span id="cb49-154"><a href="#cb49-154"></a>Let say I want to set an advertisement on social media. They claim, adds</span>
+<span id="cb49-155"><a href="#cb49-155"></a>on their surface has 10% of clicks. I a bit sceptical and asses probable</span>
+<span id="cb49-156"><a href="#cb49-156"></a>efectivnes may range between 0 and 0.20. I assume that binomial model</span>
+<span id="cb49-157"><a href="#cb49-157"></a>will imitate process generating visitors. Binomial model is my</span>
+<span id="cb49-158"><a href="#cb49-158"></a>generative model then.</span>
+<span id="cb49-159"><a href="#cb49-159"></a></span>
+<span id="cb49-162"><a href="#cb49-162"></a><span class="in">```{r}</span></span>
+<span id="cb49-163"><a href="#cb49-163"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb49-164"><a href="#cb49-164"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb49-165"><a href="#cb49-165"></a>proportion_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_samples, <span class="at">min =</span> <span class="fl">0.0</span>, <span class="at">max =</span> <span class="fl">0.2</span>)</span>
+<span id="cb49-166"><a href="#cb49-166"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_samples, <span class="at">size =</span> n_ads_shown, <span class="at">prob =</span> proportion_clicks)</span>
+<span id="cb49-167"><a href="#cb49-167"></a></span>
+<span id="cb49-168"><a href="#cb49-168"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb49-169"><a href="#cb49-169"></a><span class="co"># Visualize proportion clicks</span></span>
+<span id="cb49-170"><a href="#cb49-170"></a><span class="fu">hist</span>(proportion_clicks)</span>
+<span id="cb49-171"><a href="#cb49-171"></a><span class="co"># Visualize n_visitors</span></span>
+<span id="cb49-172"><a href="#cb49-172"></a><span class="fu">hist</span>(n_visitors)</span>
+<span id="cb49-173"><a href="#cb49-173"></a><span class="in">```</span></span>
+<span id="cb49-174"><a href="#cb49-174"></a></span>
+<span id="cb49-175"><a href="#cb49-175"></a>Below I present joint distribution over both the underlying proportion</span>
+<span id="cb49-176"><a href="#cb49-176"></a>of clicks and how many visitors I would get.</span>
+<span id="cb49-177"><a href="#cb49-177"></a></span>
+<span id="cb49-178"><a href="#cb49-178"></a><span class="in">```{r, echo  = FALSE}</span></span>
+<span id="cb49-179"><a href="#cb49-179"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(proportion_clicks,n_visitors)</span>
+<span id="cb49-180"><a href="#cb49-180"></a></span>
+<span id="cb49-181"><a href="#cb49-181"></a>  </span>
+<span id="cb49-182"><a href="#cb49-182"></a>p<span class="ot">&lt;-</span>prior <span class="sc">%&gt;%</span> </span>
+<span id="cb49-183"><a href="#cb49-183"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> n_visitors, <span class="at">y=</span> proportion_clicks))<span class="sc">+</span></span>
+<span id="cb49-184"><a href="#cb49-184"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb49-185"><a href="#cb49-185"></a><span class="fu">library</span>(ggExtra)</span>
+<span id="cb49-186"><a href="#cb49-186"></a><span class="fu">ggMarginal</span>(p, <span class="at">type=</span><span class="st">"histogram"</span>)</span>
+<span id="cb49-187"><a href="#cb49-187"></a></span>
+<span id="cb49-188"><a href="#cb49-188"></a><span class="in">```</span></span>
+<span id="cb49-189"><a href="#cb49-189"></a></span>
+<span id="cb49-190"><a href="#cb49-190"></a>I ran my ad campaign, and 13 people clicked and visited your site when</span>
+<span id="cb49-191"><a href="#cb49-191"></a>the ad was shown a 100 times. I would now like to use this new</span>
+<span id="cb49-192"><a href="#cb49-192"></a>information to update the Bayesian model. The reason that we call it</span>
+<span id="cb49-193"><a href="#cb49-193"></a>posterior is because it represents the uncertainty after (that is,</span>
+<span id="cb49-194"><a href="#cb49-194"></a>posterior to) having included the information in the data.</span>
+<span id="cb49-195"><a href="#cb49-195"></a></span>
+<span id="cb49-198"><a href="#cb49-198"></a><span class="in">```{r}</span></span>
+<span id="cb49-199"><a href="#cb49-199"></a><span class="co"># Create the posterior data frame</span></span>
+<span id="cb49-200"><a href="#cb49-200"></a>posterior <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">13</span>, ]</span>
+<span id="cb49-201"><a href="#cb49-201"></a></span>
+<span id="cb49-202"><a href="#cb49-202"></a><span class="co"># Visualize posterior proportion clicks - below I condition the joint distribution - of prior distribution of proportion_clicks and distribution of n_visitors </span></span>
+<span id="cb49-203"><a href="#cb49-203"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>proportion_clicks)</span>
+<span id="cb49-204"><a href="#cb49-204"></a><span class="in">```</span></span>
+<span id="cb49-205"><a href="#cb49-205"></a></span>
+<span id="cb49-206"><a href="#cb49-206"></a>Now we want to use this updated proportion_clicks to predict how many</span>
+<span id="cb49-207"><a href="#cb49-207"></a>visitors we would get if we reran the ad campaign.</span>
+<span id="cb49-208"><a href="#cb49-208"></a></span>
+<span id="cb49-211"><a href="#cb49-211"></a><span class="in">```{r}</span></span>
+<span id="cb49-212"><a href="#cb49-212"></a><span class="co"># Assign posterior to a new variable called prior</span></span>
+<span id="cb49-213"><a href="#cb49-213"></a>prior <span class="ot">&lt;-</span> posterior</span>
+<span id="cb49-214"><a href="#cb49-214"></a></span>
+<span id="cb49-215"><a href="#cb49-215"></a><span class="co"># Take a look at the first rows in prior</span></span>
+<span id="cb49-216"><a href="#cb49-216"></a><span class="fu">head</span>(prior)</span>
+<span id="cb49-217"><a href="#cb49-217"></a></span>
+<span id="cb49-218"><a href="#cb49-218"></a><span class="co"># Replace prior$n_visitors with a new sample and visualize the result</span></span>
+<span id="cb49-219"><a href="#cb49-219"></a>n_samples <span class="ot">&lt;-</span>  <span class="fu">nrow</span>(prior)</span>
+<span id="cb49-220"><a href="#cb49-220"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb49-221"><a href="#cb49-221"></a>prior<span class="sc">$</span>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n_samples, <span class="at">size =</span> n_ads_shown, <span class="at">prob =</span> prior<span class="sc">$</span>proportion_clicks)</span>
+<span id="cb49-222"><a href="#cb49-222"></a><span class="fu">hist</span>(prior<span class="sc">$</span>n_visitors)</span>
+<span id="cb49-223"><a href="#cb49-223"></a><span class="in">```</span></span>
+<span id="cb49-224"><a href="#cb49-224"></a></span>
+<span id="cb49-225"><a href="#cb49-225"></a><span class="fu">### Priors</span></span>
+<span id="cb49-226"><a href="#cb49-226"></a></span>
+<span id="cb49-227"><a href="#cb49-227"></a><span class="fu">#### Beta distribution</span></span>
+<span id="cb49-228"><a href="#cb49-228"></a></span>
+<span id="cb49-229"><a href="#cb49-229"></a>The Beta distribution is a useful probability distribution when you want</span>
+<span id="cb49-230"><a href="#cb49-230"></a>model uncertainty over a parameter bounded between 0 and 1. Here you'll</span>
+<span id="cb49-231"><a href="#cb49-231"></a>explore how the two parameters of the Beta distribution determine its</span>
+<span id="cb49-232"><a href="#cb49-232"></a>shape.</span>
+<span id="cb49-233"><a href="#cb49-233"></a></span>
+<span id="cb49-234"><a href="#cb49-234"></a>So the larger the shape parameters are, the more concentrated the beta</span>
+<span id="cb49-235"><a href="#cb49-235"></a>distribution becomes.</span>
+<span id="cb49-236"><a href="#cb49-236"></a></span>
+<span id="cb49-239"><a href="#cb49-239"></a><span class="in">```{r}</span></span>
+<span id="cb49-240"><a href="#cb49-240"></a><span class="co"># Explore using the rbeta function</span></span>
+<span id="cb49-241"><a href="#cb49-241"></a>beta_1 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">1</span>, <span class="at">shape2 =</span> <span class="dv">1</span>)</span>
+<span id="cb49-242"><a href="#cb49-242"></a>beta_2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">100</span>, <span class="at">shape2 =</span> <span class="dv">100</span>)</span>
+<span id="cb49-243"><a href="#cb49-243"></a>beta_3 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">100</span>, <span class="at">shape2 =</span> <span class="dv">20</span>)</span>
+<span id="cb49-244"><a href="#cb49-244"></a>beta_4 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> <span class="dv">1000000</span>, <span class="at">shape1 =</span> <span class="dv">5</span>, <span class="at">shape2 =</span> <span class="dv">95</span>)</span>
+<span id="cb49-245"><a href="#cb49-245"></a></span>
+<span id="cb49-246"><a href="#cb49-246"></a></span>
+<span id="cb49-247"><a href="#cb49-247"></a></span>
+<span id="cb49-248"><a href="#cb49-248"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb49-249"><a href="#cb49-249"></a><span class="fu">hist</span>(beta_1, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 1, shape2 = 1"</span>)</span>
+<span id="cb49-250"><a href="#cb49-250"></a><span class="fu">hist</span>(beta_2, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 100, shape2 = 100"</span>)</span>
+<span id="cb49-251"><a href="#cb49-251"></a><span class="fu">hist</span>(beta_3, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 100, shape2 = 20"</span>)</span>
+<span id="cb49-252"><a href="#cb49-252"></a><span class="fu">hist</span>(beta_4, <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.02</span>), <span class="at">main =</span> <span class="st">"shape1 = 5, shape2 = 95"</span>)</span>
+<span id="cb49-253"><a href="#cb49-253"></a><span class="in">```</span></span>
+<span id="cb49-254"><a href="#cb49-254"></a></span>
+<span id="cb49-255"><a href="#cb49-255"></a>The 4th graphs represents the best following setence: *Most ads get</span>
+<span id="cb49-256"><a href="#cb49-256"></a>clicked on 5% of the time, but for some ads it is as low as 2% and for</span>
+<span id="cb49-257"><a href="#cb49-257"></a>others as high as 8%.*</span>
+<span id="cb49-258"><a href="#cb49-258"></a></span>
+<span id="cb49-259"><a href="#cb49-259"></a><span class="fu">### Contrasts and comparison</span></span>
+<span id="cb49-260"><a href="#cb49-260"></a></span>
+<span id="cb49-261"><a href="#cb49-261"></a>Let say, I initialize also text add campaign, get 6 visitors out of 100</span>
+<span id="cb49-262"><a href="#cb49-262"></a>views and now I want to compare which one video or text add is more cost</span>
+<span id="cb49-263"><a href="#cb49-263"></a>effective.</span>
+<span id="cb49-264"><a href="#cb49-264"></a></span>
+<span id="cb49-267"><a href="#cb49-267"></a><span class="in">```{r}</span></span>
+<span id="cb49-268"><a href="#cb49-268"></a><span class="co"># Define parameters</span></span>
+<span id="cb49-269"><a href="#cb49-269"></a>n_draws <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb49-270"><a href="#cb49-270"></a>n_ads_shown <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb49-271"><a href="#cb49-271"></a>proportion_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_draws, <span class="at">min =</span> <span class="fl">0.0</span>, <span class="at">max =</span> <span class="fl">0.2</span>)</span>
+<span id="cb49-272"><a href="#cb49-272"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_draws, <span class="at">size =</span> n_ads_shown, </span>
+<span id="cb49-273"><a href="#cb49-273"></a>                     <span class="at">prob =</span> proportion_clicks)</span>
+<span id="cb49-274"><a href="#cb49-274"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(proportion_clicks, n_visitors)</span>
+<span id="cb49-275"><a href="#cb49-275"></a></span>
+<span id="cb49-276"><a href="#cb49-276"></a><span class="co"># Create the posteriors for video and text ads</span></span>
+<span id="cb49-277"><a href="#cb49-277"></a>posterior_video <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">13</span>, ]</span>
+<span id="cb49-278"><a href="#cb49-278"></a>posterior_text <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">6</span>, ]</span>
+<span id="cb49-279"><a href="#cb49-279"></a></span>
+<span id="cb49-280"><a href="#cb49-280"></a><span class="co"># Visualize the posteriors</span></span>
+<span id="cb49-281"><a href="#cb49-281"></a><span class="fu">hist</span>(posterior_video<span class="sc">$</span>proportion_clicks, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>))</span>
+<span id="cb49-282"><a href="#cb49-282"></a><span class="fu">hist</span>(posterior_text<span class="sc">$</span>proportion_clicks, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>))</span>
+<span id="cb49-283"><a href="#cb49-283"></a></span>
+<span id="cb49-284"><a href="#cb49-284"></a></span>
+<span id="cb49-285"><a href="#cb49-285"></a>posterior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">video_prop =</span> posterior_video<span class="sc">$</span>proportion_clicks[<span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>],</span>
+<span id="cb49-286"><a href="#cb49-286"></a>                        <span class="at">text_prop =</span> posterior_text<span class="sc">$</span>proportion_click[<span class="dv">1</span><span class="sc">:</span><span class="dv">4000</span>])</span>
+<span id="cb49-287"><a href="#cb49-287"></a></span>
+<span id="cb49-288"><a href="#cb49-288"></a><span class="co"># Calculate the posterior difference: video_prop - text_prop</span></span>
+<span id="cb49-289"><a href="#cb49-289"></a>posterior<span class="sc">$</span>prop_diff <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_prop <span class="sc">-</span> posterior<span class="sc">$</span>text_prop </span>
+<span id="cb49-290"><a href="#cb49-290"></a></span>
+<span id="cb49-291"><a href="#cb49-291"></a><span class="co"># Visualize prop_diff</span></span>
+<span id="cb49-292"><a href="#cb49-292"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>prop_diff)</span>
+<span id="cb49-293"><a href="#cb49-293"></a></span>
+<span id="cb49-294"><a href="#cb49-294"></a><span class="co"># Calculate the median of prop_diff</span></span>
+<span id="cb49-295"><a href="#cb49-295"></a><span class="fu">median</span>(posterior<span class="sc">$</span>prop_diff)</span>
+<span id="cb49-296"><a href="#cb49-296"></a></span>
+<span id="cb49-297"><a href="#cb49-297"></a><span class="co"># Calculate the proportion</span></span>
+<span id="cb49-298"><a href="#cb49-298"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>prop_diff <span class="sc">&gt;</span> <span class="fl">0.0</span>)</span>
+<span id="cb49-299"><a href="#cb49-299"></a></span>
+<span id="cb49-300"><a href="#cb49-300"></a></span>
+<span id="cb49-301"><a href="#cb49-301"></a><span class="co">#Different adds have differnt costs then:</span></span>
+<span id="cb49-302"><a href="#cb49-302"></a>visitor_spend <span class="ot">&lt;-</span> <span class="fl">2.53</span></span>
+<span id="cb49-303"><a href="#cb49-303"></a>video_cost <span class="ot">&lt;-</span> <span class="fl">0.25</span></span>
+<span id="cb49-304"><a href="#cb49-304"></a>text_cost <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb49-305"><a href="#cb49-305"></a></span>
+<span id="cb49-306"><a href="#cb49-306"></a><span class="co"># Add the column posterior$video_profit</span></span>
+<span id="cb49-307"><a href="#cb49-307"></a>posterior<span class="sc">$</span>video_profit <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_prop <span class="sc">*</span> visitor_spend <span class="sc">-</span> video_cost</span>
+<span id="cb49-308"><a href="#cb49-308"></a></span>
+<span id="cb49-309"><a href="#cb49-309"></a><span class="co"># Add the column posterior$text_profit</span></span>
+<span id="cb49-310"><a href="#cb49-310"></a>posterior<span class="sc">$</span>text_profit <span class="ot">&lt;-</span> posterior<span class="sc">$</span>text_prop <span class="sc">*</span> visitor_spend <span class="sc">-</span> text_cost</span>
+<span id="cb49-311"><a href="#cb49-311"></a></span>
+<span id="cb49-312"><a href="#cb49-312"></a><span class="co"># Visualize the video_profit and text_profit columns</span></span>
+<span id="cb49-313"><a href="#cb49-313"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>video_profit)</span>
+<span id="cb49-314"><a href="#cb49-314"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>text_profit)</span>
+<span id="cb49-315"><a href="#cb49-315"></a></span>
+<span id="cb49-316"><a href="#cb49-316"></a><span class="co"># Add the column posterior$profit_diff</span></span>
+<span id="cb49-317"><a href="#cb49-317"></a>posterior<span class="sc">$</span>profit_diff <span class="ot">&lt;-</span> posterior<span class="sc">$</span>video_profit <span class="sc">-</span> posterior<span class="sc">$</span>text_profit</span>
+<span id="cb49-318"><a href="#cb49-318"></a></span>
+<span id="cb49-319"><a href="#cb49-319"></a><span class="co"># Visualize posterior$profit_diff</span></span>
+<span id="cb49-320"><a href="#cb49-320"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>profit_diff)</span>
+<span id="cb49-321"><a href="#cb49-321"></a></span>
+<span id="cb49-322"><a href="#cb49-322"></a><span class="co"># Calculate a "best guess" for the difference in profits</span></span>
+<span id="cb49-323"><a href="#cb49-323"></a><span class="fu">median</span>(posterior<span class="sc">$</span>profit_diff)</span>
+<span id="cb49-324"><a href="#cb49-324"></a></span>
+<span id="cb49-325"><a href="#cb49-325"></a><span class="co"># Calculate the probability that text ads are better than video ads</span></span>
+<span id="cb49-326"><a href="#cb49-326"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>profit_diff <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb49-327"><a href="#cb49-327"></a></span>
+<span id="cb49-328"><a href="#cb49-328"></a><span class="co">#So it seems that the evidence does not strongly favor neither text nor video ads. But if forced to choose the text ads is better.</span></span>
+<span id="cb49-329"><a href="#cb49-329"></a><span class="in">```</span></span>
+<span id="cb49-330"><a href="#cb49-330"></a></span>
+<span id="cb49-331"><a href="#cb49-331"></a><span class="fu">#### Changeing Generative model</span></span>
+<span id="cb49-332"><a href="#cb49-332"></a></span>
+<span id="cb49-333"><a href="#cb49-333"></a>Company has changed the way how they price adds. Now they take money</span>
+<span id="cb49-334"><a href="#cb49-334"></a>just for full day of exposition. Binomial model, which approximate</span>
+<span id="cb49-335"><a href="#cb49-335"></a>participation of succes in all trials (click in all views) is no longer</span>
+<span id="cb49-336"><a href="#cb49-336"></a>valid. For new scenario. **Poison distribution** is now needed.</span>
+<span id="cb49-337"><a href="#cb49-337"></a></span>
+<span id="cb49-338"><a href="#cb49-338"></a>**The Poison distribution takes only one parameter which is the mean</span>
+<span id="cb49-339"><a href="#cb49-339"></a>number of events per time unit**</span>
+<span id="cb49-340"><a href="#cb49-340"></a></span>
+<span id="cb49-341"><a href="#cb49-341"></a>In R you can simulate from a Poisson distribution using rpois where</span>
+<span id="cb49-342"><a href="#cb49-342"></a>lambda is the average number of occurrences:</span>
+<span id="cb49-343"><a href="#cb49-343"></a></span>
+<span id="cb49-346"><a href="#cb49-346"></a><span class="in">```{r}</span></span>
+<span id="cb49-347"><a href="#cb49-347"></a><span class="co"># Change the model according to instructions</span></span>
+<span id="cb49-348"><a href="#cb49-348"></a>n_draws <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb49-349"><a href="#cb49-349"></a>mean_clicks <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_draws, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">80</span>) <span class="co">#this is my prior</span></span>
+<span id="cb49-350"><a href="#cb49-350"></a>n_visitors <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> n_draws, mean_clicks)</span>
+<span id="cb49-351"><a href="#cb49-351"></a></span>
+<span id="cb49-352"><a href="#cb49-352"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(mean_clicks, n_visitors)</span>
+<span id="cb49-353"><a href="#cb49-353"></a>posterior <span class="ot">&lt;-</span> prior[prior<span class="sc">$</span>n_visitors <span class="sc">==</span> <span class="dv">19</span>, ]</span>
+<span id="cb49-354"><a href="#cb49-354"></a></span>
+<span id="cb49-355"><a href="#cb49-355"></a><span class="fu">hist</span>(prior<span class="sc">$</span>mean_clicks)</span>
+<span id="cb49-356"><a href="#cb49-356"></a><span class="fu">hist</span>(posterior<span class="sc">$</span>mean_clicks)</span>
+<span id="cb49-357"><a href="#cb49-357"></a></span>
+<span id="cb49-358"><a href="#cb49-358"></a><span class="in">```</span></span>
+<span id="cb49-359"><a href="#cb49-359"></a></span>
+<span id="cb49-360"><a href="#cb49-360"></a><span class="fu">### Dealing with 2 parameter model</span></span>
+<span id="cb49-361"><a href="#cb49-361"></a></span>
+<span id="cb49-364"><a href="#cb49-364"></a><span class="in">```{r}</span></span>
+<span id="cb49-365"><a href="#cb49-365"></a><span class="co">#  the temperatures of Sweden water in 21 th of June in few following year</span></span>
+<span id="cb49-366"><a href="#cb49-366"></a>temp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">19</span>,<span class="dv">23</span>,<span class="dv">20</span>,<span class="dv">17</span>,<span class="dv">23</span>)</span>
+<span id="cb49-367"><a href="#cb49-367"></a><span class="co"># Defining the parameter grid - here are are my priors about the posible values of parameters of distribution</span></span>
+<span id="cb49-368"><a href="#cb49-368"></a>pars <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">mu =</span> <span class="fu">seq</span>(<span class="dv">8</span>,<span class="dv">30</span>, <span class="at">by =</span> <span class="fl">0.5</span>), </span>
+<span id="cb49-369"><a href="#cb49-369"></a>                    <span class="at">sigma =</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="dv">10</span>, <span class="at">by=</span> <span class="fl">0.3</span>))</span>
+<span id="cb49-370"><a href="#cb49-370"></a><span class="co"># Defining and calculating the prior density for each parameter combination</span></span>
+<span id="cb49-371"><a href="#cb49-371"></a>pars<span class="sc">$</span>mu_prior <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(pars<span class="sc">$</span>mu, <span class="at">mean =</span> <span class="dv">18</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb49-372"><a href="#cb49-372"></a>pars<span class="sc">$</span>sigma_prior <span class="ot">&lt;-</span> <span class="fu">dunif</span>(pars<span class="sc">$</span>sigma, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">10</span>)</span>
+<span id="cb49-373"><a href="#cb49-373"></a>pars<span class="sc">$</span>prior <span class="ot">&lt;-</span> pars<span class="sc">$</span>mu_prior <span class="sc">*</span> pars<span class="sc">$</span>sigma_prior</span>
+<span id="cb49-374"><a href="#cb49-374"></a><span class="co"># Calculating the likelihood for each parameter combination</span></span>
+<span id="cb49-375"><a href="#cb49-375"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pars)) {</span>
+<span id="cb49-376"><a href="#cb49-376"></a>  likelihoods <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(temp, pars<span class="sc">$</span>mu[i], pars<span class="sc">$</span>sigma[i])</span>
+<span id="cb49-377"><a href="#cb49-377"></a>  pars<span class="sc">$</span>likelihood[i] <span class="ot">&lt;-</span> <span class="fu">prod</span>(likelihoods)</span>
+<span id="cb49-378"><a href="#cb49-378"></a>}</span>
+<span id="cb49-379"><a href="#cb49-379"></a><span class="co"># Calculate the probability of each parameter combination</span></span>
+<span id="cb49-380"><a href="#cb49-380"></a>pars<span class="sc">$</span>probability <span class="ot">&lt;-</span> pars<span class="sc">$</span>likelihood <span class="sc">*</span> pars<span class="sc">$</span>prior</span>
+<span id="cb49-381"><a href="#cb49-381"></a>pars<span class="sc">$</span>probability <span class="ot">&lt;-</span> pars<span class="sc">$</span>probability <span class="sc">/</span> <span class="fu">sum</span>(pars<span class="sc">$</span>probability )</span>
+<span id="cb49-382"><a href="#cb49-382"></a></span>
+<span id="cb49-383"><a href="#cb49-383"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb49-384"><a href="#cb49-384"></a><span class="fu">levelplot</span>(probability <span class="sc">~</span> mu <span class="sc">*</span> sigma, <span class="at">data =</span> pars)</span>
+<span id="cb49-385"><a href="#cb49-385"></a><span class="in">```</span></span>
+<span id="cb49-386"><a href="#cb49-386"></a></span>
+<span id="cb49-387"><a href="#cb49-387"></a>What's likely the average water temperature for this lake on 20th of</span>
+<span id="cb49-388"><a href="#cb49-388"></a>Julys, and what's the probability the water temperature is going to be</span>
+<span id="cb49-389"><a href="#cb49-389"></a>18 or more on the next 20th?</span>
+<span id="cb49-390"><a href="#cb49-390"></a></span>
+<span id="cb49-391"><a href="#cb49-391"></a>Right now the posterior probability distribution is represented as a</span>
+<span id="cb49-392"><a href="#cb49-392"></a>data frame with one row per parameter combination with the corresponding</span>
+<span id="cb49-393"><a href="#cb49-393"></a>probability.</span>
+<span id="cb49-394"><a href="#cb49-394"></a></span>
+<span id="cb49-397"><a href="#cb49-397"></a><span class="in">```{r}</span></span>
+<span id="cb49-398"><a href="#cb49-398"></a><span class="fu">head</span>(pars)</span>
+<span id="cb49-399"><a href="#cb49-399"></a><span class="in">```</span></span>
+<span id="cb49-400"><a href="#cb49-400"></a></span>
+<span id="cb49-401"><a href="#cb49-401"></a>But my questions are much easier to answer if the posterior is</span>
+<span id="cb49-402"><a href="#cb49-402"></a>represented as a large number of samples, like in earlier chapters. So,</span>
+<span id="cb49-403"><a href="#cb49-403"></a>let's draw a sample from this posterior.</span>
+<span id="cb49-404"><a href="#cb49-404"></a></span>
+<span id="cb49-407"><a href="#cb49-407"></a><span class="in">```{r}</span></span>
+<span id="cb49-408"><a href="#cb49-408"></a>sample_indices <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pars), <span class="at">size=</span><span class="dv">10000</span>, <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span>pars<span class="sc">$</span>probability)</span>
+<span id="cb49-409"><a href="#cb49-409"></a>pars_sample <span class="ot">&lt;-</span> pars[sample_indices,<span class="fu">c</span>(<span class="st">"mu"</span>,<span class="st">"sigma"</span>)]</span>
+<span id="cb49-410"><a href="#cb49-410"></a><span class="fu">head</span>(pars_sample)</span>
+<span id="cb49-411"><a href="#cb49-411"></a></span>
+<span id="cb49-412"><a href="#cb49-412"></a><span class="in">```</span></span>
+<span id="cb49-413"><a href="#cb49-413"></a></span>
+<span id="cb49-414"><a href="#cb49-414"></a>What is probabibility of temperature being 18 or above? Not mean</span>
+<span id="cb49-415"><a href="#cb49-415"></a>temperature, the actual temperature.</span>
+<span id="cb49-416"><a href="#cb49-416"></a></span>
+<span id="cb49-419"><a href="#cb49-419"></a><span class="in">```{r}</span></span>
+<span id="cb49-420"><a href="#cb49-420"></a><span class="co">#rnorm is vectorized and implicitly loops over mu and sigma</span></span>
+<span id="cb49-421"><a href="#cb49-421"></a>pred_temp<span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>, <span class="at">mean=</span>pars_sample<span class="sc">$</span>mu, <span class="at">sd=</span>pars_sample<span class="sc">$</span>sigma)</span>
+<span id="cb49-422"><a href="#cb49-422"></a></span>
+<span id="cb49-423"><a href="#cb49-423"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb49-424"><a href="#cb49-424"></a><span class="fu">hist</span>(pars_sample<span class="sc">$</span>mu,<span class="dv">30</span>, <span class="at">main =</span> <span class="st">'probability distribution of mean temperature'</span>)</span>
+<span id="cb49-425"><a href="#cb49-425"></a><span class="fu">hist</span>(pred_temp,<span class="dv">30</span>, <span class="at">main =</span> <span class="st">'probability distribution of tempeture'</span> )</span>
+<span id="cb49-426"><a href="#cb49-426"></a><span class="fu">mean</span>(pred_temp<span class="sc">&gt;=</span><span class="dv">18</span>)</span>
+<span id="cb49-427"><a href="#cb49-427"></a><span class="in">```</span></span>
+<span id="cb49-428"><a href="#cb49-428"></a></span>
+<span id="cb49-429"><a href="#cb49-429"></a><span class="fu">### Automatisation - BEST package</span></span>
+<span id="cb49-430"><a href="#cb49-430"></a></span>
+<span id="cb49-431"><a href="#cb49-431"></a>The Bayesian model behind BEST assumes that the generative model for the</span>
+<span id="cb49-432"><a href="#cb49-432"></a>data is a t-distribution; a more flexible distribution than the normal</span>
+<span id="cb49-433"><a href="#cb49-433"></a>distribution as it assumes that data points might be outliers to some</span>
+<span id="cb49-434"><a href="#cb49-434"></a>degree. This makes BEST's estimate of the mean difference robust to</span>
+<span id="cb49-435"><a href="#cb49-435"></a>outliers in the data.</span>
+<span id="cb49-436"><a href="#cb49-436"></a></span>
+<span id="cb49-437"><a href="#cb49-437"></a>The t-distribution is just like the normal distribution, a generative</span>
+<span id="cb49-438"><a href="#cb49-438"></a>model with a mean and a standard deviation that generates heap shaped</span>
+<span id="cb49-439"><a href="#cb49-439"></a>data. The difference is that the t-distribution has an extra parameter,</span>
+<span id="cb49-440"><a href="#cb49-440"></a>sometimes called the degrees-of-freedom parameter, that governs how</span>
+<span id="cb49-441"><a href="#cb49-441"></a>likely the t-distribution is to generate outliers far from its center.</span>
+<span id="cb49-442"><a href="#cb49-442"></a></span>
+<span id="cb49-443"><a href="#cb49-443"></a>Another way in which BEST is different is that BEST uses a so-called</span>
+<span id="cb49-444"><a href="#cb49-444"></a>Markov chain Monte Carlo method to fit the model. Markov chain Monte</span>
+<span id="cb49-445"><a href="#cb49-445"></a>Carlo, or MCMC for short, returns a table of samples from the posterior,</span>
+<span id="cb49-446"><a href="#cb49-446"></a>we can work with the output just like before.</span>
+<span id="cb49-447"><a href="#cb49-447"></a></span>
+<span id="cb49-448"><a href="#cb49-448"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb49-449"><a href="#cb49-449"></a></span>
+<span id="cb49-450"><a href="#cb49-450"></a><span class="co"># The IQ of zombies on a regular diet and a brain based diet.</span></span>
+<span id="cb49-451"><a href="#cb49-451"></a>iq_brains <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">44</span>, <span class="dv">52</span>, <span class="dv">42</span>, <span class="dv">66</span>, <span class="dv">53</span>, <span class="dv">42</span>, <span class="dv">55</span>, <span class="dv">57</span>, <span class="dv">56</span>, <span class="dv">51</span>)</span>
+<span id="cb49-452"><a href="#cb49-452"></a>iq_regular <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">44</span>, <span class="dv">34</span>, <span class="dv">18</span>, <span class="dv">51</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">49</span>, <span class="dv">48</span>, <span class="dv">46</span>)</span>
+<span id="cb49-453"><a href="#cb49-453"></a></span>
+<span id="cb49-454"><a href="#cb49-454"></a><span class="co"># Calculate the mean difference in IQ between the two groups</span></span>
+<span id="cb49-455"><a href="#cb49-455"></a><span class="fu">mean</span>(iq_brains) <span class="sc">-</span> <span class="fu">mean</span>(iq_regular)</span>
+<span id="cb49-456"><a href="#cb49-456"></a></span>
+<span id="cb49-457"><a href="#cb49-457"></a><span class="co"># Fit the BEST model to the data from both groups</span></span>
+<span id="cb49-458"><a href="#cb49-458"></a><span class="fu">library</span>(BEST)</span>
+<span id="cb49-459"><a href="#cb49-459"></a><span class="fu">library</span>(rjags)</span>
+<span id="cb49-460"><a href="#cb49-460"></a>best_posterior <span class="ot">&lt;-</span> <span class="fu">BESTmcmc</span>(iq_brains, iq_regular)</span>
+<span id="cb49-461"><a href="#cb49-461"></a></span>
+<span id="cb49-462"><a href="#cb49-462"></a><span class="co"># Plot the model result</span></span>
+<span id="cb49-463"><a href="#cb49-463"></a><span class="fu">plot</span>(best_posterior)</span>
+<span id="cb49-464"><a href="#cb49-464"></a></span>
+<span id="cb49-465"><a href="#cb49-465"></a><span class="in">```</span></span>
+<span id="cb49-466"><a href="#cb49-466"></a></span>
+<span id="cb49-467"><a href="#cb49-467"></a>Assume that a super smart mutant zombie (IQ = 150) got into the</span>
+<span id="cb49-468"><a href="#cb49-468"></a>iq_regular group by mistake. This might mess up the results as you and</span>
+<span id="cb49-469"><a href="#cb49-469"></a>your colleagues really were interested in how diet affects normal</span>
+<span id="cb49-470"><a href="#cb49-470"></a>zombies.</span>
+<span id="cb49-471"><a href="#cb49-471"></a></span>
+<span id="cb49-472"><a href="#cb49-472"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb49-473"><a href="#cb49-473"></a><span class="co"># The IQ of zombies given a regular diet and a brain based diet.</span></span>
+<span id="cb49-474"><a href="#cb49-474"></a>iq_brains <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">44</span>, <span class="dv">52</span>, <span class="dv">42</span>, <span class="dv">66</span>, <span class="dv">53</span>, <span class="dv">42</span>, <span class="dv">55</span>, <span class="dv">57</span>, <span class="dv">56</span>, <span class="dv">51</span>)</span>
+<span id="cb49-475"><a href="#cb49-475"></a>iq_regular <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">55</span>, <span class="dv">44</span>, <span class="dv">34</span>, <span class="dv">18</span>, <span class="dv">51</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">49</span>, <span class="dv">48</span>, </span>
+<span id="cb49-476"><a href="#cb49-476"></a>                <span class="dv">150</span>) <span class="co"># &lt;- Mutant zombie</span></span>
+<span id="cb49-477"><a href="#cb49-477"></a></span>
+<span id="cb49-478"><a href="#cb49-478"></a><span class="co"># Modify the data above and calculate the difference in means</span></span>
+<span id="cb49-479"><a href="#cb49-479"></a><span class="fu">mean</span>(iq_brains) <span class="sc">-</span> <span class="fu">mean</span>(iq_regular)</span>
+<span id="cb49-480"><a href="#cb49-480"></a><span class="in">```</span></span>
+<span id="cb49-481"><a href="#cb49-481"></a></span>
+<span id="cb49-482"><a href="#cb49-482"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb49-483"><a href="#cb49-483"></a><span class="co"># Fit the BEST model to the modified data and plot the result</span></span>
+<span id="cb49-484"><a href="#cb49-484"></a><span class="fu">library</span>(BEST)</span>
+<span id="cb49-485"><a href="#cb49-485"></a>best_posterior <span class="ot">&lt;-</span> <span class="fu">BESTmcmc</span>(iq_brains, iq_regular)</span>
+<span id="cb49-486"><a href="#cb49-486"></a><span class="fu">plot</span>(best_posterior)</span>
+<span id="cb49-487"><a href="#cb49-487"></a></span>
+<span id="cb49-488"><a href="#cb49-488"></a><span class="in">```</span></span>
+<span id="cb49-489"><a href="#cb49-489"></a></span>
+<span id="cb49-490"><a href="#cb49-490"></a><span class="fu">### Conclusions</span></span>
+<span id="cb49-491"><a href="#cb49-491"></a></span>
+<span id="cb49-492"><a href="#cb49-492"></a>Bayes allows you to tweak, change and tinker with the model to better</span>
+<span id="cb49-493"><a href="#cb49-493"></a>fit the data analytical problem you have. But a last reason to use Bayes</span>
+<span id="cb49-494"><a href="#cb49-494"></a>is because it is optimal, kind of. It can be shown, theoretically, that</span>
+<span id="cb49-495"><a href="#cb49-495"></a>no other method learns as efficiently from data as Bayesian inference.</span>
+<span id="cb49-496"><a href="#cb49-496"></a></span>
+<span id="cb49-497"><a href="#cb49-497"></a>In above examples I show what Bayesian model is about: <span class="sc">\*</span> I describe my</span>
+<span id="cb49-498"><a href="#cb49-498"></a>expectations of proportion_clicks as uniform distribution (prior) <span class="sc">\*</span></span>
+<span id="cb49-499"><a href="#cb49-499"></a>Then i describe a generative model which will be responsible for</span>
+<span id="cb49-500"><a href="#cb49-500"></a>generating views based on proportion_clicks - the second source of</span>
+<span id="cb49-501"><a href="#cb49-501"></a>variability. For this aim I use two diffrent distribution - binomial and</span>
+<span id="cb49-502"><a href="#cb49-502"></a>poison - depending on specifity of exercise. <span class="sc">\*</span> I was able to say which</span>
+<span id="cb49-503"><a href="#cb49-503"></a>add wass better, more, I was able to say which add was better in</span>
+<span id="cb49-504"><a href="#cb49-504"></a>probability way.</span>
+<span id="cb49-505"><a href="#cb49-505"></a></span>
+<span id="cb49-506"><a href="#cb49-506"></a><span class="fu">## Bayesian Statistics - Intermediate</span></span>
+<span id="cb49-507"><a href="#cb49-507"></a></span>
+<span id="cb49-508"><a href="#cb49-508"></a><span class="fu">### Likelihood</span></span>
+<span id="cb49-509"><a href="#cb49-509"></a></span>
+<span id="cb49-510"><a href="#cb49-510"></a>On the example of poll. Imagine I am taking part in election to local</span>
+<span id="cb49-511"><a href="#cb49-511"></a>goverment. Based on many historical election poles I can count on 45% of</span>
+<span id="cb49-512"><a href="#cb49-512"></a>votes. Votes chances are approximate by bheta function.</span>
+<span id="cb49-513"><a href="#cb49-513"></a></span>
+<span id="cb49-514"><a href="#cb49-514"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb49-515"><a href="#cb49-515"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">sample=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>),</span>
+<span id="cb49-516"><a href="#cb49-516"></a>               <span class="at">density=</span><span class="fu">dbeta</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.01</span>),<span class="at">shape1=</span><span class="dv">45</span>,<span class="at">shape2=</span><span class="dv">55</span>))</span>
+<span id="cb49-517"><a href="#cb49-517"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>sample,<span class="at">y=</span>density))<span class="sc">+</span></span>
+<span id="cb49-518"><a href="#cb49-518"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb49-519"><a href="#cb49-519"></a>  <span class="fu">ggtitle</span>(<span class="st">"Density function"</span>)</span>
+<span id="cb49-520"><a href="#cb49-520"></a></span>
+<span id="cb49-521"><a href="#cb49-521"></a><span class="in">```</span></span>
+<span id="cb49-522"><a href="#cb49-522"></a></span>
+<span id="cb49-523"><a href="#cb49-523"></a>Lets imagine that i receive 60% of votes in ellection pole. I can assume</span>
+<span id="cb49-524"><a href="#cb49-524"></a>that binomial distribution is well suited for generative model</span>
+<span id="cb49-525"><a href="#cb49-525"></a>responsible for how many votes I am geting. Then I may ask myself:</span>
+<span id="cb49-526"><a href="#cb49-526"></a><span class="sc">\*\*</span>How probable would be obtaining such a results (60%) of votes under</span>
+<span id="cb49-527"><a href="#cb49-527"></a>different succes_rate (paramter of Binomial distribution).</span>
+<span id="cb49-528"><a href="#cb49-528"></a></span>
+<span id="cb49-529"><a href="#cb49-529"></a><span class="in">```{R eval=FALSE}</span></span>
+<span id="cb49-530"><a href="#cb49-530"></a></span>
+<span id="cb49-531"><a href="#cb49-531"></a>df<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">likelihood=</span><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">6</span>,<span class="at">size=</span><span class="dv">10</span>,<span class="at">prob=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>)), </span>
+<span id="cb49-532"><a href="#cb49-532"></a>               <span class="at">parameter_p=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>))</span>
+<span id="cb49-533"><a href="#cb49-533"></a></span>
+<span id="cb49-534"><a href="#cb49-534"></a>df <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>parameter_p,<span class="at">y=</span>likelihood))<span class="sc">+</span></span>
+<span id="cb49-535"><a href="#cb49-535"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb49-536"><a href="#cb49-536"></a>  <span class="fu">ggtitle</span>(<span class="st">"Likelihood distribution over different succes_rate parameters"</span>)</span>
+<span id="cb49-537"><a href="#cb49-537"></a><span class="in">```</span></span>
+<span id="cb49-538"><a href="#cb49-538"></a></span>
+<span id="cb49-539"><a href="#cb49-539"></a>The likelihood function summarizes the likelihood of observing polling</span>
+<span id="cb49-540"><a href="#cb49-540"></a>data X under different values of the underlying support parameter p.</span>
+<span id="cb49-541"><a href="#cb49-541"></a>Thus, the likelihood is a function of p that depends upon the observed</span>
+<span id="cb49-542"><a href="#cb49-542"></a>data X</span>
+<span id="cb49-543"><a href="#cb49-543"></a></span>
+<span id="cb49-544"><a href="#cb49-544"></a><span class="fu">### Posterior</span></span>
+<span id="cb49-545"><a href="#cb49-545"></a></span>
+<span id="cb49-546"><a href="#cb49-546"></a>Since I've got the prior &amp; likelihood:</span>
+<span id="cb49-547"><a href="#cb49-547"></a></span>
+<span id="cb49-548"><a href="#cb49-548"></a><span class="ss">-   </span>prior: let say based on the historical pole % of votes I can count</span>
+<span id="cb49-549"><a href="#cb49-549"></a>    on is described by betha distribution Betha(45.55) --<span class="sc">\&gt;</span> most</span>
+<span id="cb49-550"><a href="#cb49-550"></a>    probable is geting 45% votes</span>
+<span id="cb49-551"><a href="#cb49-551"></a></span>
+<span id="cb49-552"><a href="#cb49-552"></a><span class="ss">-   </span>likelihood: is denoting to the most recent data shown above</span>
+<span id="cb49-553"><a href="#cb49-553"></a></span>
+<span id="cb49-554"><a href="#cb49-554"></a>I can approach now to modeling **posterior model of p** According to</span>
+<span id="cb49-555"><a href="#cb49-555"></a>Bayes rules posterior is calculating by:</span>
+<span id="cb49-556"><a href="#cb49-556"></a></span>
+<span id="cb49-557"><a href="#cb49-557"></a>*posterior* = prior <span class="sc">\*</span> likelihood</span>
+<span id="cb49-558"><a href="#cb49-558"></a></span>
+<span id="cb49-559"><a href="#cb49-559"></a>However, in more sophisticated model settings, tidy, closed-form</span>
+<span id="cb49-560"><a href="#cb49-560"></a>solutions to this formula might not exist. Very loosely speaking, the</span>
+<span id="cb49-561"><a href="#cb49-561"></a>goal here is to send information out to the JAGS program, which will</span>
+<span id="cb49-562"><a href="#cb49-562"></a>then design an algorithm to sample from the posterior, based on which I</span>
+<span id="cb49-563"><a href="#cb49-563"></a>will then simulate the posterior.</span>
+<span id="cb49-564"><a href="#cb49-564"></a></span>
+<span id="cb49-565"><a href="#cb49-565"></a><span class="fu">#### Compiling rjags model</span></span>
+<span id="cb49-566"><a href="#cb49-566"></a></span>
+<span id="cb49-567"><a href="#cb49-567"></a>Built from previous polls &amp; election data, my prior model of is a</span>
+<span id="cb49-568"><a href="#cb49-568"></a>Beta(,) with shape parameters a=45 and b=55. For added insight into</span>
+<span id="cb49-569"><a href="#cb49-569"></a>**p**, I also polled potential voters. The dependence of X, the number</span>
+<span id="cb49-570"><a href="#cb49-570"></a>of these voters that support you, on **p** is modeled by the</span>
+<span id="cb49-571"><a href="#cb49-571"></a>Bin(**n**,**p**) distribution.</span>
+<span id="cb49-572"><a href="#cb49-572"></a></span>
+<span id="cb49-573"><a href="#cb49-573"></a>In the completed poll, X=6 of n=10 voters supported you. The next goal</span>
+<span id="cb49-574"><a href="#cb49-574"></a>is to update my model of in light of these observed polling data! To</span>
+<span id="cb49-575"><a href="#cb49-575"></a>this end, I will use the rjags package to approximate the posterior</span>
+<span id="cb49-576"><a href="#cb49-576"></a>model of . This exercise will be break down into the 3 rjags steps:</span>
+<span id="cb49-577"><a href="#cb49-577"></a>define, compile, simulate.</span>
+<span id="cb49-578"><a href="#cb49-578"></a></span>
+<span id="cb49-579"><a href="#cb49-579"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb49-580"><a href="#cb49-580"></a><span class="fu">library</span>(rjags)</span>
+<span id="cb49-581"><a href="#cb49-581"></a></span>
+<span id="cb49-582"><a href="#cb49-582"></a><span class="co"># DEFINE the model</span></span>
+<span id="cb49-583"><a href="#cb49-583"></a>vote_model <span class="ot">&lt;-</span> <span class="st">"model{</span></span>
+<span id="cb49-584"><a href="#cb49-584"></a><span class="st">    # Likelihood model for X</span></span>
+<span id="cb49-585"><a href="#cb49-585"></a><span class="st">    X ~ dbin(p, n)</span></span>
+<span id="cb49-586"><a href="#cb49-586"></a><span class="st">    </span></span>
+<span id="cb49-587"><a href="#cb49-587"></a><span class="st">    # Prior model for p</span></span>
+<span id="cb49-588"><a href="#cb49-588"></a><span class="st">    p ~ dbeta(a, b)</span></span>
+<span id="cb49-589"><a href="#cb49-589"></a><span class="st">}"</span></span>
+<span id="cb49-590"><a href="#cb49-590"></a></span>
+<span id="cb49-591"><a href="#cb49-591"></a><span class="co"># COMPILE the model    </span></span>
+<span id="cb49-592"><a href="#cb49-592"></a>vote_jags <span class="ot">&lt;-</span> <span class="fu">jags.model</span>(<span class="fu">textConnection</span>(vote_model), </span>
+<span id="cb49-593"><a href="#cb49-593"></a>    <span class="at">data =</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="dv">45</span>, <span class="at">b =</span> <span class="dv">55</span>, <span class="at">X =</span> <span class="dv">6</span>, <span class="at">n =</span> <span class="dv">10</span>),</span>
+<span id="cb49-594"><a href="#cb49-594"></a>    <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">.RNG.name =</span> <span class="st">"base::Wichmann-Hill"</span>, <span class="at">.RNG.seed =</span> <span class="dv">100</span>))</span>
+<span id="cb49-595"><a href="#cb49-595"></a></span>
+<span id="cb49-596"><a href="#cb49-596"></a><span class="co"># SIMULATE the posterior</span></span>
+<span id="cb49-597"><a href="#cb49-597"></a>vote_sim <span class="ot">&lt;-</span> <span class="fu">coda.samples</span>(<span class="at">model =</span> vote_jags, <span class="at">variable.names =</span> <span class="fu">c</span>(<span class="st">"p"</span>), <span class="at">n.iter =</span> <span class="dv">10000</span>)</span>
+<span id="cb49-598"><a href="#cb49-598"></a></span>
+<span id="cb49-599"><a href="#cb49-599"></a><span class="co"># PLOT the posterior</span></span>
+<span id="cb49-600"><a href="#cb49-600"></a><span class="fu">plot</span>(vote_sim, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb49-601"><a href="#cb49-601"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,14 @@
+{
+  "hash": "814ed330fe01c65589e52d6fc5dbc616",
+  "result": {
+    "markdown": "---\ntitle: \"Monte Carlo Simulation\"\nauthor: 'Package Build'\ndate: '2022-11-27'\ncategories: []\ntags: []\n---\n\n::: {.cell}\n\n:::\n\n\nThere are 234 observations in our data.\n\n\n::: {.cell}\n\n:::\n\n\nThe average city mileage of the cars in our data is 16.86 and the average highway mileage is 23.44.\n\nThe plots in Figure @fig-mpg show the relationship between city and highway mileage for 38 popular models of cars. In Figure @fig-mpg-1 the points are colored by the number of cylinders while in Figure @fig-mpg-2 the points are colored by engine displacement.\n\n\n::: {#fig-mpg .cell .column-page layout-ncol=\"2\" hash='index_cache/html/fig-mpg_fab6ee0cfead68b032ce0d84505fce12'}\n\n```{.r .cell-code}\nggplot(mpg, aes(x = hwy, y = cty, color = cyl)) +\n  geom_point(alpha = 0.5, size = 2) +\n  scale_color_viridis_c() +\n  theme_minimal()\n\nggplot(mpg, aes(x = hwy, y = cty, color = displ)) +\n  geom_point(alpha = 0.5, size = 2) +\n  scale_color_viridis_c(option = \"E\") +\n  theme_minimal()\n```\n\n::: {.cell-output-display}\n![Color by number of cylinders](index_files/figure-html/fig-mpg-1.png){#fig-mpg-1 width=672}\n:::\n\n::: {.cell-output-display}\n![Color by engine displacement, in liters](index_files/figure-html/fig-mpg-2.png){#fig-mpg-2 width=672}\n:::\n\nCity and highway mileage for 38 popular models of cars.\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

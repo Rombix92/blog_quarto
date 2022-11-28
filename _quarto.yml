@@ -1,0 +1,20 @@
+project:
+  type: website
+
+website:
+  title: "Lukasz Rabalski blog"
+  description: "A place where I shares my own projects"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/Rombix92?tab=repositories
+      - icon: linkedin
+        href: https://www.linkedin.com/in/%C5%82ukasz-r%C4%85balski-2892b8102/
+format:
+  html:
+    theme: darkly
+    css: styles.css
+
+editor: visual
+
