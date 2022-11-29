@@ -1,5 +1,5 @@
 ---
-title: "List of all articles can be found bellow"
+title: "List of all articles can be found below"
 description: ""
 listing:
   contents: posts
