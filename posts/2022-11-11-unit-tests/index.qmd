@@ -1,7 +1,6 @@
 ---
 title: Unit Tests
 author: Package Build
-date: '2022-11-11'
 toc: true
 categories: ['Unit testing']
 tags: ['Python', 'Unit testing']

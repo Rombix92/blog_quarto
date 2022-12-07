@@ -2,7 +2,6 @@
 description: Presentation of R Markdown functionality
 title: R_Markdown
 categories: ["Rmarkdown"]
-date: '2022-10-26'
 ---
 
 ```{r data, , include=FALSE}

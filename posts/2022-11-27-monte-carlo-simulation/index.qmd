@@ -1,7 +1,6 @@
 ---
 title: "Monte Carlo Simulation"
 author: 'Łukasz Rąbalski'
-date: '2022-11-27'
 categories: []
 tags: []
 editor: source

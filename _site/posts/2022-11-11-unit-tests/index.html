@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Package Build">
-<meta name="dcterms.date" content="2022-11-11">
 
 <title>Lukasz Rabalski blog - Unit Tests</title>
 <style>
@@ -185,12 +184,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             </div>
     </div>
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">November 11, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -309,25 +302,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## ============================= test session starts ==============================
 ## platform darwin -- Python 3.8.12, pytest-7.2.0, pluggy-1.0.0 -- /Users/lrabalski1/miniforge3/envs/everyday_use/bin/python3.8
 ## cachedir: .pytest_cache
-## rootdir: /Users/lrabalski1/Desktop/prv/blog_testtt/posts/2022-11-11-unit-tests
-## collecting ... collected 2 items
+## rootdir: /Users/lrabalski1/Desktop/prv/blog_quarto/posts/2022-11-11-unit-tests
+## collecting ... collected 0 items / 1 error
 ## 
-## test/test_regex.py::test_empty_string PASSED                             [ 50%]
-## test/test_regex.py::test_money_with_decimal_numbers FAILED               [100%]
-## 
-## =================================== FAILURES ===================================
-## _______________________ test_money_with_decimal_numbers ________________________
-## 
-##     def test_money_with_decimal_numbers():
-##         decimal_string = "5.49 euro"
-##         extracted_money = extract_money(decimal_string)
-## &gt;       assert extracted_money == 5.49
-## E       assert 9.0 == 5.49
-## 
-## ../../../blog/content/post/2022-11-11-unit-tests/test/test_regex.py:18: AssertionError
+## ==================================== ERRORS ====================================
+## _____________________ ERROR collecting test/test_regex.py ______________________
+## ImportError while importing test module '/Users/lrabalski1/Desktop/prv/blog_quarto/posts/2022-11-11-unit-tests/test/test_regex.py'.
+## Hint: make sure your test modules/packages have valid Python names.
+## Traceback:
+## ../../../../../miniforge3/envs/everyday_use/lib/python3.8/importlib/__init__.py:127: in import_module
+##     return _bootstrap._gcd_import(name[level:], package, level)
+## /Users/lrabalski1/Desktop/prv/blog/content/post/2022-11-11-unit-tests/test/test_regex.py:5: in &lt;module&gt;
+##     ???
+## E   ModuleNotFoundError: No module named 'src'
 ## =========================== short test summary info ============================
-## FAILED test/test_regex.py::test_money_with_decimal_numbers - assert 9.0 == 5.49
-## ========================= 1 failed, 1 passed in 0.41s ==========================</code></pre>
+## ERROR test/test_regex.py
+## !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+## =============================== 1 error in 0.14s ===============================</code></pre>
 </div>
 <p>As you can see</p>
 <ul>
@@ -535,113 +526,112 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> Unit Tests</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="an">author:</span><span class="co"> Package Build</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="an">date:</span><span class="co"> '2022-11-11'</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="an">toc:</span><span class="co"> true</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="an">categories:</span><span class="co"> ['Unit testing']</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="an">tags:</span><span class="co"> ['Python', 'Unit testing']</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">---</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#markdown ----</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb4-14"><a href="#cb4-14"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb4-15"><a href="#cb4-15"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a>                      ) </span>
-<span id="cb4-17"><a href="#cb4-17"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>                      <span class="at">echo =</span> <span class="cn">FALSE</span>, <span class="co">#echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb4-20"><a href="#cb4-20"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
-<span id="cb4-21"><a href="#cb4-21"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb4-22"><a href="#cb4-22"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a>                      )</span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="in">```</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="fu"># Problem</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a></span>
-<span id="cb4-29"><a href="#cb4-29"></a>What Unit testing are and how they work?</span>
-<span id="cb4-30"><a href="#cb4-30"></a></span>
-<span id="cb4-31"><a href="#cb4-31"></a><span class="fu">## Introduction:</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a></span>
-<span id="cb4-33"><a href="#cb4-33"></a>A unit test aims to check whether a part of your code operates in the intended way. Writing them has the following benefits:</span>
-<span id="cb4-34"><a href="#cb4-34"></a></span>
-<span id="cb4-35"><a href="#cb4-35"></a><span class="ss">-   </span>Reduces bugs when developing new features or when changing the existing functionality</span>
-<span id="cb4-36"><a href="#cb4-36"></a><span class="ss">-   </span>Prevents unexpected output</span>
-<span id="cb4-37"><a href="#cb4-37"></a><span class="ss">-   </span>Helps detecting edge cases</span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="ss">-   </span>Tests can serve as documentation</span>
-<span id="cb4-39"><a href="#cb4-39"></a></span>
-<span id="cb4-40"><a href="#cb4-40"></a><span class="fu">### When should you start writing tests?</span></span>
-<span id="cb4-41"><a href="#cb4-41"></a></span>
-<span id="cb4-42"><a href="#cb4-42"></a><span class="ss">-   </span>The more certainty you want to have that your code works as intended, the more you want to invest in testing.</span>
-<span id="cb4-43"><a href="#cb4-43"></a></span>
-<span id="cb4-44"><a href="#cb4-44"></a><span class="ss">-   </span>Especially when code is used in production, writing tests can be very valuable and ultimately time-saving.</span>
-<span id="cb4-45"><a href="#cb4-45"></a></span>
-<span id="cb4-46"><a href="#cb4-46"></a><span class="fu">### **When it shouldn't be usefull?**</span></span>
-<span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="ss">-   </span>When you are exploring a dataset for the first time, you will be less inclined to write them.</span>
-<span id="cb4-49"><a href="#cb4-49"></a></span>
-<span id="cb4-50"><a href="#cb4-50"></a><span class="fu">## Python Unit testing</span></span>
-<span id="cb4-51"><a href="#cb4-51"></a></span>
-<span id="cb4-52"><a href="#cb4-52"></a>**Pytest** is a great tool for writing unit tests in Python. It makes writing tests short, easy to read, and provides great output. You can install pytest using <span class="in">`pip install pytest`</span> and create a folder structure like the following:</span>
-<span id="cb4-53"><a href="#cb4-53"></a></span>
-<span id="cb4-54"><a href="#cb4-54"></a>project/\</span>
-<span id="cb4-55"><a href="#cb4-55"></a>├─ src/\</span>
-<span id="cb4-56"><a href="#cb4-56"></a>│ ├─ regex.py\</span>
-<span id="cb4-57"><a href="#cb4-57"></a>│ ├─ **init**.py\</span>
-<span id="cb4-58"><a href="#cb4-58"></a>├─ test/\</span>
-<span id="cb4-59"><a href="#cb4-59"></a>│ ├─ test_regex.py\</span>
-<span id="cb4-60"><a href="#cb4-60"></a>│ ├─ **init**.py</span>
-<span id="cb4-61"><a href="#cb4-61"></a></span>
-<span id="cb4-62"><a href="#cb4-62"></a><span class="fu">### Use case</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a></span>
-<span id="cb4-66"><a href="#cb4-66"></a><span class="in">```{r}</span></span>
-<span id="cb4-67"><a href="#cb4-67"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb4-68"><a href="#cb4-68"></a></span>
-<span id="cb4-69"><a href="#cb4-69"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb4-70"><a href="#cb4-70"></a></span>
-<span id="cb4-71"><a href="#cb4-71"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb4-72"><a href="#cb4-72"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb4-73"><a href="#cb4-73"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="in">```</span></span>
-<span id="cb4-75"><a href="#cb4-75"></a></span>
-<span id="cb4-78"><a href="#cb4-78"></a><span class="in">```{python}</span></span>
-<span id="cb4-79"><a href="#cb4-79"></a><span class="im">import</span> sys  </span>
-<span id="cb4-80"><a href="#cb4-80"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">'/Users/lrabalski1/Desktop/prv/blog/content/post/2022-11-11-unit-tests'</span>)</span>
-<span id="cb4-81"><a href="#cb4-81"></a><span class="in">```</span></span>
-<span id="cb4-82"><a href="#cb4-82"></a></span>
-<span id="cb4-83"><a href="#cb4-83"></a>In src/regex.py I insert following python code:</span>
-<span id="cb4-84"><a href="#cb4-84"></a></span>
-<span id="cb4-87"><a href="#cb4-87"></a><span class="in">```{python}</span></span>
-<span id="cb4-88"><a href="#cb4-88"></a><span class="im">from</span> src.regex <span class="im">import</span> extract_money </span>
-<span id="cb4-89"><a href="#cb4-89"></a></span>
-<span id="cb4-90"><a href="#cb4-90"></a><span class="bu">help</span>(extract_money)</span>
-<span id="cb4-91"><a href="#cb4-91"></a><span class="in">```</span></span>
-<span id="cb4-92"><a href="#cb4-92"></a></span>
-<span id="cb4-93"><a href="#cb4-93"></a>While <span class="in">`test/test_regex.py`</span> I hold following code.</span>
-<span id="cb4-94"><a href="#cb4-94"></a></span>
-<span id="cb4-97"><a href="#cb4-97"></a><span class="in">```{r}</span></span>
-<span id="cb4-98"><a href="#cb4-98"></a><span class="fu">library</span>(readr)</span>
-<span id="cb4-99"><a href="#cb4-99"></a><span class="fu">cat</span>(readr<span class="sc">::</span><span class="fu">read_file</span>(<span class="st">'test/test_regex.py'</span>))</span>
-<span id="cb4-100"><a href="#cb4-100"></a><span class="in">```</span></span>
-<span id="cb4-101"><a href="#cb4-101"></a></span>
-<span id="cb4-102"><a href="#cb4-102"></a>If the code is localised in the file with suffix "test<span class="sc">\_</span>" and within folder "test<span class="sc">\_</span>" then running code bellow from <span class="in">`root directory`</span> will run test unit test.</span>
-<span id="cb4-103"><a href="#cb4-103"></a></span>
-<span id="cb4-104"><a href="#cb4-104"></a><span class="in">```{bash, include=TRUE}</span></span>
-<span id="cb4-105"><a href="#cb4-105"></a><span class="ex">pytest</span> <span class="at">-v</span></span>
-<span id="cb4-106"><a href="#cb4-106"></a><span class="in">```</span></span>
-<span id="cb4-107"><a href="#cb4-107"></a></span>
-<span id="cb4-108"><a href="#cb4-108"></a>As you can see</span>
-<span id="cb4-109"><a href="#cb4-109"></a></span>
-<span id="cb4-110"><a href="#cb4-110"></a><span class="ss">-   </span>first test went positive, function work well with empty string</span>
-<span id="cb4-111"><a href="#cb4-111"></a></span>
-<span id="cb4-112"><a href="#cb4-112"></a><span class="ss">-   </span>second test failed, we got an AssertionError, stating that 9 is not equal to 5.49. It seems that our function only extracted the last digit of 5.49. Without this test, we would have been less likely to catch this error. The function would have returned the value 9, instead of throwing us an error.</span>
-<span id="cb4-113"><a href="#cb4-113"></a></span>
-<span id="cb4-114"><a href="#cb4-114"></a><span class="fu">## Advantages of using Unit Test</span></span>
-<span id="cb4-115"><a href="#cb4-115"></a></span>
-<span id="cb4-116"><a href="#cb4-116"></a>The next step is to fix our code and make sure that it now passes the test that failed before, while still passing the first test that we wrote as well. A great thing about unit testing is that it gives you an overview of how your changes affect the project as a whole. The tests will make you aware if any of your code additions cause any unexpected consequences.</span>
-<span id="cb4-117"><a href="#cb4-117"></a></span>
-<span id="cb4-118"><a href="#cb4-118"></a>Furthermore, the fact that our initial function did not pass the decimal number test raises the question what other examples might come up that we did not anticipate. Maybe we will get a number separated by a comma, like 5,49 euro. Or the monetary value is formatted as € 5.49,-. Unit testing allows us to quickly check for these cases and some other less-common <span class="sc">\*\*</span>edge cases<span class="sc">\*\*</span>.</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="an">categories:</span><span class="co"> ['Unit testing']</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="an">tags:</span><span class="co"> ['Python', 'Unit testing']</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">---</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#markdown ----</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb4-14"><a href="#cb4-14"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>                      ) </span>
+<span id="cb4-16"><a href="#cb4-16"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>                      <span class="at">echo =</span> <span class="cn">FALSE</span>, <span class="co">#echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-19"><a href="#cb4-19"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb4-20"><a href="#cb4-20"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb4-21"><a href="#cb4-21"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>                      )</span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="in">```</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="fu"># Problem</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a></span>
+<span id="cb4-28"><a href="#cb4-28"></a>What Unit testing are and how they work?</span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="fu">## Introduction:</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a></span>
+<span id="cb4-32"><a href="#cb4-32"></a>A unit test aims to check whether a part of your code operates in the intended way. Writing them has the following benefits:</span>
+<span id="cb4-33"><a href="#cb4-33"></a></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="ss">-   </span>Reduces bugs when developing new features or when changing the existing functionality</span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="ss">-   </span>Prevents unexpected output</span>
+<span id="cb4-36"><a href="#cb4-36"></a><span class="ss">-   </span>Helps detecting edge cases</span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="ss">-   </span>Tests can serve as documentation</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="fu">### When should you start writing tests?</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="ss">-   </span>The more certainty you want to have that your code works as intended, the more you want to invest in testing.</span>
+<span id="cb4-42"><a href="#cb4-42"></a></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="ss">-   </span>Especially when code is used in production, writing tests can be very valuable and ultimately time-saving.</span>
+<span id="cb4-44"><a href="#cb4-44"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="fu">### **When it shouldn't be usefull?**</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="ss">-   </span>When you are exploring a dataset for the first time, you will be less inclined to write them.</span>
+<span id="cb4-48"><a href="#cb4-48"></a></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="fu">## Python Unit testing</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a></span>
+<span id="cb4-51"><a href="#cb4-51"></a>**Pytest** is a great tool for writing unit tests in Python. It makes writing tests short, easy to read, and provides great output. You can install pytest using <span class="in">`pip install pytest`</span> and create a folder structure like the following:</span>
+<span id="cb4-52"><a href="#cb4-52"></a></span>
+<span id="cb4-53"><a href="#cb4-53"></a>project/\</span>
+<span id="cb4-54"><a href="#cb4-54"></a>├─ src/\</span>
+<span id="cb4-55"><a href="#cb4-55"></a>│ ├─ regex.py\</span>
+<span id="cb4-56"><a href="#cb4-56"></a>│ ├─ **init**.py\</span>
+<span id="cb4-57"><a href="#cb4-57"></a>├─ test/\</span>
+<span id="cb4-58"><a href="#cb4-58"></a>│ ├─ test_regex.py\</span>
+<span id="cb4-59"><a href="#cb4-59"></a>│ ├─ **init**.py</span>
+<span id="cb4-60"><a href="#cb4-60"></a></span>
+<span id="cb4-61"><a href="#cb4-61"></a><span class="fu">### Use case</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a></span>
+<span id="cb4-65"><a href="#cb4-65"></a><span class="in">```{r}</span></span>
+<span id="cb4-66"><a href="#cb4-66"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb4-67"><a href="#cb4-67"></a></span>
+<span id="cb4-68"><a href="#cb4-68"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb4-69"><a href="#cb4-69"></a></span>
+<span id="cb4-70"><a href="#cb4-70"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb4-71"><a href="#cb4-71"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-73"><a href="#cb4-73"></a><span class="in">```</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a></span>
+<span id="cb4-77"><a href="#cb4-77"></a><span class="in">```{python}</span></span>
+<span id="cb4-78"><a href="#cb4-78"></a><span class="im">import</span> sys  </span>
+<span id="cb4-79"><a href="#cb4-79"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">'/Users/lrabalski1/Desktop/prv/blog/content/post/2022-11-11-unit-tests'</span>)</span>
+<span id="cb4-80"><a href="#cb4-80"></a><span class="in">```</span></span>
+<span id="cb4-81"><a href="#cb4-81"></a></span>
+<span id="cb4-82"><a href="#cb4-82"></a>In src/regex.py I insert following python code:</span>
+<span id="cb4-83"><a href="#cb4-83"></a></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="in">```{python}</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="im">from</span> src.regex <span class="im">import</span> extract_money </span>
+<span id="cb4-88"><a href="#cb4-88"></a></span>
+<span id="cb4-89"><a href="#cb4-89"></a><span class="bu">help</span>(extract_money)</span>
+<span id="cb4-90"><a href="#cb4-90"></a><span class="in">```</span></span>
+<span id="cb4-91"><a href="#cb4-91"></a></span>
+<span id="cb4-92"><a href="#cb4-92"></a>While <span class="in">`test/test_regex.py`</span> I hold following code.</span>
+<span id="cb4-93"><a href="#cb4-93"></a></span>
+<span id="cb4-96"><a href="#cb4-96"></a><span class="in">```{r}</span></span>
+<span id="cb4-97"><a href="#cb4-97"></a><span class="fu">library</span>(readr)</span>
+<span id="cb4-98"><a href="#cb4-98"></a><span class="fu">cat</span>(readr<span class="sc">::</span><span class="fu">read_file</span>(<span class="st">'test/test_regex.py'</span>))</span>
+<span id="cb4-99"><a href="#cb4-99"></a><span class="in">```</span></span>
+<span id="cb4-100"><a href="#cb4-100"></a></span>
+<span id="cb4-101"><a href="#cb4-101"></a>If the code is localised in the file with suffix "test<span class="sc">\_</span>" and within folder "test<span class="sc">\_</span>" then running code bellow from <span class="in">`root directory`</span> will run test unit test.</span>
+<span id="cb4-102"><a href="#cb4-102"></a></span>
+<span id="cb4-103"><a href="#cb4-103"></a><span class="in">```{bash, include=TRUE}</span></span>
+<span id="cb4-104"><a href="#cb4-104"></a><span class="ex">pytest</span> <span class="at">-v</span></span>
+<span id="cb4-105"><a href="#cb4-105"></a><span class="in">```</span></span>
+<span id="cb4-106"><a href="#cb4-106"></a></span>
+<span id="cb4-107"><a href="#cb4-107"></a>As you can see</span>
+<span id="cb4-108"><a href="#cb4-108"></a></span>
+<span id="cb4-109"><a href="#cb4-109"></a><span class="ss">-   </span>first test went positive, function work well with empty string</span>
+<span id="cb4-110"><a href="#cb4-110"></a></span>
+<span id="cb4-111"><a href="#cb4-111"></a><span class="ss">-   </span>second test failed, we got an AssertionError, stating that 9 is not equal to 5.49. It seems that our function only extracted the last digit of 5.49. Without this test, we would have been less likely to catch this error. The function would have returned the value 9, instead of throwing us an error.</span>
+<span id="cb4-112"><a href="#cb4-112"></a></span>
+<span id="cb4-113"><a href="#cb4-113"></a><span class="fu">## Advantages of using Unit Test</span></span>
+<span id="cb4-114"><a href="#cb4-114"></a></span>
+<span id="cb4-115"><a href="#cb4-115"></a>The next step is to fix our code and make sure that it now passes the test that failed before, while still passing the first test that we wrote as well. A great thing about unit testing is that it gives you an overview of how your changes affect the project as a whole. The tests will make you aware if any of your code additions cause any unexpected consequences.</span>
+<span id="cb4-116"><a href="#cb4-116"></a></span>
+<span id="cb4-117"><a href="#cb4-117"></a>Furthermore, the fact that our initial function did not pass the decimal number test raises the question what other examples might come up that we did not anticipate. Maybe we will get a number separated by a comma, like 5,49 euro. Or the monetary value is formatted as € 5.49,-. Unit testing allows us to quickly check for these cases and some other less-common <span class="sc">\*\*</span>edge cases<span class="sc">\*\*</span>.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

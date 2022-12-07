@@ -1,6 +1,5 @@
 ---
 title: "DGL graph datastructure"
-date: "2022-10-28"
 categories: ["DGL"]
 tags: ["DGL", "graph", "graph datastructure", "compressed sparsed matrix"]
 toc: TRUE

@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-10-26">
 <meta name="description" content="Presentation of R Markdown functionality">
 
 <title>Lukasz Rabalski blog - R_Markdown</title>
@@ -184,12 +183,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <div class="quarto-title-meta">
 
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">October 26, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -429,53 +422,52 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb2-2"><a href="#cb2-2"></a><span class="an">description:</span><span class="co"> Presentation of R Markdown functionality</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="an">title:</span><span class="co"> R_Markdown</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="an">categories:</span><span class="co"> ["Rmarkdown"]</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="an">date:</span><span class="co"> '2022-10-26'</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">---</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="in">```{r data, , include=FALSE}</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">library</span>(broom)</span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="fu">library</span>(moderndive)</span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="in">```</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="fu"># Markdown</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a></span>
-<span id="cb2-18"><a href="#cb2-18"></a>------------------------------------------------------------------------</span>
-<span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>Tutorial for markdown: <span class="ot">&lt;https://bookdown.org/yihui/rmarkdown/&gt;</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a></span>
-<span id="cb2-22"><a href="#cb2-22"></a>------------------------------------------------------------------------</span>
-<span id="cb2-23"><a href="#cb2-23"></a></span>
-<span id="cb2-24"><a href="#cb2-24"></a>*Below some useful examples:*</span>
-<span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a>knitr is what runs each code chunk and knits the document. Knitr will use this option as default for each cchunk in the document when the file is knit. Followiw opts_chunk\$dollar_set() we can add the options that we want to set globally to the parentheses before the echo = TRUE argument</span>
-<span id="cb2-27"><a href="#cb2-27"></a></span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="in">```{r setup, include=FALSE}</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">fig.align=</span><span class="st">'left'</span>, <span class="at">echo=</span><span class="cn">TRUE</span>)</span>
-<span id="cb2-30"><a href="#cb2-30"></a><span class="in">```</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a></span>
-<span id="cb2-32"><a href="#cb2-32"></a><span class="ss">-   </span>include - code &amp; results appears in the result</span>
-<span id="cb2-33"><a href="#cb2-33"></a><span class="ss">-   </span>echo - code appear in the knit file</span>
-<span id="cb2-34"><a href="#cb2-34"></a><span class="ss">-   </span>eval - evaluate code in a code chunk</span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="ss">-   </span>collapse - split code and any text output into multiple blocks or include in a single block in the final report</span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="ss">-   </span>warning - display warning</span>
-<span id="cb2-37"><a href="#cb2-37"></a><span class="ss">-   </span>message - display message like from loading packages</span>
-<span id="cb2-38"><a href="#cb2-38"></a><span class="ss">-   </span>error - stop kniting file when the error will occure (if false file will knit anyway)</span>
-<span id="cb2-39"><a href="#cb2-39"></a></span>
-<span id="cb2-40"><a href="#cb2-40"></a>At the begining of the markdown document I can find YAML header.</span>
-<span id="cb2-41"><a href="#cb2-41"></a></span>
-<span id="cb2-42"><a href="#cb2-42"></a>The YAML header controls the look and feel of your document. At the very least, your R markdown document should contain the following YAML header sandwiched between two sets of <span class="in">`---`</span>:</span>
-<span id="cb2-43"><a href="#cb2-43"></a></span>
-<span id="cb2-44"><a href="#cb2-44"></a><span class="in">```{r eval=FALSE}</span></span>
-<span id="cb2-45"><a href="#cb2-45"></a>    <span class="sc">---</span></span>
-<span id="cb2-46"><a href="#cb2-46"></a>    title<span class="sc">:</span> <span class="st">"Your document title"</span></span>
-<span id="cb2-47"><a href="#cb2-47"></a>    author<span class="sc">:</span> <span class="st">"ES 218"</span></span>
-<span id="cb2-48"><a href="#cb2-48"></a>    output<span class="sc">:</span></span>
-<span id="cb2-49"><a href="#cb2-49"></a>      html_document<span class="sc">:</span> default</span>
-<span id="cb2-50"><a href="#cb2-50"></a>    <span class="sc">---</span></span>
-<span id="cb2-51"><a href="#cb2-51"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">---</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="in">```{r data, , include=FALSE}</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="fu">library</span>(broom)</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">library</span>(moderndive)</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="in">```</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="fu"># Markdown</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a>------------------------------------------------------------------------</span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a>Tutorial for markdown: <span class="ot">&lt;https://bookdown.org/yihui/rmarkdown/&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a>------------------------------------------------------------------------</span>
+<span id="cb2-22"><a href="#cb2-22"></a></span>
+<span id="cb2-23"><a href="#cb2-23"></a>*Below some useful examples:*</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>knitr is what runs each code chunk and knits the document. Knitr will use this option as default for each cchunk in the document when the file is knit. Followiw opts_chunk\$dollar_set() we can add the options that we want to set globally to the parentheses before the echo = TRUE argument</span>
+<span id="cb2-26"><a href="#cb2-26"></a></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">fig.align=</span><span class="st">'left'</span>, <span class="at">echo=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="in">```</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="ss">-   </span>include - code &amp; results appears in the result</span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="ss">-   </span>echo - code appear in the knit file</span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="ss">-   </span>eval - evaluate code in a code chunk</span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="ss">-   </span>collapse - split code and any text output into multiple blocks or include in a single block in the final report</span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="ss">-   </span>warning - display warning</span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="ss">-   </span>message - display message like from loading packages</span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="ss">-   </span>error - stop kniting file when the error will occure (if false file will knit anyway)</span>
+<span id="cb2-38"><a href="#cb2-38"></a></span>
+<span id="cb2-39"><a href="#cb2-39"></a>At the begining of the markdown document I can find YAML header.</span>
+<span id="cb2-40"><a href="#cb2-40"></a></span>
+<span id="cb2-41"><a href="#cb2-41"></a>The YAML header controls the look and feel of your document. At the very least, your R markdown document should contain the following YAML header sandwiched between two sets of <span class="in">`---`</span>:</span>
+<span id="cb2-42"><a href="#cb2-42"></a></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a>    <span class="sc">---</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a>    title<span class="sc">:</span> <span class="st">"Your document title"</span></span>
+<span id="cb2-46"><a href="#cb2-46"></a>    author<span class="sc">:</span> <span class="st">"ES 218"</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a>    output<span class="sc">:</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a>      html_document<span class="sc">:</span> default</span>
+<span id="cb2-49"><a href="#cb2-49"></a>    <span class="sc">---</span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

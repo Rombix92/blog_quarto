@@ -1003,416 +1003,415 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb32" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb32-1"><a href="#cb32-1"></a><span class="co">---</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a><span class="an">title:</span><span class="co"> "TS - forecast"</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a><span class="an">date:</span><span class="co"> "2022-11-20"</span></span>
-<span id="cb32-4"><a href="#cb32-4"></a><span class="an">tags:</span><span class="co"> []</span></span>
-<span id="cb32-5"><a href="#cb32-5"></a><span class="an">categories:</span><span class="co"> ['Time Series', 'forecast']</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb32-7"><a href="#cb32-7"></a><span class="co">---</span></span>
-<span id="cb32-8"><a href="#cb32-8"></a></span>
-<span id="cb32-9"><a href="#cb32-9"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
-<span id="cb32-10"><a href="#cb32-10"></a><span class="co">#markdown ----</span></span>
-<span id="cb32-11"><a href="#cb32-11"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb32-12"><a href="#cb32-12"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb32-13"><a href="#cb32-13"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb32-14"><a href="#cb32-14"></a>                      ) </span>
-<span id="cb32-15"><a href="#cb32-15"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
-<span id="cb32-16"><a href="#cb32-16"></a></span>
-<span id="cb32-17"><a href="#cb32-17"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-18"><a href="#cb32-18"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
-<span id="cb32-19"><a href="#cb32-19"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb32-20"><a href="#cb32-20"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
-<span id="cb32-21"><a href="#cb32-21"></a>                      )</span>
-<span id="cb32-22"><a href="#cb32-22"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
-<span id="cb32-23"><a href="#cb32-23"></a><span class="in">```</span></span>
-<span id="cb32-24"><a href="#cb32-24"></a></span>
-<span id="cb32-25"><a href="#cb32-25"></a><span class="in">```{r, include =FALSE}</span></span>
-<span id="cb32-26"><a href="#cb32-26"></a></span>
-<span id="cb32-27"><a href="#cb32-27"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb32-28"><a href="#cb32-28"></a><span class="fu">library</span>(zoo)</span>
-<span id="cb32-29"><a href="#cb32-29"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="an">tags:</span><span class="co"> []</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="an">categories:</span><span class="co"> ['Time Series', 'forecast']</span></span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a><span class="co">---</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a></span>
+<span id="cb32-8"><a href="#cb32-8"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb32-9"><a href="#cb32-9"></a><span class="co">#markdown ----</span></span>
+<span id="cb32-10"><a href="#cb32-10"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb32-11"><a href="#cb32-11"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb32-12"><a href="#cb32-12"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb32-13"><a href="#cb32-13"></a>                      ) </span>
+<span id="cb32-14"><a href="#cb32-14"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb32-15"><a href="#cb32-15"></a></span>
+<span id="cb32-16"><a href="#cb32-16"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb32-17"><a href="#cb32-17"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb32-18"><a href="#cb32-18"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb32-19"><a href="#cb32-19"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
+<span id="cb32-20"><a href="#cb32-20"></a>                      )</span>
+<span id="cb32-21"><a href="#cb32-21"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb32-22"><a href="#cb32-22"></a><span class="in">```</span></span>
+<span id="cb32-23"><a href="#cb32-23"></a></span>
+<span id="cb32-24"><a href="#cb32-24"></a><span class="in">```{r, include =FALSE}</span></span>
+<span id="cb32-25"><a href="#cb32-25"></a></span>
+<span id="cb32-26"><a href="#cb32-26"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb32-27"><a href="#cb32-27"></a><span class="fu">library</span>(zoo)</span>
+<span id="cb32-28"><a href="#cb32-28"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb32-29"><a href="#cb32-29"></a></span>
 <span id="cb32-30"><a href="#cb32-30"></a></span>
-<span id="cb32-31"><a href="#cb32-31"></a></span>
-<span id="cb32-32"><a href="#cb32-32"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb32-33"><a href="#cb32-33"></a></span>
-<span id="cb32-34"><a href="#cb32-34"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb32-35"><a href="#cb32-35"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb32-36"><a href="#cb32-36"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb32-37"><a href="#cb32-37"></a></span>
-<span id="cb32-38"><a href="#cb32-38"></a><span class="in">```</span></span>
-<span id="cb32-39"><a href="#cb32-39"></a></span>
-<span id="cb32-40"><a href="#cb32-40"></a><span class="co">[</span><span class="ot">data set source</span><span class="co">](https://archive.ics.uci.edu/ml/datasets/Daily+Demand+Forecasting+Orders)</span></span>
-<span id="cb32-41"><a href="#cb32-41"></a></span>
-<span id="cb32-42"><a href="#cb32-42"></a><span class="in">```{r, include =FALSE}</span></span>
-<span id="cb32-43"><a href="#cb32-43"></a>data_file_path <span class="ot">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
-<span id="cb32-44"><a href="#cb32-44"></a></span>
-<span id="cb32-45"><a href="#cb32-45"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://archive.ics.uci.edu/ml/machine-learning-databases/00409/Daily_Demand_Forecasting_Orders.csv"</span>), <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">';'</span>) </span>
-<span id="cb32-46"><a href="#cb32-46"></a><span class="in">```</span></span>
-<span id="cb32-47"><a href="#cb32-47"></a></span>
-<span id="cb32-48"><a href="#cb32-48"></a><span class="fu"># simple case</span></span>
-<span id="cb32-49"><a href="#cb32-49"></a></span>
-<span id="cb32-50"><a href="#cb32-50"></a><span class="fu">## general exploration of TS</span></span>
-<span id="cb32-51"><a href="#cb32-51"></a></span>
-<span id="cb32-52"><a href="#cb32-52"></a>First we plot the data in chronological order. Since we will model this as an AR process, we look to the PACF to set a cutoff on the order of the process</span>
-<span id="cb32-53"><a href="#cb32-53"></a></span>
-<span id="cb32-54"><a href="#cb32-54"></a>The database was collected during 60 days, this is a real database of a Brazilian company of large logistics. Twelve predictive attributes and a target that is the total of orders for daily.</span>
-<span id="cb32-55"><a href="#cb32-55"></a></span>
-<span id="cb32-56"><a href="#cb32-56"></a>Data looks stationary.</span>
-<span id="cb32-57"><a href="#cb32-57"></a></span>
-<span id="cb32-60"><a href="#cb32-60"></a><span class="in">```{r}</span></span>
-<span id="cb32-61"><a href="#cb32-61"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type=</span><span class="st">'l'</span>)</span>
-<span id="cb32-62"><a href="#cb32-62"></a><span class="fu">abline</span>(<span class="at">reg=</span><span class="fu">lm</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span><span class="sc">~</span><span class="fu">index</span>(df)))</span>
-<span id="cb32-63"><a href="#cb32-63"></a><span class="in">```</span></span>
-<span id="cb32-64"><a href="#cb32-64"></a></span>
-<span id="cb32-65"><a href="#cb32-65"></a><span class="fu">## AR</span></span>
-<span id="cb32-66"><a href="#cb32-66"></a></span>
-<span id="cb32-67"><a href="#cb32-67"></a>As name suggest autoregression is regression made upon past values. The simplest autoregression model is known as AR(1): $y_t=b_0+b_1*y_{t-1}+e_t$ $e_t$ is changeable within time error with stable variance and mean = 0.</span>
-<span id="cb32-68"><a href="#cb32-68"></a></span>
-<span id="cb32-69"><a href="#cb32-69"></a><span class="fu">### selecting parameter of AR</span></span>
-<span id="cb32-70"><a href="#cb32-70"></a></span>
-<span id="cb32-73"><a href="#cb32-73"></a><span class="in">```{r}</span></span>
-<span id="cb32-74"><a href="#cb32-74"></a><span class="fu">pacf</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
-<span id="cb32-75"><a href="#cb32-75"></a><span class="in">```</span></span>
-<span id="cb32-76"><a href="#cb32-76"></a></span>
-<span id="cb32-77"><a href="#cb32-77"></a>We can see that the value of the PACF crosses the 5% significance threshold at lag 3. This is consistent with the results from the ar() function available in R's stats package. ar() automatically chooses the order of an autoregressive model if one is not specified:</span>
-<span id="cb32-78"><a href="#cb32-78"></a></span>
-<span id="cb32-81"><a href="#cb32-81"></a><span class="in">```{r}</span></span>
-<span id="cb32-82"><a href="#cb32-82"></a><span class="fu">ar</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">method =</span> <span class="st">"mle"</span>)</span>
-<span id="cb32-83"><a href="#cb32-83"></a><span class="in">```</span></span>
-<span id="cb32-84"><a href="#cb32-84"></a></span>
-<span id="cb32-85"><a href="#cb32-85"></a>Notice that the ar() function has also provided us with the coefficients for the model. We may, however, want to limit the coefficients. For example, looking at the PACF, we might wonder whether we really want to include a coefficient for the lag -- 1 term or whether we should assign that term a mandatory coefficient of 0 given that its PACF value is well below the threshold used for significance. In this case, we can use the arima() function also from the stats package. Here, we demonstrate how to call the function to fit an AR(3), by setting the order parameter to c(3, 0, 0), where 3 refers to the order of the AR component</span>
-<span id="cb32-86"><a href="#cb32-86"></a></span>
-<span id="cb32-89"><a href="#cb32-89"></a><span class="in">```{r}</span></span>
-<span id="cb32-90"><a href="#cb32-90"></a>est <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="at">x =</span> df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb32-91"><a href="#cb32-91"></a>est</span>
-<span id="cb32-92"><a href="#cb32-92"></a><span class="in">```</span></span>
-<span id="cb32-93"><a href="#cb32-93"></a></span>
-<span id="cb32-94"><a href="#cb32-94"></a>To inject prior knowledge or opinion into our model, we can constraint a coefficient to be 0. For example, if we want to constrain the lag -- 1 term to remain 0 in our model, we use the following call:</span>
-<span id="cb32-95"><a href="#cb32-95"></a></span>
-<span id="cb32-98"><a href="#cb32-98"></a><span class="in">```{r}</span></span>
-<span id="cb32-99"><a href="#cb32-99"></a>est<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="at">x =</span>  df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
-<span id="cb32-100"><a href="#cb32-100"></a>               <span class="at">fixed =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
+<span id="cb32-31"><a href="#cb32-31"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb32-32"><a href="#cb32-32"></a></span>
+<span id="cb32-33"><a href="#cb32-33"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb32-34"><a href="#cb32-34"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb32-35"><a href="#cb32-35"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-36"><a href="#cb32-36"></a></span>
+<span id="cb32-37"><a href="#cb32-37"></a><span class="in">```</span></span>
+<span id="cb32-38"><a href="#cb32-38"></a></span>
+<span id="cb32-39"><a href="#cb32-39"></a><span class="co">[</span><span class="ot">data set source</span><span class="co">](https://archive.ics.uci.edu/ml/datasets/Daily+Demand+Forecasting+Orders)</span></span>
+<span id="cb32-40"><a href="#cb32-40"></a></span>
+<span id="cb32-41"><a href="#cb32-41"></a><span class="in">```{r, include =FALSE}</span></span>
+<span id="cb32-42"><a href="#cb32-42"></a>data_file_path <span class="ot">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
+<span id="cb32-43"><a href="#cb32-43"></a></span>
+<span id="cb32-44"><a href="#cb32-44"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://archive.ics.uci.edu/ml/machine-learning-databases/00409/Daily_Demand_Forecasting_Orders.csv"</span>), <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">';'</span>) </span>
+<span id="cb32-45"><a href="#cb32-45"></a><span class="in">```</span></span>
+<span id="cb32-46"><a href="#cb32-46"></a></span>
+<span id="cb32-47"><a href="#cb32-47"></a><span class="fu"># simple case</span></span>
+<span id="cb32-48"><a href="#cb32-48"></a></span>
+<span id="cb32-49"><a href="#cb32-49"></a><span class="fu">## general exploration of TS</span></span>
+<span id="cb32-50"><a href="#cb32-50"></a></span>
+<span id="cb32-51"><a href="#cb32-51"></a>First we plot the data in chronological order. Since we will model this as an AR process, we look to the PACF to set a cutoff on the order of the process</span>
+<span id="cb32-52"><a href="#cb32-52"></a></span>
+<span id="cb32-53"><a href="#cb32-53"></a>The database was collected during 60 days, this is a real database of a Brazilian company of large logistics. Twelve predictive attributes and a target that is the total of orders for daily.</span>
+<span id="cb32-54"><a href="#cb32-54"></a></span>
+<span id="cb32-55"><a href="#cb32-55"></a>Data looks stationary.</span>
+<span id="cb32-56"><a href="#cb32-56"></a></span>
+<span id="cb32-59"><a href="#cb32-59"></a><span class="in">```{r}</span></span>
+<span id="cb32-60"><a href="#cb32-60"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type=</span><span class="st">'l'</span>)</span>
+<span id="cb32-61"><a href="#cb32-61"></a><span class="fu">abline</span>(<span class="at">reg=</span><span class="fu">lm</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span><span class="sc">~</span><span class="fu">index</span>(df)))</span>
+<span id="cb32-62"><a href="#cb32-62"></a><span class="in">```</span></span>
+<span id="cb32-63"><a href="#cb32-63"></a></span>
+<span id="cb32-64"><a href="#cb32-64"></a><span class="fu">## AR</span></span>
+<span id="cb32-65"><a href="#cb32-65"></a></span>
+<span id="cb32-66"><a href="#cb32-66"></a>As name suggest autoregression is regression made upon past values. The simplest autoregression model is known as AR(1): $y_t=b_0+b_1*y_{t-1}+e_t$ $e_t$ is changeable within time error with stable variance and mean = 0.</span>
+<span id="cb32-67"><a href="#cb32-67"></a></span>
+<span id="cb32-68"><a href="#cb32-68"></a><span class="fu">### selecting parameter of AR</span></span>
+<span id="cb32-69"><a href="#cb32-69"></a></span>
+<span id="cb32-72"><a href="#cb32-72"></a><span class="in">```{r}</span></span>
+<span id="cb32-73"><a href="#cb32-73"></a><span class="fu">pacf</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
+<span id="cb32-74"><a href="#cb32-74"></a><span class="in">```</span></span>
+<span id="cb32-75"><a href="#cb32-75"></a></span>
+<span id="cb32-76"><a href="#cb32-76"></a>We can see that the value of the PACF crosses the 5% significance threshold at lag 3. This is consistent with the results from the ar() function available in R's stats package. ar() automatically chooses the order of an autoregressive model if one is not specified:</span>
+<span id="cb32-77"><a href="#cb32-77"></a></span>
+<span id="cb32-80"><a href="#cb32-80"></a><span class="in">```{r}</span></span>
+<span id="cb32-81"><a href="#cb32-81"></a><span class="fu">ar</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">method =</span> <span class="st">"mle"</span>)</span>
+<span id="cb32-82"><a href="#cb32-82"></a><span class="in">```</span></span>
+<span id="cb32-83"><a href="#cb32-83"></a></span>
+<span id="cb32-84"><a href="#cb32-84"></a>Notice that the ar() function has also provided us with the coefficients for the model. We may, however, want to limit the coefficients. For example, looking at the PACF, we might wonder whether we really want to include a coefficient for the lag -- 1 term or whether we should assign that term a mandatory coefficient of 0 given that its PACF value is well below the threshold used for significance. In this case, we can use the arima() function also from the stats package. Here, we demonstrate how to call the function to fit an AR(3), by setting the order parameter to c(3, 0, 0), where 3 refers to the order of the AR component</span>
+<span id="cb32-85"><a href="#cb32-85"></a></span>
+<span id="cb32-88"><a href="#cb32-88"></a><span class="in">```{r}</span></span>
+<span id="cb32-89"><a href="#cb32-89"></a>est <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="at">x =</span> df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb32-90"><a href="#cb32-90"></a>est</span>
+<span id="cb32-91"><a href="#cb32-91"></a><span class="in">```</span></span>
+<span id="cb32-92"><a href="#cb32-92"></a></span>
+<span id="cb32-93"><a href="#cb32-93"></a>To inject prior knowledge or opinion into our model, we can constraint a coefficient to be 0. For example, if we want to constrain the lag -- 1 term to remain 0 in our model, we use the following call:</span>
+<span id="cb32-94"><a href="#cb32-94"></a></span>
+<span id="cb32-97"><a href="#cb32-97"></a><span class="in">```{r}</span></span>
+<span id="cb32-98"><a href="#cb32-98"></a>est<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="at">x =</span>  df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb32-99"><a href="#cb32-99"></a>               <span class="at">fixed =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
+<span id="cb32-100"><a href="#cb32-100"></a></span>
 <span id="cb32-101"><a href="#cb32-101"></a></span>
-<span id="cb32-102"><a href="#cb32-102"></a></span>
-<span id="cb32-103"><a href="#cb32-103"></a><span class="in">```</span></span>
-<span id="cb32-104"><a href="#cb32-104"></a></span>
-<span id="cb32-105"><a href="#cb32-105"></a>We now inspect our model performance on our training data to assess the goodness of fit of our model to this data set. We can do this in two ways. First, we plot the ACF of the residuals (that, is the errors) to see if there is a pattern of self-correlation that our model does not cover.</span>
-<span id="cb32-106"><a href="#cb32-106"></a></span>
-<span id="cb32-107"><a href="#cb32-107"></a>Plotting the residuals is quite simple thanks to the output of the arima() function</span>
-<span id="cb32-108"><a href="#cb32-108"></a></span>
-<span id="cb32-111"><a href="#cb32-111"></a><span class="in">```{r}</span></span>
-<span id="cb32-112"><a href="#cb32-112"></a><span class="fu">acf</span>(est<span class="fl">.1</span><span class="sc">$</span>residuals)</span>
-<span id="cb32-113"><a href="#cb32-113"></a>est<span class="fl">.1</span></span>
-<span id="cb32-114"><a href="#cb32-114"></a><span class="in">```</span></span>
-<span id="cb32-115"><a href="#cb32-115"></a></span>
-<span id="cb32-116"><a href="#cb32-116"></a>None of the values of the ACF cross the significance threshold.</span>
-<span id="cb32-117"><a href="#cb32-117"></a></span>
-<span id="cb32-118"><a href="#cb32-118"></a>We do not see a pattern of self-correlation here among the residuals (i.e., the error terms). If we had seen such a pattern, we would likely want to return to our original model and consider including additional terms to add complexity to account for the significant autocorrelation of the residuals.</span>
-<span id="cb32-119"><a href="#cb32-119"></a></span>
-<span id="cb32-120"><a href="#cb32-120"></a><span class="fu">### forecasting 1 time step ahead</span></span>
-<span id="cb32-121"><a href="#cb32-121"></a></span>
-<span id="cb32-122"><a href="#cb32-122"></a>applying by hand</span>
-<span id="cb32-123"><a href="#cb32-123"></a></span>
-<span id="cb32-124"><a href="#cb32-124"></a>what's important there are different type of parametrizations of ARIMA models</span>
-<span id="cb32-125"><a href="#cb32-125"></a></span>
-<span id="cb32-126"><a href="#cb32-126"></a>There are multiple (equivalent) parametrizations for ARIMA models. There's the one you quote (sometimes called the ARMAX parametrization):</span>
-<span id="cb32-127"><a href="#cb32-127"></a></span>
-<span id="cb32-128"><a href="#cb32-128"></a>$y_t = \phi y_{t-1} + c + \epsilon_t$</span>
-<span id="cb32-129"><a href="#cb32-129"></a></span>
-<span id="cb32-130"><a href="#cb32-130"></a>And the equivalent regression with ARMA errors parametrization:</span>
-<span id="cb32-131"><a href="#cb32-131"></a></span>
-<span id="cb32-132"><a href="#cb32-132"></a>$(y_t - c') = \phi (y_{t-1} - c') + \epsilon_t$</span>
-<span id="cb32-133"><a href="#cb32-133"></a></span>
-<span id="cb32-134"><a href="#cb32-134"></a>The forecast package uses the second parametrization.</span>
-<span id="cb32-135"><a href="#cb32-135"></a></span>
-<span id="cb32-136"><a href="#cb32-136"></a>The package author explains the difference between the two parametrizations and the rationale for choosing this one on his blog. Mostly, when adding other regressors (other than the constant), this version is easier to interpret. Since the function forecast::Arima allows for other regressors, it makes sense to treat them all in the same way.</span>
-<span id="cb32-137"><a href="#cb32-137"></a></span>
-<span id="cb32-138"><a href="#cb32-138"></a><span class="co">[</span><span class="ot">url</span><span class="co">](https://stats.stackexchange.com/questions/236633/r-arima-order1-0-0-forecast-not-giving-what-expected)</span></span>
-<span id="cb32-139"><a href="#cb32-139"></a></span>
-<span id="cb32-142"><a href="#cb32-142"></a><span class="in">```{r}</span></span>
-<span id="cb32-143"><a href="#cb32-143"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]</span>
-<span id="cb32-144"><a href="#cb32-144"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]</span>
-<span id="cb32-145"><a href="#cb32-145"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]</span>
-<span id="cb32-146"><a href="#cb32-146"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]</span>
+<span id="cb32-102"><a href="#cb32-102"></a><span class="in">```</span></span>
+<span id="cb32-103"><a href="#cb32-103"></a></span>
+<span id="cb32-104"><a href="#cb32-104"></a>We now inspect our model performance on our training data to assess the goodness of fit of our model to this data set. We can do this in two ways. First, we plot the ACF of the residuals (that, is the errors) to see if there is a pattern of self-correlation that our model does not cover.</span>
+<span id="cb32-105"><a href="#cb32-105"></a></span>
+<span id="cb32-106"><a href="#cb32-106"></a>Plotting the residuals is quite simple thanks to the output of the arima() function</span>
+<span id="cb32-107"><a href="#cb32-107"></a></span>
+<span id="cb32-110"><a href="#cb32-110"></a><span class="in">```{r}</span></span>
+<span id="cb32-111"><a href="#cb32-111"></a><span class="fu">acf</span>(est<span class="fl">.1</span><span class="sc">$</span>residuals)</span>
+<span id="cb32-112"><a href="#cb32-112"></a>est<span class="fl">.1</span></span>
+<span id="cb32-113"><a href="#cb32-113"></a><span class="in">```</span></span>
+<span id="cb32-114"><a href="#cb32-114"></a></span>
+<span id="cb32-115"><a href="#cb32-115"></a>None of the values of the ACF cross the significance threshold.</span>
+<span id="cb32-116"><a href="#cb32-116"></a></span>
+<span id="cb32-117"><a href="#cb32-117"></a>We do not see a pattern of self-correlation here among the residuals (i.e., the error terms). If we had seen such a pattern, we would likely want to return to our original model and consider including additional terms to add complexity to account for the significant autocorrelation of the residuals.</span>
+<span id="cb32-118"><a href="#cb32-118"></a></span>
+<span id="cb32-119"><a href="#cb32-119"></a><span class="fu">### forecasting 1 time step ahead</span></span>
+<span id="cb32-120"><a href="#cb32-120"></a></span>
+<span id="cb32-121"><a href="#cb32-121"></a>applying by hand</span>
+<span id="cb32-122"><a href="#cb32-122"></a></span>
+<span id="cb32-123"><a href="#cb32-123"></a>what's important there are different type of parametrizations of ARIMA models</span>
+<span id="cb32-124"><a href="#cb32-124"></a></span>
+<span id="cb32-125"><a href="#cb32-125"></a>There are multiple (equivalent) parametrizations for ARIMA models. There's the one you quote (sometimes called the ARMAX parametrization):</span>
+<span id="cb32-126"><a href="#cb32-126"></a></span>
+<span id="cb32-127"><a href="#cb32-127"></a>$y_t = \phi y_{t-1} + c + \epsilon_t$</span>
+<span id="cb32-128"><a href="#cb32-128"></a></span>
+<span id="cb32-129"><a href="#cb32-129"></a>And the equivalent regression with ARMA errors parametrization:</span>
+<span id="cb32-130"><a href="#cb32-130"></a></span>
+<span id="cb32-131"><a href="#cb32-131"></a>$(y_t - c') = \phi (y_{t-1} - c') + \epsilon_t$</span>
+<span id="cb32-132"><a href="#cb32-132"></a></span>
+<span id="cb32-133"><a href="#cb32-133"></a>The forecast package uses the second parametrization.</span>
+<span id="cb32-134"><a href="#cb32-134"></a></span>
+<span id="cb32-135"><a href="#cb32-135"></a>The package author explains the difference between the two parametrizations and the rationale for choosing this one on his blog. Mostly, when adding other regressors (other than the constant), this version is easier to interpret. Since the function forecast::Arima allows for other regressors, it makes sense to treat them all in the same way.</span>
+<span id="cb32-136"><a href="#cb32-136"></a></span>
+<span id="cb32-137"><a href="#cb32-137"></a><span class="co">[</span><span class="ot">url</span><span class="co">](https://stats.stackexchange.com/questions/236633/r-arima-order1-0-0-forecast-not-giving-what-expected)</span></span>
+<span id="cb32-138"><a href="#cb32-138"></a></span>
+<span id="cb32-141"><a href="#cb32-141"></a><span class="in">```{r}</span></span>
+<span id="cb32-142"><a href="#cb32-142"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]</span>
+<span id="cb32-143"><a href="#cb32-143"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]</span>
+<span id="cb32-144"><a href="#cb32-144"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]</span>
+<span id="cb32-145"><a href="#cb32-145"></a>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]</span>
+<span id="cb32-146"><a href="#cb32-146"></a></span>
 <span id="cb32-147"><a href="#cb32-147"></a></span>
-<span id="cb32-148"><a href="#cb32-148"></a></span>
-<span id="cb32-149"><a href="#cb32-149"></a>x<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
-<span id="cb32-150"><a href="#cb32-150"></a></span>
-<span id="cb32-151"><a href="#cb32-151"></a>y_pred <span class="ot">=</span> zoo<span class="sc">::</span><span class="fu">rollapply</span>(<span class="fu">zoo</span>(x),</span>
-<span id="cb32-152"><a href="#cb32-152"></a>               <span class="at">width=</span><span class="dv">3</span>,</span>
-<span id="cb32-153"><a href="#cb32-153"></a>               <span class="at">FUN=</span><span class="cf">function</span>(w){</span>
-<span id="cb32-154"><a href="#cb32-154"></a>                 est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
-<span id="cb32-155"><a href="#cb32-155"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(w[<span class="dv">3</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-156"><a href="#cb32-156"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(w[<span class="dv">2</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-157"><a href="#cb32-157"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(w[<span class="dv">1</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
-<span id="cb32-158"><a href="#cb32-158"></a>                 </span>
-<span id="cb32-159"><a href="#cb32-159"></a>                </span>
-<span id="cb32-160"><a href="#cb32-160"></a>                 },</span>
-<span id="cb32-161"><a href="#cb32-161"></a>               <span class="at">partial =</span> <span class="cn">FALSE</span></span>
-<span id="cb32-162"><a href="#cb32-162"></a>               )</span>
-<span id="cb32-163"><a href="#cb32-163"></a></span>
-<span id="cb32-164"><a href="#cb32-164"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(y_pred))</span>
-<span id="cb32-165"><a href="#cb32-165"></a></span>
-<span id="cb32-166"><a href="#cb32-166"></a><span class="in">```</span></span>
-<span id="cb32-167"><a href="#cb32-167"></a></span>
-<span id="cb32-170"><a href="#cb32-170"></a><span class="in">```{r}</span></span>
-<span id="cb32-171"><a href="#cb32-171"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type =</span> <span class="st">'l'</span>)</span>
-<span id="cb32-172"><a href="#cb32-172"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">1</span>), <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">5</span>) <span class="do">## use the forecast package</span></span>
-<span id="cb32-173"><a href="#cb32-173"></a><span class="fu">lines</span>(y_pred, <span class="at">col =</span> <span class="dv">6</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## fitted by hand</span></span>
-<span id="cb32-174"><a href="#cb32-174"></a><span class="in">```</span></span>
-<span id="cb32-175"><a href="#cb32-175"></a></span>
-<span id="cb32-176"><a href="#cb32-176"></a>Now let's think about the quality of the forecast. If we calculate the correlation between the predicted value and the actual value, we get 0.29. This is not bad in some contexts, but remember that sometimes differencing the data will remove what seemed like a strong relationship and replace it with one that is essentially random. This will be the case particularly if the data was not truly stationary when we fit it, so that an unidentified trend masquerades as good model performance when it is actually a trait of the data we should have addressed before modeling.</span>
-<span id="cb32-177"><a href="#cb32-177"></a></span>
-<span id="cb32-178"><a href="#cb32-178"></a>We can difference both the series and the predicted values to see whether the change from one time period to the next is well predicted by the model. Even after differenc‐ ing, our predictions and the data show similar patterns, suggesting our model is a meaningful one</span>
-<span id="cb32-179"><a href="#cb32-179"></a></span>
-<span id="cb32-182"><a href="#cb32-182"></a><span class="in">```{r}</span></span>
-<span id="cb32-183"><a href="#cb32-183"></a><span class="fu">cor</span>(y_pred[<span class="dv">1</span><span class="sc">:</span><span class="dv">60</span>],df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">60</span>])</span>
-<span id="cb32-184"><a href="#cb32-184"></a><span class="fu">cor</span>(<span class="fu">diff</span>(y_pred)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>],<span class="fu">diff</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>])</span>
-<span id="cb32-185"><a href="#cb32-185"></a><span class="fu">plot</span>(<span class="fu">diff</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>],<span class="fu">diff</span>(y_pred)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>])</span>
-<span id="cb32-186"><a href="#cb32-186"></a><span class="in">```</span></span>
-<span id="cb32-187"><a href="#cb32-187"></a></span>
-<span id="cb32-188"><a href="#cb32-188"></a><span class="fu">### Forecasting many steps into the future</span></span>
-<span id="cb32-189"><a href="#cb32-189"></a></span>
-<span id="cb32-190"><a href="#cb32-190"></a>Looking back at the original plot of the forecast versus actual values, we see that the main difference between the forecast and the data is that the forecast is less variable than the data.</span>
-<span id="cb32-191"><a href="#cb32-191"></a></span>
-<span id="cb32-192"><a href="#cb32-192"></a>It may predict the direction of the future correctly, but not the scale of the change from one time period to another. This is not a problem per se but rather reflects the fact that forecasts are means of the predicted distributions and so necessarily will have lower variability than sampled data.</span>
-<span id="cb32-193"><a href="#cb32-193"></a></span>
-<span id="cb32-194"><a href="#cb32-194"></a>As you can see in the Figure below, the variance of the prediction decreases with increasing forward horizon. The reason for this---which highlights an important limitation of the model---is that the further forward in time we go, the less the actual data matters because the coefficients for input data look only at a finite previous set of time points (in this model, going back only to lag -- 3; i.e., time -- 3). The future prediction approaches the mean value of the series as the time horizon grows, and hence the variance of both the error term and of the forecast values shrinks to 0 as the forecast values tend toward the unconditional mean value.</span>
-<span id="cb32-195"><a href="#cb32-195"></a></span>
-<span id="cb32-198"><a href="#cb32-198"></a><span class="in">```{r}</span></span>
-<span id="cb32-199"><a href="#cb32-199"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type =</span> <span class="st">'l'</span>)</span>
-<span id="cb32-200"><a href="#cb32-200"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">1</span>), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">6</span>) <span class="do">## use the forecast package</span></span>
-<span id="cb32-201"><a href="#cb32-201"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">4</span>), <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">4</span>) <span class="do">## use the forecast package</span></span>
-<span id="cb32-202"><a href="#cb32-202"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">7</span>), <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## use the forecast package</span></span>
-<span id="cb32-203"><a href="#cb32-203"></a><span class="in">```</span></span>
-<span id="cb32-204"><a href="#cb32-204"></a></span>
-<span id="cb32-205"><a href="#cb32-205"></a><span class="fu">### calculating forecast by hand</span></span>
-<span id="cb32-206"><a href="#cb32-206"></a></span>
-<span id="cb32-207"><a href="#cb32-207"></a>Below how prediction for point 8 in time series in calculcated using window_width=3</span>
-<span id="cb32-208"><a href="#cb32-208"></a></span>
-<span id="cb32-211"><a href="#cb32-211"></a><span class="in">```{r}</span></span>
-<span id="cb32-212"><a href="#cb32-212"></a>ts<span class="ot">&lt;-</span>df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span></span>
+<span id="cb32-148"><a href="#cb32-148"></a>x<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
+<span id="cb32-149"><a href="#cb32-149"></a></span>
+<span id="cb32-150"><a href="#cb32-150"></a>y_pred <span class="ot">=</span> zoo<span class="sc">::</span><span class="fu">rollapply</span>(<span class="fu">zoo</span>(x),</span>
+<span id="cb32-151"><a href="#cb32-151"></a>               <span class="at">width=</span><span class="dv">3</span>,</span>
+<span id="cb32-152"><a href="#cb32-152"></a>               <span class="at">FUN=</span><span class="cf">function</span>(w){</span>
+<span id="cb32-153"><a href="#cb32-153"></a>                 est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
+<span id="cb32-154"><a href="#cb32-154"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(w[<span class="dv">3</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-155"><a href="#cb32-155"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(w[<span class="dv">2</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-156"><a href="#cb32-156"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(w[<span class="dv">1</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
+<span id="cb32-157"><a href="#cb32-157"></a>                 </span>
+<span id="cb32-158"><a href="#cb32-158"></a>                </span>
+<span id="cb32-159"><a href="#cb32-159"></a>                 },</span>
+<span id="cb32-160"><a href="#cb32-160"></a>               <span class="at">partial =</span> <span class="cn">FALSE</span></span>
+<span id="cb32-161"><a href="#cb32-161"></a>               )</span>
+<span id="cb32-162"><a href="#cb32-162"></a></span>
+<span id="cb32-163"><a href="#cb32-163"></a>y_pred <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">as.vector</span>(y_pred))</span>
+<span id="cb32-164"><a href="#cb32-164"></a></span>
+<span id="cb32-165"><a href="#cb32-165"></a><span class="in">```</span></span>
+<span id="cb32-166"><a href="#cb32-166"></a></span>
+<span id="cb32-169"><a href="#cb32-169"></a><span class="in">```{r}</span></span>
+<span id="cb32-170"><a href="#cb32-170"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type =</span> <span class="st">'l'</span>)</span>
+<span id="cb32-171"><a href="#cb32-171"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">1</span>), <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">5</span>) <span class="do">## use the forecast package</span></span>
+<span id="cb32-172"><a href="#cb32-172"></a><span class="fu">lines</span>(y_pred, <span class="at">col =</span> <span class="dv">6</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## fitted by hand</span></span>
+<span id="cb32-173"><a href="#cb32-173"></a><span class="in">```</span></span>
+<span id="cb32-174"><a href="#cb32-174"></a></span>
+<span id="cb32-175"><a href="#cb32-175"></a>Now let's think about the quality of the forecast. If we calculate the correlation between the predicted value and the actual value, we get 0.29. This is not bad in some contexts, but remember that sometimes differencing the data will remove what seemed like a strong relationship and replace it with one that is essentially random. This will be the case particularly if the data was not truly stationary when we fit it, so that an unidentified trend masquerades as good model performance when it is actually a trait of the data we should have addressed before modeling.</span>
+<span id="cb32-176"><a href="#cb32-176"></a></span>
+<span id="cb32-177"><a href="#cb32-177"></a>We can difference both the series and the predicted values to see whether the change from one time period to the next is well predicted by the model. Even after differenc‐ ing, our predictions and the data show similar patterns, suggesting our model is a meaningful one</span>
+<span id="cb32-178"><a href="#cb32-178"></a></span>
+<span id="cb32-181"><a href="#cb32-181"></a><span class="in">```{r}</span></span>
+<span id="cb32-182"><a href="#cb32-182"></a><span class="fu">cor</span>(y_pred[<span class="dv">1</span><span class="sc">:</span><span class="dv">60</span>],df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">60</span>])</span>
+<span id="cb32-183"><a href="#cb32-183"></a><span class="fu">cor</span>(<span class="fu">diff</span>(y_pred)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>],<span class="fu">diff</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>])</span>
+<span id="cb32-184"><a href="#cb32-184"></a><span class="fu">plot</span>(<span class="fu">diff</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>],<span class="fu">diff</span>(y_pred)[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>])</span>
+<span id="cb32-185"><a href="#cb32-185"></a><span class="in">```</span></span>
+<span id="cb32-186"><a href="#cb32-186"></a></span>
+<span id="cb32-187"><a href="#cb32-187"></a><span class="fu">### Forecasting many steps into the future</span></span>
+<span id="cb32-188"><a href="#cb32-188"></a></span>
+<span id="cb32-189"><a href="#cb32-189"></a>Looking back at the original plot of the forecast versus actual values, we see that the main difference between the forecast and the data is that the forecast is less variable than the data.</span>
+<span id="cb32-190"><a href="#cb32-190"></a></span>
+<span id="cb32-191"><a href="#cb32-191"></a>It may predict the direction of the future correctly, but not the scale of the change from one time period to another. This is not a problem per se but rather reflects the fact that forecasts are means of the predicted distributions and so necessarily will have lower variability than sampled data.</span>
+<span id="cb32-192"><a href="#cb32-192"></a></span>
+<span id="cb32-193"><a href="#cb32-193"></a>As you can see in the Figure below, the variance of the prediction decreases with increasing forward horizon. The reason for this---which highlights an important limitation of the model---is that the further forward in time we go, the less the actual data matters because the coefficients for input data look only at a finite previous set of time points (in this model, going back only to lag -- 3; i.e., time -- 3). The future prediction approaches the mean value of the series as the time horizon grows, and hence the variance of both the error term and of the forecast values shrinks to 0 as the forecast values tend toward the unconditional mean value.</span>
+<span id="cb32-194"><a href="#cb32-194"></a></span>
+<span id="cb32-197"><a href="#cb32-197"></a><span class="in">```{r}</span></span>
+<span id="cb32-198"><a href="#cb32-198"></a><span class="fu">plot</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>, <span class="at">type =</span> <span class="st">'l'</span>)</span>
+<span id="cb32-199"><a href="#cb32-199"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">1</span>), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">6</span>) <span class="do">## use the forecast package</span></span>
+<span id="cb32-200"><a href="#cb32-200"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">4</span>), <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">4</span>) <span class="do">## use the forecast package</span></span>
+<span id="cb32-201"><a href="#cb32-201"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">7</span>), <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## use the forecast package</span></span>
+<span id="cb32-202"><a href="#cb32-202"></a><span class="in">```</span></span>
+<span id="cb32-203"><a href="#cb32-203"></a></span>
+<span id="cb32-204"><a href="#cb32-204"></a><span class="fu">### calculating forecast by hand</span></span>
+<span id="cb32-205"><a href="#cb32-205"></a></span>
+<span id="cb32-206"><a href="#cb32-206"></a>Below how prediction for point 8 in time series in calculcated using window_width=3</span>
+<span id="cb32-207"><a href="#cb32-207"></a></span>
+<span id="cb32-210"><a href="#cb32-210"></a><span class="in">```{r}</span></span>
+<span id="cb32-211"><a href="#cb32-211"></a>ts<span class="ot">&lt;-</span>df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span></span>
+<span id="cb32-212"><a href="#cb32-212"></a></span>
 <span id="cb32-213"><a href="#cb32-213"></a></span>
-<span id="cb32-214"><a href="#cb32-214"></a></span>
-<span id="cb32-215"><a href="#cb32-215"></a>y_hat_6_window_1 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
-<span id="cb32-216"><a href="#cb32-216"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-217"><a href="#cb32-217"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(ts[<span class="dv">4</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-218"><a href="#cb32-218"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">3</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
-<span id="cb32-219"><a href="#cb32-219"></a></span>
-<span id="cb32-220"><a href="#cb32-220"></a>y_hat_7_window_2 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
-<span id="cb32-221"><a href="#cb32-221"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(y_hat_6<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-222"><a href="#cb32-222"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-223"><a href="#cb32-223"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">4</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
-<span id="cb32-224"><a href="#cb32-224"></a></span>
-<span id="cb32-225"><a href="#cb32-225"></a>y_hat_8_window_3 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
-<span id="cb32-226"><a href="#cb32-226"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(y_hat_7_window_2<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-227"><a href="#cb32-227"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(y_hat_6<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb32-228"><a href="#cb32-228"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
+<span id="cb32-214"><a href="#cb32-214"></a>y_hat_6_window_1 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
+<span id="cb32-215"><a href="#cb32-215"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-216"><a href="#cb32-216"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(ts[<span class="dv">4</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-217"><a href="#cb32-217"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">3</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
+<span id="cb32-218"><a href="#cb32-218"></a></span>
+<span id="cb32-219"><a href="#cb32-219"></a>y_hat_7_window_2 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
+<span id="cb32-220"><a href="#cb32-220"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(y_hat_6<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-221"><a href="#cb32-221"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-222"><a href="#cb32-222"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">4</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
+<span id="cb32-223"><a href="#cb32-223"></a></span>
+<span id="cb32-224"><a href="#cb32-224"></a>y_hat_8_window_3 <span class="ot">=</span> est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> </span>
+<span id="cb32-225"><a href="#cb32-225"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar1'</span>]<span class="sc">*</span>(y_hat_7_window_2<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-226"><a href="#cb32-226"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar2'</span>]<span class="sc">*</span>(y_hat_6<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb32-227"><a href="#cb32-227"></a>dplyr<span class="sc">::</span><span class="fu">coalesce</span>(est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'ar3'</span>]<span class="sc">*</span>(ts[<span class="dv">5</span>]<span class="sc">-</span>est<span class="fl">.1</span><span class="sc">$</span>coef[<span class="st">'intercept'</span>]),<span class="dv">0</span>) </span>
+<span id="cb32-228"><a href="#cb32-228"></a></span>
 <span id="cb32-229"><a href="#cb32-229"></a></span>
-<span id="cb32-230"><a href="#cb32-230"></a></span>
-<span id="cb32-231"><a href="#cb32-231"></a><span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">3</span>)[<span class="dv">8</span>] <span class="sc">==</span> y_hat_8_window_3</span>
+<span id="cb32-230"><a href="#cb32-230"></a><span class="fu">fitted</span>(est<span class="fl">.1</span>,<span class="at">h=</span><span class="dv">3</span>)[<span class="dv">8</span>] <span class="sc">==</span> y_hat_8_window_3</span>
+<span id="cb32-231"><a href="#cb32-231"></a></span>
 <span id="cb32-232"><a href="#cb32-232"></a></span>
 <span id="cb32-233"><a href="#cb32-233"></a></span>
-<span id="cb32-234"><a href="#cb32-234"></a></span>
-<span id="cb32-235"><a href="#cb32-235"></a><span class="in">```</span></span>
-<span id="cb32-236"><a href="#cb32-236"></a></span>
-<span id="cb32-237"><a href="#cb32-237"></a>Below show how variance is diminishing continously along broader and broader horizont width.</span>
-<span id="cb32-238"><a href="#cb32-238"></a></span>
-<span id="cb32-241"><a href="#cb32-241"></a><span class="in">```{r}</span></span>
-<span id="cb32-242"><a href="#cb32-242"></a><span class="do">## R</span></span>
-<span id="cb32-243"><a href="#cb32-243"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">3</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb32-244"><a href="#cb32-244"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">5</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb32-245"><a href="#cb32-245"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">10</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb32-246"><a href="#cb32-246"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">20</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb32-247"><a href="#cb32-247"></a><span class="in">```</span></span>
-<span id="cb32-248"><a href="#cb32-248"></a></span>
-<span id="cb32-249"><a href="#cb32-249"></a><span class="fu">## MA model</span></span>
-<span id="cb32-250"><a href="#cb32-250"></a></span>
-<span id="cb32-251"><a href="#cb32-251"></a>Do not confuse the MA model (moving average model) with a moving average. They are not the same thing.</span>
-<span id="cb32-252"><a href="#cb32-252"></a></span>
-<span id="cb32-253"><a href="#cb32-253"></a>MA models are by definition weakly stationary.</span>
-<span id="cb32-254"><a href="#cb32-254"></a></span>
-<span id="cb32-255"><a href="#cb32-255"></a>A moving average model can be expressed similarly to an autoregressive model except that the terms included in the linear equation refer to present and past error terms rather than present and past values of the process itself. So an MA model of order q is expressed as:</span>
-<span id="cb32-256"><a href="#cb32-256"></a></span>
-<span id="cb32-257"><a href="#cb32-257"></a>$yt = μ +e_t +θ_1 × e_{t-1} +θ_2 × e_{t-2}...+θ_q × e_{t-q}$</span>
-<span id="cb32-258"><a href="#cb32-258"></a></span>
-<span id="cb32-259"><a href="#cb32-259"></a><span class="ss">-   </span>Economists talk about these error terms as "shocks" to the system,</span>
-<span id="cb32-260"><a href="#cb32-260"></a></span>
-<span id="cb32-261"><a href="#cb32-261"></a><span class="ss">-   </span>while someone with an electrical engineering background could talk about this as a series of impulses and the model itself as a finite impulse response filter, meaning that the effects of any particular impulse remain only for a finite period of time.</span>
-<span id="cb32-262"><a href="#cb32-262"></a></span>
-<span id="cb32-263"><a href="#cb32-263"></a>The wording is unimportant, but the concept of many independent events at different past times affecting the current value of the process, each making an individual contribution, is the main idea.</span>
-<span id="cb32-264"><a href="#cb32-264"></a></span>
-<span id="cb32-265"><a href="#cb32-265"></a><span class="fu">### selecting parameter of AR</span></span>
-<span id="cb32-266"><a href="#cb32-266"></a></span>
-<span id="cb32-267"><a href="#cb32-267"></a>We see significant values at lags 3 and 9, so we fit an MA model with these lags.</span>
-<span id="cb32-268"><a href="#cb32-268"></a></span>
-<span id="cb32-271"><a href="#cb32-271"></a><span class="in">```{r}</span></span>
-<span id="cb32-272"><a href="#cb32-272"></a><span class="fu">acf</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
-<span id="cb32-273"><a href="#cb32-273"></a><span class="in">```</span></span>
-<span id="cb32-274"><a href="#cb32-274"></a></span>
-<span id="cb32-277"><a href="#cb32-277"></a><span class="in">```{r}</span></span>
-<span id="cb32-278"><a href="#cb32-278"></a>ma.est <span class="ot">=</span> <span class="fu">arima</span>(<span class="at">x =</span> df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,</span>
-<span id="cb32-279"><a href="#cb32-279"></a>                     <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">9</span>),</span>
-<span id="cb32-280"><a href="#cb32-280"></a>  <span class="at">fixed =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="cn">NA</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">5</span>), <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
-<span id="cb32-281"><a href="#cb32-281"></a>ma.est</span>
-<span id="cb32-282"><a href="#cb32-282"></a><span class="in">```</span></span>
-<span id="cb32-283"><a href="#cb32-283"></a></span>
-<span id="cb32-284"><a href="#cb32-284"></a>Note that the Box.test() input requires us to specify the number of degrees of freedom--- that is, how many model parameters were free to be estimated rather than being con‐ strained to a specific value. In this case, the free parameters were the intercept as well as the MA3 and MA9 terms.</span>
-<span id="cb32-285"><a href="#cb32-285"></a></span>
-<span id="cb32-286"><a href="#cb32-286"></a>We cannot reject the null hypothesis that there is no temporal correlation between residual points.</span>
-<span id="cb32-287"><a href="#cb32-287"></a></span>
-<span id="cb32-290"><a href="#cb32-290"></a><span class="in">```{r}</span></span>
-<span id="cb32-291"><a href="#cb32-291"></a><span class="fu">Box.test</span>(ma.est<span class="sc">$</span>residuals, <span class="at">lag =</span> <span class="dv">10</span>, <span class="at">type =</span> <span class="st">"Ljung"</span>, <span class="at">fitdf =</span> <span class="dv">3</span>)</span>
-<span id="cb32-292"><a href="#cb32-292"></a><span class="in">```</span></span>
-<span id="cb32-293"><a href="#cb32-293"></a></span>
-<span id="cb32-294"><a href="#cb32-294"></a><span class="fu">### calculating forecast by hand</span></span>
-<span id="cb32-295"><a href="#cb32-295"></a></span>
-<span id="cb32-296"><a href="#cb32-296"></a><span class="fu"># this is equasion for proces MA(1), based on this equasation parameters are calculated</span></span>
-<span id="cb32-297"><a href="#cb32-297"></a></span>
-<span id="cb32-298"><a href="#cb32-298"></a>$y_t = μ + θ_1 × e_{t -1} + e_t$ Then if i want to predict future one point forward i am getting following equasation:</span>
-<span id="cb32-299"><a href="#cb32-299"></a></span>
-<span id="cb32-300"><a href="#cb32-300"></a>$y_{t+1} = μ + θ_1 × e_{t} + e_{t+1}$.</span>
-<span id="cb32-301"><a href="#cb32-301"></a></span>
-<span id="cb32-302"><a href="#cb32-302"></a>Since I don't know value of\$ e<span class="sc">\_</span>{t+1}\$ it is diminishing and i finished with following equsation</span>
-<span id="cb32-303"><a href="#cb32-303"></a></span>
-<span id="cb32-304"><a href="#cb32-304"></a>\$y<span class="sc">\_</span>{t+1} = μ + θ_1 × e<span class="sc">\_</span>{t} \$.</span>
-<span id="cb32-305"><a href="#cb32-305"></a></span>
-<span id="cb32-308"><a href="#cb32-308"></a><span class="in">```{r}</span></span>
-<span id="cb32-309"><a href="#cb32-309"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>)[<span class="dv">11</span>]</span>
-<span id="cb32-310"><a href="#cb32-310"></a><span class="fu">fitted</span>(ma.est)</span>
-<span id="cb32-311"><a href="#cb32-311"></a>ma.est<span class="sc">$</span>residuals</span>
-<span id="cb32-312"><a href="#cb32-312"></a></span>
-<span id="cb32-313"><a href="#cb32-313"></a>ts<span class="ot">&lt;-</span>df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span></span>
-<span id="cb32-314"><a href="#cb32-314"></a></span>
-<span id="cb32-315"><a href="#cb32-315"></a>ma.est<span class="sc">$</span>coef[<span class="st">'intercept'</span>]</span>
-<span id="cb32-316"><a href="#cb32-316"></a></span>
-<span id="cb32-317"><a href="#cb32-317"></a>res<span class="ot">=</span><span class="fu">c</span>()</span>
-<span id="cb32-318"><a href="#cb32-318"></a>h<span class="ot">=</span><span class="dv">1</span></span>
-<span id="cb32-319"><a href="#cb32-319"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">11</span>,<span class="dv">60</span>)){</span>
-<span id="cb32-320"><a href="#cb32-320"></a>  res <span class="ot">=</span> <span class="fu">c</span>(res,</span>
-<span id="cb32-321"><a href="#cb32-321"></a>          ma.est<span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> <span class="co"># ma.est$residuals[i] tego nie wliczam bo nie znam w błedu 1 punkt w przyszłość</span></span>
-<span id="cb32-322"><a href="#cb32-322"></a>  ma.est<span class="sc">$</span>coef[[<span class="st">'ma3'</span>]] <span class="sc">*</span> ma.est<span class="sc">$</span>residuals[i<span class="dv">-3</span> <span class="sc">+</span>h] <span class="sc">+</span>   </span>
-<span id="cb32-323"><a href="#cb32-323"></a>  ma.est<span class="sc">$</span>coef[[<span class="st">'ma9'</span>]] <span class="sc">*</span> ma.est<span class="sc">$</span>residuals[i<span class="dv">-9</span> <span class="sc">+</span>h] </span>
-<span id="cb32-324"><a href="#cb32-324"></a>  )</span>
-<span id="cb32-325"><a href="#cb32-325"></a>}</span>
+<span id="cb32-234"><a href="#cb32-234"></a><span class="in">```</span></span>
+<span id="cb32-235"><a href="#cb32-235"></a></span>
+<span id="cb32-236"><a href="#cb32-236"></a>Below show how variance is diminishing continously along broader and broader horizont width.</span>
+<span id="cb32-237"><a href="#cb32-237"></a></span>
+<span id="cb32-240"><a href="#cb32-240"></a><span class="in">```{r}</span></span>
+<span id="cb32-241"><a href="#cb32-241"></a><span class="do">## R</span></span>
+<span id="cb32-242"><a href="#cb32-242"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">3</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-243"><a href="#cb32-243"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">5</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb32-244"><a href="#cb32-244"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">10</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb32-245"><a href="#cb32-245"></a><span class="fu">var</span>(<span class="fu">fitted</span>(est<span class="fl">.1</span>, <span class="at">h =</span> <span class="dv">20</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb32-246"><a href="#cb32-246"></a><span class="in">```</span></span>
+<span id="cb32-247"><a href="#cb32-247"></a></span>
+<span id="cb32-248"><a href="#cb32-248"></a><span class="fu">## MA model</span></span>
+<span id="cb32-249"><a href="#cb32-249"></a></span>
+<span id="cb32-250"><a href="#cb32-250"></a>Do not confuse the MA model (moving average model) with a moving average. They are not the same thing.</span>
+<span id="cb32-251"><a href="#cb32-251"></a></span>
+<span id="cb32-252"><a href="#cb32-252"></a>MA models are by definition weakly stationary.</span>
+<span id="cb32-253"><a href="#cb32-253"></a></span>
+<span id="cb32-254"><a href="#cb32-254"></a>A moving average model can be expressed similarly to an autoregressive model except that the terms included in the linear equation refer to present and past error terms rather than present and past values of the process itself. So an MA model of order q is expressed as:</span>
+<span id="cb32-255"><a href="#cb32-255"></a></span>
+<span id="cb32-256"><a href="#cb32-256"></a>$yt = μ +e_t +θ_1 × e_{t-1} +θ_2 × e_{t-2}...+θ_q × e_{t-q}$</span>
+<span id="cb32-257"><a href="#cb32-257"></a></span>
+<span id="cb32-258"><a href="#cb32-258"></a><span class="ss">-   </span>Economists talk about these error terms as "shocks" to the system,</span>
+<span id="cb32-259"><a href="#cb32-259"></a></span>
+<span id="cb32-260"><a href="#cb32-260"></a><span class="ss">-   </span>while someone with an electrical engineering background could talk about this as a series of impulses and the model itself as a finite impulse response filter, meaning that the effects of any particular impulse remain only for a finite period of time.</span>
+<span id="cb32-261"><a href="#cb32-261"></a></span>
+<span id="cb32-262"><a href="#cb32-262"></a>The wording is unimportant, but the concept of many independent events at different past times affecting the current value of the process, each making an individual contribution, is the main idea.</span>
+<span id="cb32-263"><a href="#cb32-263"></a></span>
+<span id="cb32-264"><a href="#cb32-264"></a><span class="fu">### selecting parameter of AR</span></span>
+<span id="cb32-265"><a href="#cb32-265"></a></span>
+<span id="cb32-266"><a href="#cb32-266"></a>We see significant values at lags 3 and 9, so we fit an MA model with these lags.</span>
+<span id="cb32-267"><a href="#cb32-267"></a></span>
+<span id="cb32-270"><a href="#cb32-270"></a><span class="in">```{r}</span></span>
+<span id="cb32-271"><a href="#cb32-271"></a><span class="fu">acf</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>)</span>
+<span id="cb32-272"><a href="#cb32-272"></a><span class="in">```</span></span>
+<span id="cb32-273"><a href="#cb32-273"></a></span>
+<span id="cb32-276"><a href="#cb32-276"></a><span class="in">```{r}</span></span>
+<span id="cb32-277"><a href="#cb32-277"></a>ma.est <span class="ot">=</span> <span class="fu">arima</span>(<span class="at">x =</span> df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,</span>
+<span id="cb32-278"><a href="#cb32-278"></a>                     <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">9</span>),</span>
+<span id="cb32-279"><a href="#cb32-279"></a>  <span class="at">fixed =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="cn">NA</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">5</span>), <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
+<span id="cb32-280"><a href="#cb32-280"></a>ma.est</span>
+<span id="cb32-281"><a href="#cb32-281"></a><span class="in">```</span></span>
+<span id="cb32-282"><a href="#cb32-282"></a></span>
+<span id="cb32-283"><a href="#cb32-283"></a>Note that the Box.test() input requires us to specify the number of degrees of freedom--- that is, how many model parameters were free to be estimated rather than being con‐ strained to a specific value. In this case, the free parameters were the intercept as well as the MA3 and MA9 terms.</span>
+<span id="cb32-284"><a href="#cb32-284"></a></span>
+<span id="cb32-285"><a href="#cb32-285"></a>We cannot reject the null hypothesis that there is no temporal correlation between residual points.</span>
+<span id="cb32-286"><a href="#cb32-286"></a></span>
+<span id="cb32-289"><a href="#cb32-289"></a><span class="in">```{r}</span></span>
+<span id="cb32-290"><a href="#cb32-290"></a><span class="fu">Box.test</span>(ma.est<span class="sc">$</span>residuals, <span class="at">lag =</span> <span class="dv">10</span>, <span class="at">type =</span> <span class="st">"Ljung"</span>, <span class="at">fitdf =</span> <span class="dv">3</span>)</span>
+<span id="cb32-291"><a href="#cb32-291"></a><span class="in">```</span></span>
+<span id="cb32-292"><a href="#cb32-292"></a></span>
+<span id="cb32-293"><a href="#cb32-293"></a><span class="fu">### calculating forecast by hand</span></span>
+<span id="cb32-294"><a href="#cb32-294"></a></span>
+<span id="cb32-295"><a href="#cb32-295"></a><span class="fu"># this is equasion for proces MA(1), based on this equasation parameters are calculated</span></span>
+<span id="cb32-296"><a href="#cb32-296"></a></span>
+<span id="cb32-297"><a href="#cb32-297"></a>$y_t = μ + θ_1 × e_{t -1} + e_t$ Then if i want to predict future one point forward i am getting following equasation:</span>
+<span id="cb32-298"><a href="#cb32-298"></a></span>
+<span id="cb32-299"><a href="#cb32-299"></a>$y_{t+1} = μ + θ_1 × e_{t} + e_{t+1}$.</span>
+<span id="cb32-300"><a href="#cb32-300"></a></span>
+<span id="cb32-301"><a href="#cb32-301"></a>Since I don't know value of\$ e<span class="sc">\_</span>{t+1}\$ it is diminishing and i finished with following equsation</span>
+<span id="cb32-302"><a href="#cb32-302"></a></span>
+<span id="cb32-303"><a href="#cb32-303"></a>\$y<span class="sc">\_</span>{t+1} = μ + θ_1 × e<span class="sc">\_</span>{t} \$.</span>
+<span id="cb32-304"><a href="#cb32-304"></a></span>
+<span id="cb32-307"><a href="#cb32-307"></a><span class="in">```{r}</span></span>
+<span id="cb32-308"><a href="#cb32-308"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>)[<span class="dv">11</span>]</span>
+<span id="cb32-309"><a href="#cb32-309"></a><span class="fu">fitted</span>(ma.est)</span>
+<span id="cb32-310"><a href="#cb32-310"></a>ma.est<span class="sc">$</span>residuals</span>
+<span id="cb32-311"><a href="#cb32-311"></a></span>
+<span id="cb32-312"><a href="#cb32-312"></a>ts<span class="ot">&lt;-</span>df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span></span>
+<span id="cb32-313"><a href="#cb32-313"></a></span>
+<span id="cb32-314"><a href="#cb32-314"></a>ma.est<span class="sc">$</span>coef[<span class="st">'intercept'</span>]</span>
+<span id="cb32-315"><a href="#cb32-315"></a></span>
+<span id="cb32-316"><a href="#cb32-316"></a>res<span class="ot">=</span><span class="fu">c</span>()</span>
+<span id="cb32-317"><a href="#cb32-317"></a>h<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb32-318"><a href="#cb32-318"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">11</span>,<span class="dv">60</span>)){</span>
+<span id="cb32-319"><a href="#cb32-319"></a>  res <span class="ot">=</span> <span class="fu">c</span>(res,</span>
+<span id="cb32-320"><a href="#cb32-320"></a>          ma.est<span class="sc">$</span>coef[<span class="st">'intercept'</span>] <span class="sc">+</span> <span class="co"># ma.est$residuals[i] tego nie wliczam bo nie znam w błedu 1 punkt w przyszłość</span></span>
+<span id="cb32-321"><a href="#cb32-321"></a>  ma.est<span class="sc">$</span>coef[[<span class="st">'ma3'</span>]] <span class="sc">*</span> ma.est<span class="sc">$</span>residuals[i<span class="dv">-3</span> <span class="sc">+</span>h] <span class="sc">+</span>   </span>
+<span id="cb32-322"><a href="#cb32-322"></a>  ma.est<span class="sc">$</span>coef[[<span class="st">'ma9'</span>]] <span class="sc">*</span> ma.est<span class="sc">$</span>residuals[i<span class="dv">-9</span> <span class="sc">+</span>h] </span>
+<span id="cb32-323"><a href="#cb32-323"></a>  )</span>
+<span id="cb32-324"><a href="#cb32-324"></a>}</span>
+<span id="cb32-325"><a href="#cb32-325"></a></span>
 <span id="cb32-326"><a href="#cb32-326"></a></span>
 <span id="cb32-327"><a href="#cb32-327"></a></span>
 <span id="cb32-328"><a href="#cb32-328"></a></span>
 <span id="cb32-329"><a href="#cb32-329"></a></span>
-<span id="cb32-330"><a href="#cb32-330"></a></span>
-<span id="cb32-331"><a href="#cb32-331"></a><span class="in">```</span></span>
-<span id="cb32-332"><a href="#cb32-332"></a></span>
-<span id="cb32-333"><a href="#cb32-333"></a><span class="fu">### forecasting 1 time step ahead</span></span>
-<span id="cb32-334"><a href="#cb32-334"></a></span>
-<span id="cb32-337"><a href="#cb32-337"></a><span class="in">```{r}</span></span>
-<span id="cb32-338"><a href="#cb32-338"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>)</span>
-<span id="cb32-339"><a href="#cb32-339"></a><span class="in">```</span></span>
-<span id="cb32-340"><a href="#cb32-340"></a></span>
-<span id="cb32-341"><a href="#cb32-341"></a>MA models exhibit strong mean reversion and so forecasts rapidly converge to the mean of the process. This makes sense given that the process is considered to be a function of white noise.</span>
-<span id="cb32-342"><a href="#cb32-342"></a></span>
-<span id="cb32-345"><a href="#cb32-345"></a><span class="in">```{r}</span></span>
-<span id="cb32-346"><a href="#cb32-346"></a><span class="fu">plot</span>(<span class="fu">c</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">12</span>)), <span class="at">type =</span> <span class="st">'l'</span>)</span>
-<span id="cb32-347"><a href="#cb32-347"></a><span class="fu">lines</span>(<span class="fu">c</span>(<span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>),<span class="fu">predict</span>(ma.est, <span class="at">n.ahead =</span> <span class="dv">12</span>)<span class="sc">$</span>pred)</span>
-<span id="cb32-348"><a href="#cb32-348"></a>      , <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">5</span>) <span class="do">## use the forecast package</span></span>
-<span id="cb32-349"><a href="#cb32-349"></a><span class="fu">lines</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">11</span>),res)</span>
-<span id="cb32-350"><a href="#cb32-350"></a>      , <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## by hand</span></span>
-<span id="cb32-351"><a href="#cb32-351"></a></span>
-<span id="cb32-352"><a href="#cb32-352"></a><span class="in">```</span></span>
-<span id="cb32-353"><a href="#cb32-353"></a></span>
-<span id="cb32-354"><a href="#cb32-354"></a>If you forecast beyond the range of the model established by its order, the forecast will necessarily be the mean of the process by definition of the process. Consider an MA(1) model: $yt = μ + θ1 × et -1 + et$ To predict one time step in the future, our estimate for $y_{t+1} = μ + θ1 × yt + et$.</span>
-<span id="cb32-355"><a href="#cb32-355"></a></span>
-<span id="cb32-356"><a href="#cb32-356"></a>If we want to predict two time steps in the future, our estimate is: $E(y_{t+2} =μ+e_{t+2} +θ_1 ×e_{t+1})=μ+0+θ_1 ×0=μ$</span>
-<span id="cb32-357"><a href="#cb32-357"></a></span>
-<span id="cb32-358"><a href="#cb32-358"></a>With an MA(1) process we cannot offer an informed prediction beyond one step ahead, and for an MA(q) process in general we cannot offer a more informed predic‐ tion beyond q steps than the mean value emitted by the process. By informed predic‐ tion, I mean one in which our most recent measurements have an impact on the forecast.</span>
-<span id="cb32-359"><a href="#cb32-359"></a></span>
-<span id="cb32-360"><a href="#cb32-360"></a>We can see this by producing predictions with our MA(9) model that we just fit, and for which we now seek predictions 10 time steps ahead.</span>
-<span id="cb32-361"><a href="#cb32-361"></a></span>
-<span id="cb32-362"><a href="#cb32-362"></a>When we attempt to predict 10 time steps into the future, we predict the mean for every time step</span>
-<span id="cb32-363"><a href="#cb32-363"></a></span>
-<span id="cb32-366"><a href="#cb32-366"></a><span class="in">```{r}</span></span>
-<span id="cb32-367"><a href="#cb32-367"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">10</span>)[<span class="dv">40</span><span class="sc">:</span><span class="dv">50</span>]</span>
-<span id="cb32-368"><a href="#cb32-368"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">9</span>)[<span class="dv">40</span><span class="sc">:</span><span class="dv">50</span>]</span>
-<span id="cb32-369"><a href="#cb32-369"></a><span class="in">```</span></span>
-<span id="cb32-370"><a href="#cb32-370"></a></span>
-<span id="cb32-371"><a href="#cb32-371"></a><span class="fu">## more complicated case</span></span>
-<span id="cb32-372"><a href="#cb32-372"></a></span>
-<span id="cb32-375"><a href="#cb32-375"></a><span class="in">```{r}</span></span>
-<span id="cb32-376"><a href="#cb32-376"></a><span class="fu">class</span>(AirPassengers)</span>
-<span id="cb32-377"><a href="#cb32-377"></a><span class="co">#This is the start of the time series</span></span>
-<span id="cb32-378"><a href="#cb32-378"></a><span class="fu">start</span>(AirPassengers)</span>
-<span id="cb32-379"><a href="#cb32-379"></a><span class="co">#This is the end of the time series</span></span>
-<span id="cb32-380"><a href="#cb32-380"></a><span class="fu">end</span>(AirPassengers)</span>
-<span id="cb32-381"><a href="#cb32-381"></a><span class="co">#The cycle of this time series is 12months in a year</span></span>
-<span id="cb32-382"><a href="#cb32-382"></a><span class="fu">frequency</span>(AirPassengers)</span>
-<span id="cb32-383"><a href="#cb32-383"></a><span class="fu">summary</span>(AirPassengers)</span>
-<span id="cb32-384"><a href="#cb32-384"></a><span class="in">```</span></span>
-<span id="cb32-385"><a href="#cb32-385"></a></span>
-<span id="cb32-388"><a href="#cb32-388"></a><span class="in">```{r}</span></span>
-<span id="cb32-389"><a href="#cb32-389"></a><span class="co">#The number of passengers are distributed across the spectrum</span></span>
-<span id="cb32-390"><a href="#cb32-390"></a><span class="fu">plot</span>(AirPassengers)</span>
-<span id="cb32-391"><a href="#cb32-391"></a><span class="co">#This will plot the time series</span></span>
-<span id="cb32-392"><a href="#cb32-392"></a><span class="fu">abline</span>(<span class="at">reg=</span><span class="fu">lm</span>(AirPassengers<span class="sc">~</span><span class="fu">time</span>(AirPassengers)))</span>
-<span id="cb32-393"><a href="#cb32-393"></a><span class="co"># This will fit in a line</span></span>
-<span id="cb32-394"><a href="#cb32-394"></a><span class="in">```</span></span>
-<span id="cb32-395"><a href="#cb32-395"></a></span>
-<span id="cb32-398"><a href="#cb32-398"></a><span class="in">```{r}</span></span>
-<span id="cb32-399"><a href="#cb32-399"></a><span class="fu">cycle</span>(AirPassengers)</span>
-<span id="cb32-400"><a href="#cb32-400"></a></span>
-<span id="cb32-401"><a href="#cb32-401"></a><span class="co">#This will print the cycle across years.</span></span>
-<span id="cb32-402"><a href="#cb32-402"></a></span>
-<span id="cb32-403"><a href="#cb32-403"></a><span class="fu">plot</span>(<span class="fu">aggregate</span>(AirPassengers,<span class="at">FUN=</span>mean))</span>
-<span id="cb32-404"><a href="#cb32-404"></a><span class="co">#This will aggregate the cycles and display a year on year trend</span></span>
-<span id="cb32-405"><a href="#cb32-405"></a></span>
-<span id="cb32-406"><a href="#cb32-406"></a><span class="fu">boxplot</span>(AirPassengers<span class="sc">~</span><span class="fu">cycle</span>(AirPassengers))</span>
-<span id="cb32-407"><a href="#cb32-407"></a><span class="co">#Box plot across months will give us a sense on seasonal effect</span></span>
-<span id="cb32-408"><a href="#cb32-408"></a></span>
-<span id="cb32-409"><a href="#cb32-409"></a><span class="in">```</span></span>
-<span id="cb32-410"><a href="#cb32-410"></a></span>
-<span id="cb32-411"><a href="#cb32-411"></a><span class="fu">### Important Inferences</span></span>
-<span id="cb32-412"><a href="#cb32-412"></a></span>
-<span id="cb32-413"><a href="#cb32-413"></a><span class="ss">1.  </span>The year on year trend clearly shows that the #passengers have been increasing without fail.</span>
-<span id="cb32-414"><a href="#cb32-414"></a></span>
-<span id="cb32-415"><a href="#cb32-415"></a><span class="ss">2.  </span>The variance and the mean value in July and August is much higher than rest of the months.</span>
-<span id="cb32-416"><a href="#cb32-416"></a></span>
-<span id="cb32-417"><a href="#cb32-417"></a><span class="ss">3.  </span>Even though the mean value of each month is quite different their variance is small. Hence, we have strong seasonal effect with a cycle of 12 months or less.</span>
-<span id="cb32-418"><a href="#cb32-418"></a></span>
-<span id="cb32-419"><a href="#cb32-419"></a>Exploring data becomes most important in a time series model -- without this exploration, you will not know whether a series is stationary or not. As in this case we already know many details about the kind of model we are looking out for.</span>
-<span id="cb32-420"><a href="#cb32-420"></a></span>
-<span id="cb32-421"><a href="#cb32-421"></a><span class="fu">### Solving unstationary issues</span></span>
-<span id="cb32-422"><a href="#cb32-422"></a></span>
-<span id="cb32-423"><a href="#cb32-423"></a>We know that we need to address two issues before we test stationary series. One, we need to remove unequal variances. We do this using log of the series. Two, we need to address the trend component. We do this by taking difference of the series. Now, let's test the resultant series.</span>
-<span id="cb32-424"><a href="#cb32-424"></a></span>
-<span id="cb32-427"><a href="#cb32-427"></a><span class="in">```{r}</span></span>
-<span id="cb32-428"><a href="#cb32-428"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)), <span class="at">alternative=</span><span class="st">"stationary"</span>, <span class="at">k=</span><span class="dv">0</span>)</span>
-<span id="cb32-429"><a href="#cb32-429"></a></span>
-<span id="cb32-430"><a href="#cb32-430"></a><span class="fu">log</span>(AirPassengers)</span>
-<span id="cb32-431"><a href="#cb32-431"></a><span class="in">```</span></span>
-<span id="cb32-432"><a href="#cb32-432"></a></span>
-<span id="cb32-433"><a href="#cb32-433"></a>We see that the series is stationary enough to do any kind of time series modelling.</span>
-<span id="cb32-434"><a href="#cb32-434"></a></span>
-<span id="cb32-435"><a href="#cb32-435"></a>Next step is to find the right parameters to be used in the ARIMA model. We already know that the 'd' component is 1 as we need 1 difference to make the series stationary. We do this using the Correlation plots. Following are the ACF plots for the series:</span>
-<span id="cb32-436"><a href="#cb32-436"></a></span>
-<span id="cb32-439"><a href="#cb32-439"></a><span class="in">```{R}</span></span>
-<span id="cb32-440"><a href="#cb32-440"></a><span class="fu">acf</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)))</span>
+<span id="cb32-330"><a href="#cb32-330"></a><span class="in">```</span></span>
+<span id="cb32-331"><a href="#cb32-331"></a></span>
+<span id="cb32-332"><a href="#cb32-332"></a><span class="fu">### forecasting 1 time step ahead</span></span>
+<span id="cb32-333"><a href="#cb32-333"></a></span>
+<span id="cb32-336"><a href="#cb32-336"></a><span class="in">```{r}</span></span>
+<span id="cb32-337"><a href="#cb32-337"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>)</span>
+<span id="cb32-338"><a href="#cb32-338"></a><span class="in">```</span></span>
+<span id="cb32-339"><a href="#cb32-339"></a></span>
+<span id="cb32-340"><a href="#cb32-340"></a>MA models exhibit strong mean reversion and so forecasts rapidly converge to the mean of the process. This makes sense given that the process is considered to be a function of white noise.</span>
+<span id="cb32-341"><a href="#cb32-341"></a></span>
+<span id="cb32-344"><a href="#cb32-344"></a><span class="in">```{r}</span></span>
+<span id="cb32-345"><a href="#cb32-345"></a><span class="fu">plot</span>(<span class="fu">c</span>(df<span class="sc">$</span>Banking.orders..<span class="fl">2.</span>,<span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">12</span>)), <span class="at">type =</span> <span class="st">'l'</span>)</span>
+<span id="cb32-346"><a href="#cb32-346"></a><span class="fu">lines</span>(<span class="fu">c</span>(<span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">1</span>),<span class="fu">predict</span>(ma.est, <span class="at">n.ahead =</span> <span class="dv">12</span>)<span class="sc">$</span>pred)</span>
+<span id="cb32-347"><a href="#cb32-347"></a>      , <span class="at">col =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="dv">5</span>) <span class="do">## use the forecast package</span></span>
+<span id="cb32-348"><a href="#cb32-348"></a><span class="fu">lines</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">11</span>),res)</span>
+<span id="cb32-349"><a href="#cb32-349"></a>      , <span class="at">col =</span> <span class="dv">4</span>, <span class="at">lwd =</span> <span class="dv">2</span>) <span class="do">## by hand</span></span>
+<span id="cb32-350"><a href="#cb32-350"></a></span>
+<span id="cb32-351"><a href="#cb32-351"></a><span class="in">```</span></span>
+<span id="cb32-352"><a href="#cb32-352"></a></span>
+<span id="cb32-353"><a href="#cb32-353"></a>If you forecast beyond the range of the model established by its order, the forecast will necessarily be the mean of the process by definition of the process. Consider an MA(1) model: $yt = μ + θ1 × et -1 + et$ To predict one time step in the future, our estimate for $y_{t+1} = μ + θ1 × yt + et$.</span>
+<span id="cb32-354"><a href="#cb32-354"></a></span>
+<span id="cb32-355"><a href="#cb32-355"></a>If we want to predict two time steps in the future, our estimate is: $E(y_{t+2} =μ+e_{t+2} +θ_1 ×e_{t+1})=μ+0+θ_1 ×0=μ$</span>
+<span id="cb32-356"><a href="#cb32-356"></a></span>
+<span id="cb32-357"><a href="#cb32-357"></a>With an MA(1) process we cannot offer an informed prediction beyond one step ahead, and for an MA(q) process in general we cannot offer a more informed predic‐ tion beyond q steps than the mean value emitted by the process. By informed predic‐ tion, I mean one in which our most recent measurements have an impact on the forecast.</span>
+<span id="cb32-358"><a href="#cb32-358"></a></span>
+<span id="cb32-359"><a href="#cb32-359"></a>We can see this by producing predictions with our MA(9) model that we just fit, and for which we now seek predictions 10 time steps ahead.</span>
+<span id="cb32-360"><a href="#cb32-360"></a></span>
+<span id="cb32-361"><a href="#cb32-361"></a>When we attempt to predict 10 time steps into the future, we predict the mean for every time step</span>
+<span id="cb32-362"><a href="#cb32-362"></a></span>
+<span id="cb32-365"><a href="#cb32-365"></a><span class="in">```{r}</span></span>
+<span id="cb32-366"><a href="#cb32-366"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">10</span>)[<span class="dv">40</span><span class="sc">:</span><span class="dv">50</span>]</span>
+<span id="cb32-367"><a href="#cb32-367"></a><span class="fu">fitted</span>(ma.est, <span class="at">h=</span><span class="dv">9</span>)[<span class="dv">40</span><span class="sc">:</span><span class="dv">50</span>]</span>
+<span id="cb32-368"><a href="#cb32-368"></a><span class="in">```</span></span>
+<span id="cb32-369"><a href="#cb32-369"></a></span>
+<span id="cb32-370"><a href="#cb32-370"></a><span class="fu">## more complicated case</span></span>
+<span id="cb32-371"><a href="#cb32-371"></a></span>
+<span id="cb32-374"><a href="#cb32-374"></a><span class="in">```{r}</span></span>
+<span id="cb32-375"><a href="#cb32-375"></a><span class="fu">class</span>(AirPassengers)</span>
+<span id="cb32-376"><a href="#cb32-376"></a><span class="co">#This is the start of the time series</span></span>
+<span id="cb32-377"><a href="#cb32-377"></a><span class="fu">start</span>(AirPassengers)</span>
+<span id="cb32-378"><a href="#cb32-378"></a><span class="co">#This is the end of the time series</span></span>
+<span id="cb32-379"><a href="#cb32-379"></a><span class="fu">end</span>(AirPassengers)</span>
+<span id="cb32-380"><a href="#cb32-380"></a><span class="co">#The cycle of this time series is 12months in a year</span></span>
+<span id="cb32-381"><a href="#cb32-381"></a><span class="fu">frequency</span>(AirPassengers)</span>
+<span id="cb32-382"><a href="#cb32-382"></a><span class="fu">summary</span>(AirPassengers)</span>
+<span id="cb32-383"><a href="#cb32-383"></a><span class="in">```</span></span>
+<span id="cb32-384"><a href="#cb32-384"></a></span>
+<span id="cb32-387"><a href="#cb32-387"></a><span class="in">```{r}</span></span>
+<span id="cb32-388"><a href="#cb32-388"></a><span class="co">#The number of passengers are distributed across the spectrum</span></span>
+<span id="cb32-389"><a href="#cb32-389"></a><span class="fu">plot</span>(AirPassengers)</span>
+<span id="cb32-390"><a href="#cb32-390"></a><span class="co">#This will plot the time series</span></span>
+<span id="cb32-391"><a href="#cb32-391"></a><span class="fu">abline</span>(<span class="at">reg=</span><span class="fu">lm</span>(AirPassengers<span class="sc">~</span><span class="fu">time</span>(AirPassengers)))</span>
+<span id="cb32-392"><a href="#cb32-392"></a><span class="co"># This will fit in a line</span></span>
+<span id="cb32-393"><a href="#cb32-393"></a><span class="in">```</span></span>
+<span id="cb32-394"><a href="#cb32-394"></a></span>
+<span id="cb32-397"><a href="#cb32-397"></a><span class="in">```{r}</span></span>
+<span id="cb32-398"><a href="#cb32-398"></a><span class="fu">cycle</span>(AirPassengers)</span>
+<span id="cb32-399"><a href="#cb32-399"></a></span>
+<span id="cb32-400"><a href="#cb32-400"></a><span class="co">#This will print the cycle across years.</span></span>
+<span id="cb32-401"><a href="#cb32-401"></a></span>
+<span id="cb32-402"><a href="#cb32-402"></a><span class="fu">plot</span>(<span class="fu">aggregate</span>(AirPassengers,<span class="at">FUN=</span>mean))</span>
+<span id="cb32-403"><a href="#cb32-403"></a><span class="co">#This will aggregate the cycles and display a year on year trend</span></span>
+<span id="cb32-404"><a href="#cb32-404"></a></span>
+<span id="cb32-405"><a href="#cb32-405"></a><span class="fu">boxplot</span>(AirPassengers<span class="sc">~</span><span class="fu">cycle</span>(AirPassengers))</span>
+<span id="cb32-406"><a href="#cb32-406"></a><span class="co">#Box plot across months will give us a sense on seasonal effect</span></span>
+<span id="cb32-407"><a href="#cb32-407"></a></span>
+<span id="cb32-408"><a href="#cb32-408"></a><span class="in">```</span></span>
+<span id="cb32-409"><a href="#cb32-409"></a></span>
+<span id="cb32-410"><a href="#cb32-410"></a><span class="fu">### Important Inferences</span></span>
+<span id="cb32-411"><a href="#cb32-411"></a></span>
+<span id="cb32-412"><a href="#cb32-412"></a><span class="ss">1.  </span>The year on year trend clearly shows that the #passengers have been increasing without fail.</span>
+<span id="cb32-413"><a href="#cb32-413"></a></span>
+<span id="cb32-414"><a href="#cb32-414"></a><span class="ss">2.  </span>The variance and the mean value in July and August is much higher than rest of the months.</span>
+<span id="cb32-415"><a href="#cb32-415"></a></span>
+<span id="cb32-416"><a href="#cb32-416"></a><span class="ss">3.  </span>Even though the mean value of each month is quite different their variance is small. Hence, we have strong seasonal effect with a cycle of 12 months or less.</span>
+<span id="cb32-417"><a href="#cb32-417"></a></span>
+<span id="cb32-418"><a href="#cb32-418"></a>Exploring data becomes most important in a time series model -- without this exploration, you will not know whether a series is stationary or not. As in this case we already know many details about the kind of model we are looking out for.</span>
+<span id="cb32-419"><a href="#cb32-419"></a></span>
+<span id="cb32-420"><a href="#cb32-420"></a><span class="fu">### Solving unstationary issues</span></span>
+<span id="cb32-421"><a href="#cb32-421"></a></span>
+<span id="cb32-422"><a href="#cb32-422"></a>We know that we need to address two issues before we test stationary series. One, we need to remove unequal variances. We do this using log of the series. Two, we need to address the trend component. We do this by taking difference of the series. Now, let's test the resultant series.</span>
+<span id="cb32-423"><a href="#cb32-423"></a></span>
+<span id="cb32-426"><a href="#cb32-426"></a><span class="in">```{r}</span></span>
+<span id="cb32-427"><a href="#cb32-427"></a>tseries<span class="sc">::</span><span class="fu">adf.test</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)), <span class="at">alternative=</span><span class="st">"stationary"</span>, <span class="at">k=</span><span class="dv">0</span>)</span>
+<span id="cb32-428"><a href="#cb32-428"></a></span>
+<span id="cb32-429"><a href="#cb32-429"></a><span class="fu">log</span>(AirPassengers)</span>
+<span id="cb32-430"><a href="#cb32-430"></a><span class="in">```</span></span>
+<span id="cb32-431"><a href="#cb32-431"></a></span>
+<span id="cb32-432"><a href="#cb32-432"></a>We see that the series is stationary enough to do any kind of time series modelling.</span>
+<span id="cb32-433"><a href="#cb32-433"></a></span>
+<span id="cb32-434"><a href="#cb32-434"></a>Next step is to find the right parameters to be used in the ARIMA model. We already know that the 'd' component is 1 as we need 1 difference to make the series stationary. We do this using the Correlation plots. Following are the ACF plots for the series:</span>
+<span id="cb32-435"><a href="#cb32-435"></a></span>
+<span id="cb32-438"><a href="#cb32-438"></a><span class="in">```{R}</span></span>
+<span id="cb32-439"><a href="#cb32-439"></a><span class="fu">acf</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)))</span>
+<span id="cb32-440"><a href="#cb32-440"></a></span>
 <span id="cb32-441"><a href="#cb32-441"></a></span>
-<span id="cb32-442"><a href="#cb32-442"></a></span>
-<span id="cb32-443"><a href="#cb32-443"></a><span class="fu">pacf</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)))</span>
-<span id="cb32-444"><a href="#cb32-444"></a><span class="in">```</span></span>
-<span id="cb32-445"><a href="#cb32-445"></a></span>
-<span id="cb32-446"><a href="#cb32-446"></a>Clearly, ACF plot cuts off after the first lag. Hence, we understood&nbsp;that value of p should be 0 as the ACF is the curve getting a cut off. While value of q should be 1 or 2. After a few iterations, we found that (0,1,1) as (p,d,q) comes out to be the combination with least AIC and BIC.</span>
-<span id="cb32-447"><a href="#cb32-447"></a></span>
-<span id="cb32-450"><a href="#cb32-450"></a><span class="in">```{r}</span></span>
-<span id="cb32-451"><a href="#cb32-451"></a>(fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="fu">log</span>(AirPassengers), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),<span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>)))</span>
-<span id="cb32-452"><a href="#cb32-452"></a><span class="in">```</span></span>
-<span id="cb32-453"><a href="#cb32-453"></a></span>
-<span id="cb32-454"><a href="#cb32-454"></a>Let's fit an ARIMA model and predict the future 10 years. Also, we will try fitting in a seasonal component in the ARIMA formulation. Then, we will visualize the prediction along with the training data. You can use the following code to do the same :</span>
-<span id="cb32-455"><a href="#cb32-455"></a></span>
-<span id="cb32-458"><a href="#cb32-458"></a><span class="in">```{r}</span></span>
-<span id="cb32-459"><a href="#cb32-459"></a>(fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="fu">log</span>(AirPassengers), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),<span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>)))</span>
-<span id="cb32-460"><a href="#cb32-460"></a></span>
-<span id="cb32-461"><a href="#cb32-461"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">n.ahead =</span> <span class="dv">10</span><span class="sc">*</span><span class="dv">12</span>)</span>
-<span id="cb32-462"><a href="#cb32-462"></a></span>
-<span id="cb32-463"><a href="#cb32-463"></a><span class="fu">ts.plot</span>(AirPassengers,<span class="fl">2.718</span><span class="sc">^</span>pred<span class="sc">$</span>pred, <span class="at">log =</span> <span class="st">"y"</span>, <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
-<span id="cb32-464"><a href="#cb32-464"></a><span class="in">```</span></span>
+<span id="cb32-442"><a href="#cb32-442"></a><span class="fu">pacf</span>(<span class="fu">diff</span>(<span class="fu">log</span>(AirPassengers)))</span>
+<span id="cb32-443"><a href="#cb32-443"></a><span class="in">```</span></span>
+<span id="cb32-444"><a href="#cb32-444"></a></span>
+<span id="cb32-445"><a href="#cb32-445"></a>Clearly, ACF plot cuts off after the first lag. Hence, we understood&nbsp;that value of p should be 0 as the ACF is the curve getting a cut off. While value of q should be 1 or 2. After a few iterations, we found that (0,1,1) as (p,d,q) comes out to be the combination with least AIC and BIC.</span>
+<span id="cb32-446"><a href="#cb32-446"></a></span>
+<span id="cb32-449"><a href="#cb32-449"></a><span class="in">```{r}</span></span>
+<span id="cb32-450"><a href="#cb32-450"></a>(fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="fu">log</span>(AirPassengers), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),<span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>)))</span>
+<span id="cb32-451"><a href="#cb32-451"></a><span class="in">```</span></span>
+<span id="cb32-452"><a href="#cb32-452"></a></span>
+<span id="cb32-453"><a href="#cb32-453"></a>Let's fit an ARIMA model and predict the future 10 years. Also, we will try fitting in a seasonal component in the ARIMA formulation. Then, we will visualize the prediction along with the training data. You can use the following code to do the same :</span>
+<span id="cb32-454"><a href="#cb32-454"></a></span>
+<span id="cb32-457"><a href="#cb32-457"></a><span class="in">```{r}</span></span>
+<span id="cb32-458"><a href="#cb32-458"></a>(fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(<span class="fu">log</span>(AirPassengers), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),<span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>)))</span>
+<span id="cb32-459"><a href="#cb32-459"></a></span>
+<span id="cb32-460"><a href="#cb32-460"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">n.ahead =</span> <span class="dv">10</span><span class="sc">*</span><span class="dv">12</span>)</span>
+<span id="cb32-461"><a href="#cb32-461"></a></span>
+<span id="cb32-462"><a href="#cb32-462"></a><span class="fu">ts.plot</span>(AirPassengers,<span class="fl">2.718</span><span class="sc">^</span>pred<span class="sc">$</span>pred, <span class="at">log =</span> <span class="st">"y"</span>, <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb32-463"><a href="#cb32-463"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

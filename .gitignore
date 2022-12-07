@@ -4,3 +4,7 @@
 .Ruserdata
 
 /.quarto/
+
+# MAC OS Folder view configuration files
+.DS_Store
+Desktop.ini

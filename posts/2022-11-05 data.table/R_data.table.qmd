@@ -3,7 +3,6 @@ description: R data.table
 title: "R lib: data.table"
 categories: ["data.table"]
 tags: ["R", "data.table", "datagrapling","rolling joins"]
-date: '2022-11-07'
 toc: true
 ---
 
@@ -74,6 +73,7 @@ commercials[sales, roll = TRUE]
 ![](https://www.gormanalysis.com/blog/r-data-table-rolling-joins_files/roll-2.gif)
 
 data.table also supports backward rolling joins by setting roll = -Inf.
+
 ```{r}
 commercials[sales, roll = -Inf]
 ```

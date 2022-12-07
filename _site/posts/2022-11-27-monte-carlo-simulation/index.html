@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Łukasz Rąbalski">
-<meta name="dcterms.date" content="2022-11-27">
 
 <title>Lukasz Rabalski blog - Monte Carlo Simulation</title>
 <style>
@@ -182,12 +181,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             </div>
     </div>
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">November 27, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -302,14 +295,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-4"><a href="#cb7-4"></a><span class="bu">print</span>(<span class="st">"Average win probability after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: "</span> <span class="op">+</span> <span class="bu">str</span>(overall_win_probability))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average win probability after 100runs: 0.16773999999999997</code></pre>
+<pre><code>Average win probability after 100runs: 0.16715</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">print</span>(<span class="st">"Average ending balance after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: $"</span> <span class="op">+</span> <span class="bu">str</span>(overall_end_balance))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Average ending balance after 100runs: $838.7</code></pre>
+<pre><code>Average ending balance after 100runs: $835.75</code></pre>
 </div>
 </div>
 </section>
@@ -512,129 +505,128 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">---</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="an">title:</span><span class="co"> "Monte Carlo Simulation"</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="an">author:</span><span class="co"> 'Łukasz Rąbalski'</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="an">date:</span><span class="co"> '2022-11-27'</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="an">categories:</span><span class="co"> []</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="an">tags:</span><span class="co"> []</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">fig.height: 4</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">out.width: '100%'</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="an">include:</span><span class="co"> true  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="an">echo:</span><span class="co"> true  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="an">warning:</span><span class="co"> false</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="an">message:</span><span class="co"> false</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="an">collapse:</span><span class="co"> true</span></span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="an">error:</span><span class="co"> true</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="co"># format:</span></span>
-<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#   html:</span></span>
-<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#     toc: true</span></span>
-<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#     code-fold: true</span></span>
-<span id="cb11-20"><a href="#cb11-20"></a><span class="co">---</span></span>
-<span id="cb11-23"><a href="#cb11-23"></a><span class="in">```{r}</span></span>
-<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#| include: false</span></span>
-<span id="cb11-25"><a href="#cb11-25"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb11-26"><a href="#cb11-26"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb11-27"><a href="#cb11-27"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb11-28"><a href="#cb11-28"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-29"><a href="#cb11-29"></a></span>
-<span id="cb11-30"><a href="#cb11-30"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb11-31"><a href="#cb11-31"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
-<span id="cb11-32"><a href="#cb11-32"></a><span class="in">```</span></span>
-<span id="cb11-33"><a href="#cb11-33"></a></span>
-<span id="cb11-34"><a href="#cb11-34"></a><span class="fu"># What is a Monte Carlo Simulation?</span></span>
-<span id="cb11-35"><a href="#cb11-35"></a></span>
-<span id="cb11-36"><a href="#cb11-36"></a>A Monte Carlo simulation is a type of computational algorithm that estimates the probability of occurrence of an undeterminable event due to the involvement of random variables. The algorithm relies on repeated random sampling in an attempt to determine the probability. This means simulating an event with random inputs a large number of times to obtain your estimation. You can determine other factors as well, and we will see that in the example. Monte Carlo simulations can be utilized in a broad range of fields spanning from economics, gambling, engineering, energy, and anything in-between. So, no matter what career field you are in, it’s an excellent thing to know about.</span>
-<span id="cb11-37"><a href="#cb11-37"></a></span>
-<span id="cb11-38"><a href="#cb11-38"></a>#The Dice Game</span>
-<span id="cb11-39"><a href="#cb11-39"></a></span>
-<span id="cb11-40"><a href="#cb11-40"></a>Our simple game will involve two six-sided dice. In order to win, the player needs to roll the same number on both dice. A six-sided die has six possible outcomes (1, 2, 3, 4, 5, and 6). With two dice, there is now 36 possible outcomes (1 and 1, 1 and 2, 1 and 3, etc., or 6 x 6 = 36 possibilities). In this game, the house has more opportunities to win (30 outcomes vs. the player’s 6 outcomes), meaning the house has the quite the advantage.</span>
-<span id="cb11-41"><a href="#cb11-41"></a></span>
-<span id="cb11-42"><a href="#cb11-42"></a>Let’s say our player starts with a balance of $1,000 and is prepared to lose it all, so they bet $1 on every roll (meaning both dice are rolled) and decide to play 1,000 rolls. Because the house is so generous, they offer to payout 4 times the player’s bet when the player wins. For example, if the player wins the first roll, their balance increases by $4, and they end the round with a balance of $1,004. If they miraculously went on a 1,000 roll win-streak, they could go home with $5,000. If they lost every round, they could go home with nothing. Not a bad risk-reward ratio… or maybe it is.</span>
-<span id="cb11-43"><a href="#cb11-43"></a></span>
-<span id="cb11-46"><a href="#cb11-46"></a><span class="in">```{python}</span></span>
-<span id="cb11-47"><a href="#cb11-47"></a><span class="co"># Importing Packages</span></span>
-<span id="cb11-48"><a href="#cb11-48"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb11-49"><a href="#cb11-49"></a><span class="im">import</span> random</span>
-<span id="cb11-50"><a href="#cb11-50"></a><span class="in">```</span></span>
-<span id="cb11-51"><a href="#cb11-51"></a></span>
-<span id="cb11-52"><a href="#cb11-52"></a><span class="fu">## Dice Roll Function</span></span>
-<span id="cb11-53"><a href="#cb11-53"></a></span>
-<span id="cb11-54"><a href="#cb11-54"></a>Let's define a function that will randomize an integer from 1 to 6 for both dice (simulating a roll). The function will also compare the two dice to see if they are the same. The function will return a Boolean variable, same_num, to store if the rolls are the same or not. We will use this value later to determine actions in our code.</span>
-<span id="cb11-55"><a href="#cb11-55"></a></span>
-<span id="cb11-58"><a href="#cb11-58"></a><span class="in">```{python}</span></span>
-<span id="cb11-59"><a href="#cb11-59"></a><span class="co"># Creating Roll Dice Function</span></span>
-<span id="cb11-60"><a href="#cb11-60"></a><span class="kw">def</span> roll_dice():</span>
-<span id="cb11-61"><a href="#cb11-61"></a>    die_1 <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">6</span>)</span>
-<span id="cb11-62"><a href="#cb11-62"></a>    die_2 <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">6</span>)</span>
-<span id="cb11-63"><a href="#cb11-63"></a>    <span class="co"># Determining if the dice are the same number</span></span>
-<span id="cb11-64"><a href="#cb11-64"></a>    <span class="cf">if</span> die_1 <span class="op">==</span> die_2:</span>
-<span id="cb11-65"><a href="#cb11-65"></a>        same_num <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb11-66"><a href="#cb11-66"></a>    <span class="cf">else</span>:</span>
-<span id="cb11-67"><a href="#cb11-67"></a>        same_num <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb11-68"><a href="#cb11-68"></a>    <span class="cf">return</span> same_num</span>
-<span id="cb11-69"><a href="#cb11-69"></a></span>
-<span id="cb11-70"><a href="#cb11-70"></a><span class="in">```</span></span>
-<span id="cb11-71"><a href="#cb11-71"></a></span>
-<span id="cb11-72"><a href="#cb11-72"></a>These are initialized as lists and will be updated at the end of each game.</span>
-<span id="cb11-75"><a href="#cb11-75"></a><span class="in">```{python}</span></span>
-<span id="cb11-76"><a href="#cb11-76"></a><span class="co"># Inputs</span></span>
-<span id="cb11-77"><a href="#cb11-77"></a>num_simulations <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb11-78"><a href="#cb11-78"></a>max_num_rolls <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb11-79"><a href="#cb11-79"></a>bet <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb11-80"><a href="#cb11-80"></a></span>
-<span id="cb11-81"><a href="#cb11-81"></a><span class="co"># Tracking</span></span>
-<span id="cb11-82"><a href="#cb11-82"></a>win_probability <span class="op">=</span> []</span>
-<span id="cb11-83"><a href="#cb11-83"></a>end_balance <span class="op">=</span> []</span>
-<span id="cb11-84"><a href="#cb11-84"></a><span class="in">```</span></span>
-<span id="cb11-85"><a href="#cb11-85"></a></span>
-<span id="cb11-88"><a href="#cb11-88"></a><span class="in">```{python}</span></span>
-<span id="cb11-89"><a href="#cb11-89"></a><span class="co"># Creating Figure for Simulation Balances</span></span>
-<span id="cb11-90"><a href="#cb11-90"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb11-91"><a href="#cb11-91"></a>plt.title(<span class="st">"Monte Carlo Dice Game ["</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"simulations]"</span>)</span>
-<span id="cb11-92"><a href="#cb11-92"></a>plt.xlabel(<span class="st">"Roll Number"</span>)</span>
-<span id="cb11-93"><a href="#cb11-93"></a>plt.ylabel(<span class="st">"Balance [$]"</span>)</span>
-<span id="cb11-94"><a href="#cb11-94"></a>plt.xlim([<span class="dv">0</span>, max_num_rolls])</span>
-<span id="cb11-95"><a href="#cb11-95"></a><span class="in">```</span></span>
-<span id="cb11-96"><a href="#cb11-96"></a></span>
-<span id="cb11-97"><a href="#cb11-97"></a>Once the number of rolls hits 1,000, we can calculate the player’s win probability as the number of wins divided by the total number of rolls. We can also store the ending balance for the completed game in the tracking variable end_balance. Finally, we can plot the num_rolls and balance variables to add a line to the figure we defined earlier.</span>
-<span id="cb11-98"><a href="#cb11-98"></a></span>
-<span id="cb11-99"><a href="#cb11-99"></a><span class="fu">## Monte Carlo Simulation</span></span>
-<span id="cb11-100"><a href="#cb11-100"></a></span>
-<span id="cb11-103"><a href="#cb11-103"></a><span class="in">```{python}</span></span>
-<span id="cb11-104"><a href="#cb11-104"></a><span class="co"># For loop to run for the number of simulations desired</span></span>
-<span id="cb11-105"><a href="#cb11-105"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_simulations):</span>
-<span id="cb11-106"><a href="#cb11-106"></a>    balance <span class="op">=</span> [<span class="dv">1000</span>]</span>
-<span id="cb11-107"><a href="#cb11-107"></a>    num_rolls <span class="op">=</span> [<span class="dv">0</span>]</span>
-<span id="cb11-108"><a href="#cb11-108"></a>    num_wins <span class="op">=</span> <span class="dv">0</span>    <span class="co"># Run until the player has rolled 1,000 times</span></span>
-<span id="cb11-109"><a href="#cb11-109"></a>    <span class="cf">while</span> num_rolls[<span class="op">-</span><span class="dv">1</span>] <span class="op">&lt;</span> max_num_rolls:</span>
-<span id="cb11-110"><a href="#cb11-110"></a>        same <span class="op">=</span> roll_dice()        <span class="co"># Result if the dice are the same number</span></span>
-<span id="cb11-111"><a href="#cb11-111"></a>        <span class="cf">if</span> same:</span>
-<span id="cb11-112"><a href="#cb11-112"></a>            balance.append(balance[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> bet)</span>
-<span id="cb11-113"><a href="#cb11-113"></a>            num_wins <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb11-114"><a href="#cb11-114"></a>        <span class="co"># Result if the dice are different numbers</span></span>
-<span id="cb11-115"><a href="#cb11-115"></a>        <span class="cf">else</span>:</span>
-<span id="cb11-116"><a href="#cb11-116"></a>            balance.append(balance[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> bet)</span>
-<span id="cb11-117"><a href="#cb11-117"></a>        num_rolls.append(num_rolls[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">1</span>)<span class="co"># Store tracking variables and add line to figure</span></span>
-<span id="cb11-118"><a href="#cb11-118"></a>    win_probability.append(num_wins<span class="op">/</span>num_rolls[<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb11-119"><a href="#cb11-119"></a>    end_balance.append(balance[<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb11-120"><a href="#cb11-120"></a>    plt.plot(num_rolls, balance)</span>
-<span id="cb11-121"><a href="#cb11-121"></a></span>
-<span id="cb11-122"><a href="#cb11-122"></a><span class="in">```</span></span>
-<span id="cb11-123"><a href="#cb11-123"></a></span>
-<span id="cb11-124"><a href="#cb11-124"></a>The last step is displaying meaningful data from our tracking variables. We can display our figure (shown below) that we created in our for loop. Also, we can calculate and display (shown below) our overall win probability and ending balance by averaging our win_probability and end_balance lists.</span>
-<span id="cb11-125"><a href="#cb11-125"></a></span>
-<span id="cb11-128"><a href="#cb11-128"></a><span class="in">```{python}</span></span>
-<span id="cb11-129"><a href="#cb11-129"></a><span class="co"># Averaging win probability and end balance</span></span>
-<span id="cb11-130"><a href="#cb11-130"></a>overall_win_probability <span class="op">=</span> <span class="bu">sum</span>(win_probability)<span class="op">/</span><span class="bu">len</span>(win_probability)</span>
-<span id="cb11-131"><a href="#cb11-131"></a>overall_end_balance <span class="op">=</span> <span class="bu">sum</span>(end_balance)<span class="op">/</span><span class="bu">len</span>(end_balance)<span class="co"># Displaying the averages</span></span>
-<span id="cb11-132"><a href="#cb11-132"></a><span class="bu">print</span>(<span class="st">"Average win probability after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: "</span> <span class="op">+</span> <span class="bu">str</span>(overall_win_probability))</span>
-<span id="cb11-133"><a href="#cb11-133"></a><span class="bu">print</span>(<span class="st">"Average ending balance after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: $"</span> <span class="op">+</span> <span class="bu">str</span>(overall_end_balance))</span>
-<span id="cb11-134"><a href="#cb11-134"></a><span class="in">```</span></span>
-<span id="cb11-135"><a href="#cb11-135"></a></span>
-<span id="cb11-136"><a href="#cb11-136"></a><span class="fu">## Analyzing Results</span></span>
-<span id="cb11-137"><a href="#cb11-137"></a></span>
-<span id="cb11-138"><a href="#cb11-138"></a>The most important part of any Monte Carlo simulation (or any analysis for that matter) is drawing conclusions from the results. From our figure, we can determine that the player rarely makes a profit after 1,000 rolls. In fact, the average ending balance of our 10,000 simulations is $833.66 (your results may be slightly different due to randomization). So, even though the house was “generous” in paying out 4 times our bet when the player won, the house still came out on top.</span>
-<span id="cb11-139"><a href="#cb11-139"></a></span>
-<span id="cb11-140"><a href="#cb11-140"></a>We also notice that our win probability is about 0.1667, or approximately 1/6. Let’s think about why that might be. Returning back to one of the earlier paragraphs, we noted that the player had 6 outcomes in which they could win. We also noted there are 36 possible rolls. Using these two numbers, we would expect that the player would win 6 out of 36 rolls, or 1/6 rolls, which matches our Monte Carlo prediction. Pretty cool!</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="an">categories:</span><span class="co"> []</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="an">tags:</span><span class="co"> []</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">fig.height: 4</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">out.width: '100%'</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="an">include:</span><span class="co"> true  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="an">echo:</span><span class="co"> true  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="an">warning:</span><span class="co"> false</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="an">message:</span><span class="co"> false</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="an">collapse:</span><span class="co"> true</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="an">error:</span><span class="co"> true</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co"># format:</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#   html:</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#     toc: true</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#     code-fold: true</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">---</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="in">```{r}</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#| include: false</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb11-25"><a href="#cb11-25"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb11-26"><a href="#cb11-26"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-28"><a href="#cb11-28"></a></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb11-30"><a href="#cb11-30"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="in">```</span></span>
+<span id="cb11-32"><a href="#cb11-32"></a></span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="fu"># What is a Monte Carlo Simulation?</span></span>
+<span id="cb11-34"><a href="#cb11-34"></a></span>
+<span id="cb11-35"><a href="#cb11-35"></a>A Monte Carlo simulation is a type of computational algorithm that estimates the probability of occurrence of an undeterminable event due to the involvement of random variables. The algorithm relies on repeated random sampling in an attempt to determine the probability. This means simulating an event with random inputs a large number of times to obtain your estimation. You can determine other factors as well, and we will see that in the example. Monte Carlo simulations can be utilized in a broad range of fields spanning from economics, gambling, engineering, energy, and anything in-between. So, no matter what career field you are in, it’s an excellent thing to know about.</span>
+<span id="cb11-36"><a href="#cb11-36"></a></span>
+<span id="cb11-37"><a href="#cb11-37"></a>#The Dice Game</span>
+<span id="cb11-38"><a href="#cb11-38"></a></span>
+<span id="cb11-39"><a href="#cb11-39"></a>Our simple game will involve two six-sided dice. In order to win, the player needs to roll the same number on both dice. A six-sided die has six possible outcomes (1, 2, 3, 4, 5, and 6). With two dice, there is now 36 possible outcomes (1 and 1, 1 and 2, 1 and 3, etc., or 6 x 6 = 36 possibilities). In this game, the house has more opportunities to win (30 outcomes vs. the player’s 6 outcomes), meaning the house has the quite the advantage.</span>
+<span id="cb11-40"><a href="#cb11-40"></a></span>
+<span id="cb11-41"><a href="#cb11-41"></a>Let’s say our player starts with a balance of $1,000 and is prepared to lose it all, so they bet $1 on every roll (meaning both dice are rolled) and decide to play 1,000 rolls. Because the house is so generous, they offer to payout 4 times the player’s bet when the player wins. For example, if the player wins the first roll, their balance increases by $4, and they end the round with a balance of $1,004. If they miraculously went on a 1,000 roll win-streak, they could go home with $5,000. If they lost every round, they could go home with nothing. Not a bad risk-reward ratio… or maybe it is.</span>
+<span id="cb11-42"><a href="#cb11-42"></a></span>
+<span id="cb11-45"><a href="#cb11-45"></a><span class="in">```{python}</span></span>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="co"># Importing Packages</span></span>
+<span id="cb11-47"><a href="#cb11-47"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-48"><a href="#cb11-48"></a><span class="im">import</span> random</span>
+<span id="cb11-49"><a href="#cb11-49"></a><span class="in">```</span></span>
+<span id="cb11-50"><a href="#cb11-50"></a></span>
+<span id="cb11-51"><a href="#cb11-51"></a><span class="fu">## Dice Roll Function</span></span>
+<span id="cb11-52"><a href="#cb11-52"></a></span>
+<span id="cb11-53"><a href="#cb11-53"></a>Let's define a function that will randomize an integer from 1 to 6 for both dice (simulating a roll). The function will also compare the two dice to see if they are the same. The function will return a Boolean variable, same_num, to store if the rolls are the same or not. We will use this value later to determine actions in our code.</span>
+<span id="cb11-54"><a href="#cb11-54"></a></span>
+<span id="cb11-57"><a href="#cb11-57"></a><span class="in">```{python}</span></span>
+<span id="cb11-58"><a href="#cb11-58"></a><span class="co"># Creating Roll Dice Function</span></span>
+<span id="cb11-59"><a href="#cb11-59"></a><span class="kw">def</span> roll_dice():</span>
+<span id="cb11-60"><a href="#cb11-60"></a>    die_1 <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">6</span>)</span>
+<span id="cb11-61"><a href="#cb11-61"></a>    die_2 <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">6</span>)</span>
+<span id="cb11-62"><a href="#cb11-62"></a>    <span class="co"># Determining if the dice are the same number</span></span>
+<span id="cb11-63"><a href="#cb11-63"></a>    <span class="cf">if</span> die_1 <span class="op">==</span> die_2:</span>
+<span id="cb11-64"><a href="#cb11-64"></a>        same_num <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-65"><a href="#cb11-65"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-66"><a href="#cb11-66"></a>        same_num <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-67"><a href="#cb11-67"></a>    <span class="cf">return</span> same_num</span>
+<span id="cb11-68"><a href="#cb11-68"></a></span>
+<span id="cb11-69"><a href="#cb11-69"></a><span class="in">```</span></span>
+<span id="cb11-70"><a href="#cb11-70"></a></span>
+<span id="cb11-71"><a href="#cb11-71"></a>These are initialized as lists and will be updated at the end of each game.</span>
+<span id="cb11-74"><a href="#cb11-74"></a><span class="in">```{python}</span></span>
+<span id="cb11-75"><a href="#cb11-75"></a><span class="co"># Inputs</span></span>
+<span id="cb11-76"><a href="#cb11-76"></a>num_simulations <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb11-77"><a href="#cb11-77"></a>max_num_rolls <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-78"><a href="#cb11-78"></a>bet <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb11-79"><a href="#cb11-79"></a></span>
+<span id="cb11-80"><a href="#cb11-80"></a><span class="co"># Tracking</span></span>
+<span id="cb11-81"><a href="#cb11-81"></a>win_probability <span class="op">=</span> []</span>
+<span id="cb11-82"><a href="#cb11-82"></a>end_balance <span class="op">=</span> []</span>
+<span id="cb11-83"><a href="#cb11-83"></a><span class="in">```</span></span>
+<span id="cb11-84"><a href="#cb11-84"></a></span>
+<span id="cb11-87"><a href="#cb11-87"></a><span class="in">```{python}</span></span>
+<span id="cb11-88"><a href="#cb11-88"></a><span class="co"># Creating Figure for Simulation Balances</span></span>
+<span id="cb11-89"><a href="#cb11-89"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb11-90"><a href="#cb11-90"></a>plt.title(<span class="st">"Monte Carlo Dice Game ["</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"simulations]"</span>)</span>
+<span id="cb11-91"><a href="#cb11-91"></a>plt.xlabel(<span class="st">"Roll Number"</span>)</span>
+<span id="cb11-92"><a href="#cb11-92"></a>plt.ylabel(<span class="st">"Balance [$]"</span>)</span>
+<span id="cb11-93"><a href="#cb11-93"></a>plt.xlim([<span class="dv">0</span>, max_num_rolls])</span>
+<span id="cb11-94"><a href="#cb11-94"></a><span class="in">```</span></span>
+<span id="cb11-95"><a href="#cb11-95"></a></span>
+<span id="cb11-96"><a href="#cb11-96"></a>Once the number of rolls hits 1,000, we can calculate the player’s win probability as the number of wins divided by the total number of rolls. We can also store the ending balance for the completed game in the tracking variable end_balance. Finally, we can plot the num_rolls and balance variables to add a line to the figure we defined earlier.</span>
+<span id="cb11-97"><a href="#cb11-97"></a></span>
+<span id="cb11-98"><a href="#cb11-98"></a><span class="fu">## Monte Carlo Simulation</span></span>
+<span id="cb11-99"><a href="#cb11-99"></a></span>
+<span id="cb11-102"><a href="#cb11-102"></a><span class="in">```{python}</span></span>
+<span id="cb11-103"><a href="#cb11-103"></a><span class="co"># For loop to run for the number of simulations desired</span></span>
+<span id="cb11-104"><a href="#cb11-104"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_simulations):</span>
+<span id="cb11-105"><a href="#cb11-105"></a>    balance <span class="op">=</span> [<span class="dv">1000</span>]</span>
+<span id="cb11-106"><a href="#cb11-106"></a>    num_rolls <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb11-107"><a href="#cb11-107"></a>    num_wins <span class="op">=</span> <span class="dv">0</span>    <span class="co"># Run until the player has rolled 1,000 times</span></span>
+<span id="cb11-108"><a href="#cb11-108"></a>    <span class="cf">while</span> num_rolls[<span class="op">-</span><span class="dv">1</span>] <span class="op">&lt;</span> max_num_rolls:</span>
+<span id="cb11-109"><a href="#cb11-109"></a>        same <span class="op">=</span> roll_dice()        <span class="co"># Result if the dice are the same number</span></span>
+<span id="cb11-110"><a href="#cb11-110"></a>        <span class="cf">if</span> same:</span>
+<span id="cb11-111"><a href="#cb11-111"></a>            balance.append(balance[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> bet)</span>
+<span id="cb11-112"><a href="#cb11-112"></a>            num_wins <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb11-113"><a href="#cb11-113"></a>        <span class="co"># Result if the dice are different numbers</span></span>
+<span id="cb11-114"><a href="#cb11-114"></a>        <span class="cf">else</span>:</span>
+<span id="cb11-115"><a href="#cb11-115"></a>            balance.append(balance[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> bet)</span>
+<span id="cb11-116"><a href="#cb11-116"></a>        num_rolls.append(num_rolls[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="dv">1</span>)<span class="co"># Store tracking variables and add line to figure</span></span>
+<span id="cb11-117"><a href="#cb11-117"></a>    win_probability.append(num_wins<span class="op">/</span>num_rolls[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb11-118"><a href="#cb11-118"></a>    end_balance.append(balance[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb11-119"><a href="#cb11-119"></a>    plt.plot(num_rolls, balance)</span>
+<span id="cb11-120"><a href="#cb11-120"></a></span>
+<span id="cb11-121"><a href="#cb11-121"></a><span class="in">```</span></span>
+<span id="cb11-122"><a href="#cb11-122"></a></span>
+<span id="cb11-123"><a href="#cb11-123"></a>The last step is displaying meaningful data from our tracking variables. We can display our figure (shown below) that we created in our for loop. Also, we can calculate and display (shown below) our overall win probability and ending balance by averaging our win_probability and end_balance lists.</span>
+<span id="cb11-124"><a href="#cb11-124"></a></span>
+<span id="cb11-127"><a href="#cb11-127"></a><span class="in">```{python}</span></span>
+<span id="cb11-128"><a href="#cb11-128"></a><span class="co"># Averaging win probability and end balance</span></span>
+<span id="cb11-129"><a href="#cb11-129"></a>overall_win_probability <span class="op">=</span> <span class="bu">sum</span>(win_probability)<span class="op">/</span><span class="bu">len</span>(win_probability)</span>
+<span id="cb11-130"><a href="#cb11-130"></a>overall_end_balance <span class="op">=</span> <span class="bu">sum</span>(end_balance)<span class="op">/</span><span class="bu">len</span>(end_balance)<span class="co"># Displaying the averages</span></span>
+<span id="cb11-131"><a href="#cb11-131"></a><span class="bu">print</span>(<span class="st">"Average win probability after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: "</span> <span class="op">+</span> <span class="bu">str</span>(overall_win_probability))</span>
+<span id="cb11-132"><a href="#cb11-132"></a><span class="bu">print</span>(<span class="st">"Average ending balance after "</span> <span class="op">+</span> <span class="bu">str</span>(num_simulations) <span class="op">+</span> <span class="st">"runs: $"</span> <span class="op">+</span> <span class="bu">str</span>(overall_end_balance))</span>
+<span id="cb11-133"><a href="#cb11-133"></a><span class="in">```</span></span>
+<span id="cb11-134"><a href="#cb11-134"></a></span>
+<span id="cb11-135"><a href="#cb11-135"></a><span class="fu">## Analyzing Results</span></span>
+<span id="cb11-136"><a href="#cb11-136"></a></span>
+<span id="cb11-137"><a href="#cb11-137"></a>The most important part of any Monte Carlo simulation (or any analysis for that matter) is drawing conclusions from the results. From our figure, we can determine that the player rarely makes a profit after 1,000 rolls. In fact, the average ending balance of our 10,000 simulations is $833.66 (your results may be slightly different due to randomization). So, even though the house was “generous” in paying out 4 times our bet when the player won, the house still came out on top.</span>
+<span id="cb11-138"><a href="#cb11-138"></a></span>
+<span id="cb11-139"><a href="#cb11-139"></a>We also notice that our win probability is about 0.1667, or approximately 1/6. Let’s think about why that might be. Returning back to one of the earlier paragraphs, we noted that the player had 6 outcomes in which they could win. We also noted there are 36 possible rolls. Using these two numbers, we would expect that the player would win 6 out of 36 rolls, or 1/6 rolls, which matches our Monte Carlo prediction. Pretty cool!</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

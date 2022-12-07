@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-10-28">
 
 <title>Lukasz Rabalski blog - DGL graph datastructure</title>
 <style>
@@ -178,12 +177,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <div class="quarto-title-meta">
 
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">October 28, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -442,7 +435,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-3"><a href="#cb9-3"></a><span class="im">import</span> sys</span>
 <span id="cb9-4"><a href="#cb9-4"></a>sys.path.insert(<span class="dv">1</span>, repo_directory)</span>
 <span id="cb9-5"><a href="#cb9-5"></a><span class="im">from</span> builder <span class="im">import</span> PandasGraphBuilder</span>
-<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): ModuleNotFoundError: No module named 'builder'</span></span>
 <span id="cb9-7"><a href="#cb9-7"></a>users<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">101</span>), columns<span class="op">=</span>[<span class="st">'user_id'</span>])</span>
 <span id="cb9-8"><a href="#cb9-8"></a>products<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">50</span>), columns<span class="op">=</span>[<span class="st">'product_id'</span>])</span>
 <span id="cb9-9"><a href="#cb9-9"></a>interactions<span class="op">=</span>pd.DataFrame(data<span class="op">=</span>{</span>
@@ -454,17 +447,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-15"><a href="#cb9-15"></a></span>
 <span id="cb9-16"><a href="#cb9-16"></a></span>
 <span id="cb9-17"><a href="#cb9-17"></a>graph_builder <span class="op">=</span> PandasGraphBuilder()</span>
-<span id="cb9-18"><a href="#cb9-18"></a>graph_builder.add_entities(users, <span class="st">'user_id'</span>, <span class="st">'user'</span>)</span>
-<span id="cb9-19"><a href="#cb9-19"></a>graph_builder.add_entities(products, <span class="st">'product_id'</span>, <span class="st">'product'</span>)</span>
-<span id="cb9-20"><a href="#cb9-20"></a></span>
-<span id="cb9-21"><a href="#cb9-21"></a>graph_builder.add_binary_relations(interactions, <span class="st">'user_id'</span>,<span class="st">'product_id'</span>, <span class="st">'interaction'</span>)</span>
-<span id="cb9-22"><a href="#cb9-22"></a>graph_builder.add_binary_relations(interactions, <span class="st">'product_id'</span>,<span class="st">'user_id'</span>, <span class="st">'interaction-by'</span>)</span>
-<span id="cb9-23"><a href="#cb9-23"></a></span>
-<span id="cb9-24"><a href="#cb9-24"></a><span class="bu">print</span>(<span class="st">'starting graph building'</span>)</span>
-<span id="cb9-25"><a href="#cb9-25"></a><span class="co">## starting graph building</span></span>
-<span id="cb9-26"><a href="#cb9-26"></a>g <span class="op">=</span> graph_builder.build()</span>
-<span id="cb9-27"><a href="#cb9-27"></a></span>
-<span id="cb9-28"><a href="#cb9-28"></a>plot_graph(nxg<span class="op">=</span>g.metagraph(),plot_name<span class="op">=</span><span class="st">'pandas_graph'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'PandasGraphBuilder' is not defined</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a>graph_builder.add_entities(users, <span class="st">'user_id'</span>, <span class="st">'user'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'graph_builder' is not defined</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a>graph_builder.add_entities(products, <span class="st">'product_id'</span>, <span class="st">'product'</span>)</span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'graph_builder' is not defined</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a>graph_builder.add_binary_relations(interactions, <span class="st">'user_id'</span>,<span class="st">'product_id'</span>, <span class="st">'interaction'</span>)</span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'graph_builder' is not defined</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a>graph_builder.add_binary_relations(interactions, <span class="st">'product_id'</span>,<span class="st">'user_id'</span>, <span class="st">'interaction-by'</span>)</span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'graph_builder' is not defined</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="bu">print</span>(<span class="st">'starting graph building'</span>)</span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">## starting graph building</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a>g <span class="op">=</span> graph_builder.build()</span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'graph_builder' is not defined</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a>plot_graph(nxg<span class="op">=</span>g.metagraph(),plot_name<span class="op">=</span><span class="st">'pandas_graph'</span>)</span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'g' is not defined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p><img src="pandas_graph.png" class="img-fluid"></p>
@@ -662,260 +659,259 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="an">title:</span><span class="co"> "DGL graph datastructure"</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="an">date:</span><span class="co"> "2022-10-28"</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="an">categories:</span><span class="co"> ["DGL"]</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="an">tags:</span><span class="co"> ["DGL", "graph", "graph datastructure", "compressed sparsed matrix"]</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="an">toc:</span><span class="co"> TRUE</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">---</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="in">```{r include=FALSE}</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#[url](https://www.jianshu.com/p/767950b560c4)</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="in">```</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="in">```{r include =FALSE}</span></span>
-<span id="cb10-14"><a href="#cb10-14"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb10-15"><a href="#cb10-15"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb10-16"><a href="#cb10-16"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb10-17"><a href="#cb10-17"></a>                      ) </span>
-<span id="cb10-18"><a href="#cb10-18"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#When `include = FALSE`, this whole code chunk is excluded in the output, but note that it will still be evaluated if `eval = TRUE`. When you are trying to set `echo = FALSE`, `results = 'hide'`, `warning = FALSE`, and `message = FALSE`, chances are you simply mean a single option `include = FALSE` instead of suppressing different types of text output individually.</span></span>
-<span id="cb10-19"><a href="#cb10-19"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-20"><a href="#cb10-20"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
-<span id="cb10-21"><a href="#cb10-21"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb10-22"><a href="#cb10-22"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
-<span id="cb10-23"><a href="#cb10-23"></a>                      )</span>
-<span id="cb10-24"><a href="#cb10-24"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
-<span id="cb10-25"><a href="#cb10-25"></a><span class="in">```</span></span>
-<span id="cb10-26"><a href="#cb10-26"></a></span>
-<span id="cb10-27"><a href="#cb10-27"></a><span class="in">```{r, include =FALSE}</span></span>
-<span id="cb10-28"><a href="#cb10-28"></a></span>
-<span id="cb10-29"><a href="#cb10-29"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb10-30"><a href="#cb10-30"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb10-31"><a href="#cb10-31"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">5</span>]</span>
-<span id="cb10-32"><a href="#cb10-32"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-33"><a href="#cb10-33"></a><span class="in">```</span></span>
-<span id="cb10-34"><a href="#cb10-34"></a></span>
-<span id="cb10-35"><a href="#cb10-35"></a><span class="in">```{python, include =FALSE}</span></span>
-<span id="cb10-36"><a href="#cb10-36"></a>data_file_path<span class="op">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
-<span id="cb10-37"><a href="#cb10-37"></a>repo_directory <span class="op">=</span> <span class="st">'/Users/lrabalski1/Desktop/Mrowisko/000Pracownicy/000_Rabalski_Lukasz/2022.05.19 graf/repo projektu/graph-recommendator/pinsage/'</span></span>
-<span id="cb10-38"><a href="#cb10-38"></a><span class="in">```</span></span>
-<span id="cb10-39"><a href="#cb10-39"></a></span>
-<span id="cb10-40"><a href="#cb10-40"></a><span class="fu"># Creating Graph data</span></span>
-<span id="cb10-41"><a href="#cb10-41"></a></span>
-<span id="cb10-42"><a href="#cb10-42"></a>Very simple example below</span>
-<span id="cb10-43"><a href="#cb10-43"></a></span>
-<span id="cb10-46"><a href="#cb10-46"></a><span class="in">```{python}</span></span>
-<span id="cb10-47"><a href="#cb10-47"></a><span class="co"># Each value of the dictionary is a list of edge tuples.</span></span>
-<span id="cb10-48"><a href="#cb10-48"></a><span class="co"># Nodes are integer IDs starting from zero. Nodes IDs of different types have</span></span>
-<span id="cb10-49"><a href="#cb10-49"></a><span class="co"># separate countings.</span></span>
-<span id="cb10-50"><a href="#cb10-50"></a><span class="im">import</span> torch</span>
-<span id="cb10-51"><a href="#cb10-51"></a><span class="im">import</span> dgl</span>
-<span id="cb10-52"><a href="#cb10-52"></a></span>
-<span id="cb10-53"><a href="#cb10-53"></a>ratings <span class="op">=</span> dgl.heterograph(</span>
-<span id="cb10-54"><a href="#cb10-54"></a>    {(<span class="st">'user'</span>, <span class="st">'+1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">0</span>)],</span>
-<span id="cb10-55"><a href="#cb10-55"></a>     (<span class="st">'user'</span>, <span class="st">'-1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">2</span>, <span class="dv">1</span>)]})</span>
-<span id="cb10-56"><a href="#cb10-56"></a>ratings</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="an">categories:</span><span class="co"> ["DGL"]</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="an">tags:</span><span class="co"> ["DGL", "graph", "graph datastructure", "compressed sparsed matrix"]</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="an">toc:</span><span class="co"> TRUE</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">---</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="in">```{r include=FALSE}</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#[url](https://www.jianshu.com/p/767950b560c4)</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="in">```</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="in">```{r include =FALSE}</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb10-14"><a href="#cb10-14"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb10-15"><a href="#cb10-15"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a>                      ) </span>
+<span id="cb10-17"><a href="#cb10-17"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#When `include = FALSE`, this whole code chunk is excluded in the output, but note that it will still be evaluated if `eval = TRUE`. When you are trying to set `echo = FALSE`, `results = 'hide'`, `warning = FALSE`, and `message = FALSE`, chances are you simply mean a single option `include = FALSE` instead of suppressing different types of text output individually.</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-19"><a href="#cb10-19"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb10-20"><a href="#cb10-20"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb10-21"><a href="#cb10-21"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a>                      )</span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="in">```</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="in">```{r, include =FALSE}</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb10-29"><a href="#cb10-29"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb10-30"><a href="#cb10-30"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">5</span>]</span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-32"><a href="#cb10-32"></a><span class="in">```</span></span>
+<span id="cb10-33"><a href="#cb10-33"></a></span>
+<span id="cb10-34"><a href="#cb10-34"></a><span class="in">```{python, include =FALSE}</span></span>
+<span id="cb10-35"><a href="#cb10-35"></a>data_file_path<span class="op">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
+<span id="cb10-36"><a href="#cb10-36"></a>repo_directory <span class="op">=</span> <span class="st">'/Users/lrabalski1/Desktop/Mrowisko/000Pracownicy/000_Rabalski_Lukasz/2022.05.19 graf/repo projektu/graph-recommendator/pinsage/'</span></span>
+<span id="cb10-37"><a href="#cb10-37"></a><span class="in">```</span></span>
+<span id="cb10-38"><a href="#cb10-38"></a></span>
+<span id="cb10-39"><a href="#cb10-39"></a><span class="fu"># Creating Graph data</span></span>
+<span id="cb10-40"><a href="#cb10-40"></a></span>
+<span id="cb10-41"><a href="#cb10-41"></a>Very simple example below</span>
+<span id="cb10-42"><a href="#cb10-42"></a></span>
+<span id="cb10-45"><a href="#cb10-45"></a><span class="in">```{python}</span></span>
+<span id="cb10-46"><a href="#cb10-46"></a><span class="co"># Each value of the dictionary is a list of edge tuples.</span></span>
+<span id="cb10-47"><a href="#cb10-47"></a><span class="co"># Nodes are integer IDs starting from zero. Nodes IDs of different types have</span></span>
+<span id="cb10-48"><a href="#cb10-48"></a><span class="co"># separate countings.</span></span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="im">import</span> torch</span>
+<span id="cb10-50"><a href="#cb10-50"></a><span class="im">import</span> dgl</span>
+<span id="cb10-51"><a href="#cb10-51"></a></span>
+<span id="cb10-52"><a href="#cb10-52"></a>ratings <span class="op">=</span> dgl.heterograph(</span>
+<span id="cb10-53"><a href="#cb10-53"></a>    {(<span class="st">'user'</span>, <span class="st">'+1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">0</span>)],</span>
+<span id="cb10-54"><a href="#cb10-54"></a>     (<span class="st">'user'</span>, <span class="st">'-1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">2</span>, <span class="dv">1</span>)]})</span>
+<span id="cb10-55"><a href="#cb10-55"></a>ratings</span>
+<span id="cb10-56"><a href="#cb10-56"></a></span>
 <span id="cb10-57"><a href="#cb10-57"></a></span>
-<span id="cb10-58"><a href="#cb10-58"></a></span>
-<span id="cb10-59"><a href="#cb10-59"></a><span class="in">```</span></span>
-<span id="cb10-60"><a href="#cb10-60"></a></span>
-<span id="cb10-61"><a href="#cb10-61"></a><span class="fu">## saving graph</span></span>
-<span id="cb10-62"><a href="#cb10-62"></a></span>
-<span id="cb10-63"><a href="#cb10-63"></a>In order to save graph as object, very convenient method is to use <span class="in">`pickle.`</span></span>
-<span id="cb10-64"><a href="#cb10-64"></a></span>
-<span id="cb10-65"><a href="#cb10-65"></a><span class="in">```{python, eval=FALSE}</span></span>
-<span id="cb10-66"><a href="#cb10-66"></a><span class="im">import</span> pickle</span>
-<span id="cb10-67"><a href="#cb10-67"></a></span>
-<span id="cb10-68"><a href="#cb10-68"></a>output_file <span class="op">=</span> <span class="st">'builded_graph.pkl'</span></span>
-<span id="cb10-69"><a href="#cb10-69"></a>directory <span class="op">=</span> <span class="st">'input/'</span></span>
-<span id="cb10-70"><a href="#cb10-70"></a><span class="cf">with</span> <span class="bu">open</span>(directory <span class="op">+</span> output_file, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb10-71"><a href="#cb10-71"></a>    g <span class="op">=</span> pickle.load(f)</span>
+<span id="cb10-58"><a href="#cb10-58"></a><span class="in">```</span></span>
+<span id="cb10-59"><a href="#cb10-59"></a></span>
+<span id="cb10-60"><a href="#cb10-60"></a><span class="fu">## saving graph</span></span>
+<span id="cb10-61"><a href="#cb10-61"></a></span>
+<span id="cb10-62"><a href="#cb10-62"></a>In order to save graph as object, very convenient method is to use <span class="in">`pickle.`</span></span>
+<span id="cb10-63"><a href="#cb10-63"></a></span>
+<span id="cb10-64"><a href="#cb10-64"></a><span class="in">```{python, eval=FALSE}</span></span>
+<span id="cb10-65"><a href="#cb10-65"></a><span class="im">import</span> pickle</span>
+<span id="cb10-66"><a href="#cb10-66"></a></span>
+<span id="cb10-67"><a href="#cb10-67"></a>output_file <span class="op">=</span> <span class="st">'builded_graph.pkl'</span></span>
+<span id="cb10-68"><a href="#cb10-68"></a>directory <span class="op">=</span> <span class="st">'input/'</span></span>
+<span id="cb10-69"><a href="#cb10-69"></a><span class="cf">with</span> <span class="bu">open</span>(directory <span class="op">+</span> output_file, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb10-70"><a href="#cb10-70"></a>    g <span class="op">=</span> pickle.load(f)</span>
+<span id="cb10-71"><a href="#cb10-71"></a></span>
 <span id="cb10-72"><a href="#cb10-72"></a></span>
-<span id="cb10-73"><a href="#cb10-73"></a></span>
-<span id="cb10-74"><a href="#cb10-74"></a><span class="co">#loading saved graph</span></span>
-<span id="cb10-75"><a href="#cb10-75"></a><span class="cf">with</span> <span class="bu">open</span>(directory  <span class="op">+</span> output_file, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
-<span id="cb10-76"><a href="#cb10-76"></a>    sp_matrix <span class="op">=</span> pickle.load(f)</span>
-<span id="cb10-77"><a href="#cb10-77"></a></span>
-<span id="cb10-78"><a href="#cb10-78"></a><span class="in">```</span></span>
-<span id="cb10-79"><a href="#cb10-79"></a></span>
-<span id="cb10-80"><a href="#cb10-80"></a>To create a more realistic heterograph let's use the ACM dataset. <span class="sc">\#</span># Graphs Dataset can be downloaded from <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.aminer.org/citation)</span>. It's stored in mat (matrix) object. Within which we can find object/matrices stored in a <span class="in">`compresed sparsed`</span> format. More about further.</span>
-<span id="cb10-81"><a href="#cb10-81"></a></span>
-<span id="cb10-84"><a href="#cb10-84"></a><span class="in">```{python}</span></span>
-<span id="cb10-85"><a href="#cb10-85"></a><span class="im">import</span> scipy.io</span>
-<span id="cb10-86"><a href="#cb10-86"></a><span class="im">import</span> urllib.request</span>
-<span id="cb10-87"><a href="#cb10-87"></a></span>
-<span id="cb10-88"><a href="#cb10-88"></a>data <span class="op">=</span> scipy.io.loadmat(data_file_path<span class="op">+</span><span class="st">'ACM.mat'</span>)</span>
+<span id="cb10-73"><a href="#cb10-73"></a><span class="co">#loading saved graph</span></span>
+<span id="cb10-74"><a href="#cb10-74"></a><span class="cf">with</span> <span class="bu">open</span>(directory  <span class="op">+</span> output_file, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb10-75"><a href="#cb10-75"></a>    sp_matrix <span class="op">=</span> pickle.load(f)</span>
+<span id="cb10-76"><a href="#cb10-76"></a></span>
+<span id="cb10-77"><a href="#cb10-77"></a><span class="in">```</span></span>
+<span id="cb10-78"><a href="#cb10-78"></a></span>
+<span id="cb10-79"><a href="#cb10-79"></a>To create a more realistic heterograph let's use the ACM dataset. <span class="sc">\#</span># Graphs Dataset can be downloaded from <span class="co">[</span><span class="ot">here</span><span class="co">](https://www.aminer.org/citation)</span>. It's stored in mat (matrix) object. Within which we can find object/matrices stored in a <span class="in">`compresed sparsed`</span> format. More about further.</span>
+<span id="cb10-80"><a href="#cb10-80"></a></span>
+<span id="cb10-83"><a href="#cb10-83"></a><span class="in">```{python}</span></span>
+<span id="cb10-84"><a href="#cb10-84"></a><span class="im">import</span> scipy.io</span>
+<span id="cb10-85"><a href="#cb10-85"></a><span class="im">import</span> urllib.request</span>
+<span id="cb10-86"><a href="#cb10-86"></a></span>
+<span id="cb10-87"><a href="#cb10-87"></a>data <span class="op">=</span> scipy.io.loadmat(data_file_path<span class="op">+</span><span class="st">'ACM.mat'</span>)</span>
+<span id="cb10-88"><a href="#cb10-88"></a></span>
 <span id="cb10-89"><a href="#cb10-89"></a></span>
-<span id="cb10-90"><a href="#cb10-90"></a></span>
-<span id="cb10-91"><a href="#cb10-91"></a><span class="in">```</span></span>
-<span id="cb10-92"><a href="#cb10-92"></a></span>
-<span id="cb10-93"><a href="#cb10-93"></a><span class="fu">## compresed sparsed matrix</span></span>
-<span id="cb10-94"><a href="#cb10-94"></a></span>
-<span id="cb10-95"><a href="#cb10-95"></a>Many different ways to store <span class="in">`sparsed matrices`</span> may be find in scipy <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://docs.scipy.org/doc/scipy/reference/sparse.html)</span>.</span>
-<span id="cb10-96"><a href="#cb10-96"></a></span>
-<span id="cb10-97"><a href="#cb10-97"></a>For us most important will be <span class="in">`csr_matrix`</span> and <span class="in">`csc_matrix`</span>.</span>
-<span id="cb10-98"><a href="#cb10-98"></a></span>
-<span id="cb10-99"><a href="#cb10-99"></a>CSC format is almost identical, except that values are indexed first by column with a column-major order. Usually, the CSC is used when there are more rows than columns. On the contrary, the CSR works better for a 'wide' format. So, her is taking CSR as an example here.</span>
-<span id="cb10-100"><a href="#cb10-100"></a></span>
-<span id="cb10-101"><a href="#cb10-101"></a>Below short example how <span class="in">`sparsed matrices`</span> can be handle with <span class="in">`scipy`</span> package.</span>
-<span id="cb10-102"><a href="#cb10-102"></a></span>
-<span id="cb10-105"><a href="#cb10-105"></a><span class="in">```{python}</span></span>
-<span id="cb10-106"><a href="#cb10-106"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb10-107"><a href="#cb10-107"></a><span class="im">from</span> scipy.sparse <span class="im">import</span> csr_matrix, csc_matrix</span>
-<span id="cb10-108"><a href="#cb10-108"></a>arr <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>]])</span>
-<span id="cb10-109"><a href="#cb10-109"></a></span>
-<span id="cb10-110"><a href="#cb10-110"></a>arr_csr <span class="op">=</span> csr_matrix(arr)</span>
-<span id="cb10-111"><a href="#cb10-111"></a>arr_csc <span class="op">=</span> csc_matrix(arr)</span>
-<span id="cb10-112"><a href="#cb10-112"></a></span>
-<span id="cb10-113"><a href="#cb10-113"></a><span class="bu">print</span>(<span class="bu">type</span>(arr_csr))</span>
-<span id="cb10-114"><a href="#cb10-114"></a><span class="bu">print</span>(<span class="bu">type</span>(arr_csc))</span>
-<span id="cb10-115"><a href="#cb10-115"></a></span>
-<span id="cb10-116"><a href="#cb10-116"></a><span class="co"># `CSC` format is almost identical, except that values are indexed first by column with a column-major order. Usually, the `CSC` is used when there are more rows than columns. On the contrary, the `CSR` works better for a ‘wide’ format. So, her is taking CSR as an example here</span></span>
-<span id="cb10-117"><a href="#cb10-117"></a><span class="bu">print</span>(arr_csr)</span>
-<span id="cb10-118"><a href="#cb10-118"></a><span class="bu">print</span>(arr_csc)</span>
-<span id="cb10-119"><a href="#cb10-119"></a></span>
-<span id="cb10-120"><a href="#cb10-120"></a><span class="co"># however in order to get access ti those indexes need to use method to_coo.</span></span>
-<span id="cb10-121"><a href="#cb10-121"></a>arr_csr.tocoo().row</span>
-<span id="cb10-122"><a href="#cb10-122"></a>arr_csr.tocoo().col</span>
-<span id="cb10-123"><a href="#cb10-123"></a></span>
-<span id="cb10-124"><a href="#cb10-124"></a><span class="co">#Viewing stored data (not the zero items) with the data property</span></span>
-<span id="cb10-125"><a href="#cb10-125"></a><span class="bu">print</span>(arr_csr.data)</span>
-<span id="cb10-126"><a href="#cb10-126"></a><span class="bu">print</span>(arr_csc.data)</span>
-<span id="cb10-127"><a href="#cb10-127"></a></span>
-<span id="cb10-128"><a href="#cb10-128"></a><span class="co">#Counting nonzeros with the count_nonzero() method:</span></span>
-<span id="cb10-129"><a href="#cb10-129"></a><span class="bu">print</span>(arr_csr.count_nonzero())</span>
-<span id="cb10-130"><a href="#cb10-130"></a><span class="bu">print</span>(arr_csc.count_nonzero)</span>
-<span id="cb10-131"><a href="#cb10-131"></a></span>
-<span id="cb10-132"><a href="#cb10-132"></a><span class="bu">print</span>(arr_csr.toarray())</span>
-<span id="cb10-133"><a href="#cb10-133"></a><span class="bu">print</span>(arr_csc.todense())</span>
+<span id="cb10-90"><a href="#cb10-90"></a><span class="in">```</span></span>
+<span id="cb10-91"><a href="#cb10-91"></a></span>
+<span id="cb10-92"><a href="#cb10-92"></a><span class="fu">## compresed sparsed matrix</span></span>
+<span id="cb10-93"><a href="#cb10-93"></a></span>
+<span id="cb10-94"><a href="#cb10-94"></a>Many different ways to store <span class="in">`sparsed matrices`</span> may be find in scipy <span class="co">[</span><span class="ot">documentation</span><span class="co">](https://docs.scipy.org/doc/scipy/reference/sparse.html)</span>.</span>
+<span id="cb10-95"><a href="#cb10-95"></a></span>
+<span id="cb10-96"><a href="#cb10-96"></a>For us most important will be <span class="in">`csr_matrix`</span> and <span class="in">`csc_matrix`</span>.</span>
+<span id="cb10-97"><a href="#cb10-97"></a></span>
+<span id="cb10-98"><a href="#cb10-98"></a>CSC format is almost identical, except that values are indexed first by column with a column-major order. Usually, the CSC is used when there are more rows than columns. On the contrary, the CSR works better for a 'wide' format. So, her is taking CSR as an example here.</span>
+<span id="cb10-99"><a href="#cb10-99"></a></span>
+<span id="cb10-100"><a href="#cb10-100"></a>Below short example how <span class="in">`sparsed matrices`</span> can be handle with <span class="in">`scipy`</span> package.</span>
+<span id="cb10-101"><a href="#cb10-101"></a></span>
+<span id="cb10-104"><a href="#cb10-104"></a><span class="in">```{python}</span></span>
+<span id="cb10-105"><a href="#cb10-105"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-106"><a href="#cb10-106"></a><span class="im">from</span> scipy.sparse <span class="im">import</span> csr_matrix, csc_matrix</span>
+<span id="cb10-107"><a href="#cb10-107"></a>arr <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>]])</span>
+<span id="cb10-108"><a href="#cb10-108"></a></span>
+<span id="cb10-109"><a href="#cb10-109"></a>arr_csr <span class="op">=</span> csr_matrix(arr)</span>
+<span id="cb10-110"><a href="#cb10-110"></a>arr_csc <span class="op">=</span> csc_matrix(arr)</span>
+<span id="cb10-111"><a href="#cb10-111"></a></span>
+<span id="cb10-112"><a href="#cb10-112"></a><span class="bu">print</span>(<span class="bu">type</span>(arr_csr))</span>
+<span id="cb10-113"><a href="#cb10-113"></a><span class="bu">print</span>(<span class="bu">type</span>(arr_csc))</span>
+<span id="cb10-114"><a href="#cb10-114"></a></span>
+<span id="cb10-115"><a href="#cb10-115"></a><span class="co"># `CSC` format is almost identical, except that values are indexed first by column with a column-major order. Usually, the `CSC` is used when there are more rows than columns. On the contrary, the `CSR` works better for a ‘wide’ format. So, her is taking CSR as an example here</span></span>
+<span id="cb10-116"><a href="#cb10-116"></a><span class="bu">print</span>(arr_csr)</span>
+<span id="cb10-117"><a href="#cb10-117"></a><span class="bu">print</span>(arr_csc)</span>
+<span id="cb10-118"><a href="#cb10-118"></a></span>
+<span id="cb10-119"><a href="#cb10-119"></a><span class="co"># however in order to get access ti those indexes need to use method to_coo.</span></span>
+<span id="cb10-120"><a href="#cb10-120"></a>arr_csr.tocoo().row</span>
+<span id="cb10-121"><a href="#cb10-121"></a>arr_csr.tocoo().col</span>
+<span id="cb10-122"><a href="#cb10-122"></a></span>
+<span id="cb10-123"><a href="#cb10-123"></a><span class="co">#Viewing stored data (not the zero items) with the data property</span></span>
+<span id="cb10-124"><a href="#cb10-124"></a><span class="bu">print</span>(arr_csr.data)</span>
+<span id="cb10-125"><a href="#cb10-125"></a><span class="bu">print</span>(arr_csc.data)</span>
+<span id="cb10-126"><a href="#cb10-126"></a></span>
+<span id="cb10-127"><a href="#cb10-127"></a><span class="co">#Counting nonzeros with the count_nonzero() method:</span></span>
+<span id="cb10-128"><a href="#cb10-128"></a><span class="bu">print</span>(arr_csr.count_nonzero())</span>
+<span id="cb10-129"><a href="#cb10-129"></a><span class="bu">print</span>(arr_csc.count_nonzero)</span>
+<span id="cb10-130"><a href="#cb10-130"></a></span>
+<span id="cb10-131"><a href="#cb10-131"></a><span class="bu">print</span>(arr_csr.toarray())</span>
+<span id="cb10-132"><a href="#cb10-132"></a><span class="bu">print</span>(arr_csc.todense())</span>
+<span id="cb10-133"><a href="#cb10-133"></a></span>
 <span id="cb10-134"><a href="#cb10-134"></a></span>
-<span id="cb10-135"><a href="#cb10-135"></a></span>
-<span id="cb10-136"><a href="#cb10-136"></a><span class="in">```</span></span>
-<span id="cb10-137"><a href="#cb10-137"></a></span>
-<span id="cb10-138"><a href="#cb10-138"></a><span class="fu">## SP matrix methods</span></span>
-<span id="cb10-139"><a href="#cb10-139"></a></span>
-<span id="cb10-140"><a href="#cb10-140"></a><span class="fu">### bipartite_from_scipy</span></span>
-<span id="cb10-141"><a href="#cb10-141"></a></span>
-<span id="cb10-144"><a href="#cb10-144"></a><span class="in">```{python}</span></span>
-<span id="cb10-145"><a href="#cb10-145"></a><span class="im">import</span> scipy.sparse <span class="im">as</span> sp</span>
-<span id="cb10-146"><a href="#cb10-146"></a></span>
-<span id="cb10-147"><a href="#cb10-147"></a>sp_matrix <span class="op">=</span> data[<span class="st">'PvsA'</span>]</span>
-<span id="cb10-148"><a href="#cb10-148"></a><span class="bu">print</span>(<span class="bu">type</span>(sp_matrix))</span>
-<span id="cb10-149"><a href="#cb10-149"></a></span>
-<span id="cb10-150"><a href="#cb10-150"></a><span class="bu">print</span>(<span class="st">'#Papers:'</span>, sp_matrix.shape[<span class="dv">0</span>])</span>
-<span id="cb10-151"><a href="#cb10-151"></a><span class="bu">print</span>(<span class="st">'#Authors:'</span>,sp_matrix.shape[<span class="dv">1</span>])</span>
-<span id="cb10-152"><a href="#cb10-152"></a><span class="bu">print</span>(<span class="st">'#Links:'</span>, sp_matrix.nnz)</span>
-<span id="cb10-153"><a href="#cb10-153"></a></span>
-<span id="cb10-154"><a href="#cb10-154"></a><span class="co"># ways of populating graph with coo_matrix</span></span>
-<span id="cb10-155"><a href="#cb10-155"></a></span>
-<span id="cb10-156"><a href="#cb10-156"></a>pp_g <span class="op">=</span> dgl.bipartite_from_scipy(sp_matrix, utype<span class="op">=</span><span class="st">'paper'</span>, etype<span class="op">=</span><span class="st">'written-by'</span>, vtype<span class="op">=</span><span class="st">'author'</span>)</span>
-<span id="cb10-157"><a href="#cb10-157"></a></span>
-<span id="cb10-158"><a href="#cb10-158"></a>pp_g.is_homogeneous</span>
-<span id="cb10-159"><a href="#cb10-159"></a><span class="bu">print</span>(pp_g.number_of_nodes())</span>
-<span id="cb10-160"><a href="#cb10-160"></a><span class="bu">print</span>(pp_g.number_of_edges())</span>
-<span id="cb10-161"><a href="#cb10-161"></a><span class="bu">print</span>(pp_g.successors(<span class="dv">3</span>))</span>
-<span id="cb10-162"><a href="#cb10-162"></a></span>
-<span id="cb10-163"><a href="#cb10-163"></a><span class="bu">print</span>(<span class="st">'Node types:'</span>, pp_g.ntypes)</span>
-<span id="cb10-164"><a href="#cb10-164"></a><span class="bu">print</span>(<span class="st">'Edge types:'</span>, pp_g.etypes)</span>
-<span id="cb10-165"><a href="#cb10-165"></a><span class="bu">print</span>(<span class="st">'Canonical edge types:'</span>, pp_g.canonical_etypes)</span>
-<span id="cb10-166"><a href="#cb10-166"></a></span>
-<span id="cb10-167"><a href="#cb10-167"></a><span class="in">```</span></span>
-<span id="cb10-168"><a href="#cb10-168"></a></span>
-<span id="cb10-169"><a href="#cb10-169"></a>In order to visualize the interactions (edges) between nodes let use following function.</span>
-<span id="cb10-170"><a href="#cb10-170"></a></span>
-<span id="cb10-173"><a href="#cb10-173"></a><span class="in">```{python}</span></span>
-<span id="cb10-174"><a href="#cb10-174"></a><span class="im">import</span> pygraphviz <span class="im">as</span> pgv</span>
-<span id="cb10-175"><a href="#cb10-175"></a><span class="kw">def</span> plot_graph(nxg, plot_name):</span>
-<span id="cb10-176"><a href="#cb10-176"></a>    ag <span class="op">=</span> pgv.AGraph(strict<span class="op">=</span><span class="va">False</span>, directed<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb10-177"><a href="#cb10-177"></a>    <span class="cf">for</span> u, v, k <span class="kw">in</span> nxg.edges(keys<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb10-178"><a href="#cb10-178"></a>        ag.add_edge(u, v, label<span class="op">=</span>k)</span>
-<span id="cb10-179"><a href="#cb10-179"></a>    ag.layout(<span class="st">'dot'</span>)</span>
-<span id="cb10-180"><a href="#cb10-180"></a>    ag.draw(plot_name<span class="op">+</span><span class="st">'.png'</span>)</span>
-<span id="cb10-181"><a href="#cb10-181"></a></span>
-<span id="cb10-182"><a href="#cb10-182"></a><span class="in">```</span></span>
-<span id="cb10-183"><a href="#cb10-183"></a></span>
-<span id="cb10-186"><a href="#cb10-186"></a><span class="in">```{python}</span></span>
-<span id="cb10-187"><a href="#cb10-187"></a>plot_graph(nxg<span class="op">=</span>pp_g.metagraph(),plot_name<span class="op">=</span><span class="st">'simple_graph'</span>)</span>
-<span id="cb10-188"><a href="#cb10-188"></a><span class="in">```</span></span>
-<span id="cb10-189"><a href="#cb10-189"></a></span>
-<span id="cb10-190"><a href="#cb10-190"></a><span class="al">![](simple_graph.png)</span></span>
-<span id="cb10-191"><a href="#cb10-191"></a></span>
-<span id="cb10-192"><a href="#cb10-192"></a><span class="fu">### heterograph</span></span>
-<span id="cb10-193"><a href="#cb10-193"></a></span>
-<span id="cb10-194"><a href="#cb10-194"></a>Using ACM dataset</span>
-<span id="cb10-195"><a href="#cb10-195"></a></span>
-<span id="cb10-198"><a href="#cb10-198"></a><span class="in">```{python}</span></span>
-<span id="cb10-199"><a href="#cb10-199"></a><span class="im">import</span> torch</span>
-<span id="cb10-200"><a href="#cb10-200"></a></span>
-<span id="cb10-201"><a href="#cb10-201"></a><span class="co"># Unfortunately following code no longer works</span></span>
-<span id="cb10-202"><a href="#cb10-202"></a>G <span class="op">=</span> dgl.heterograph({</span>
-<span id="cb10-203"><a href="#cb10-203"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : data[<span class="st">'PvsA'</span>],</span>
-<span id="cb10-204"><a href="#cb10-204"></a>        (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsA'</span>].transpose(),</span>
-<span id="cb10-205"><a href="#cb10-205"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>],</span>
-<span id="cb10-206"><a href="#cb10-206"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>].transpose(),</span>
-<span id="cb10-207"><a href="#cb10-207"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : data[<span class="st">'PvsL'</span>],</span>
-<span id="cb10-208"><a href="#cb10-208"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsL'</span>].transpose(),</span>
-<span id="cb10-209"><a href="#cb10-209"></a>    })</span>
-<span id="cb10-210"><a href="#cb10-210"></a></span>
-<span id="cb10-211"><a href="#cb10-211"></a><span class="co"># we need to a little bit tweak the code the get the same result as above.</span></span>
-<span id="cb10-212"><a href="#cb10-212"></a>G <span class="op">=</span> dgl.heterograph({</span>
-<span id="cb10-213"><a href="#cb10-213"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : </span>
-<span id="cb10-214"><a href="#cb10-214"></a>          (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row )),</span>
-<span id="cb10-215"><a href="#cb10-215"></a>         (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb10-216"><a href="#cb10-216"></a>           (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col)),</span>
-<span id="cb10-217"><a href="#cb10-217"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb10-218"><a href="#cb10-218"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row )),</span>
-<span id="cb10-219"><a href="#cb10-219"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb10-220"><a href="#cb10-220"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col)),</span>
-<span id="cb10-221"><a href="#cb10-221"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : </span>
-<span id="cb10-222"><a href="#cb10-222"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row )),</span>
-<span id="cb10-223"><a href="#cb10-223"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb10-224"><a href="#cb10-224"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col))</span>
-<span id="cb10-225"><a href="#cb10-225"></a>    })</span>
-<span id="cb10-226"><a href="#cb10-226"></a>  </span>
-<span id="cb10-227"><a href="#cb10-227"></a>plot_graph(nxg<span class="op">=</span>G.metagraph(),plot_name<span class="op">=</span><span class="st">'more_complicated_graph'</span>)</span>
+<span id="cb10-135"><a href="#cb10-135"></a><span class="in">```</span></span>
+<span id="cb10-136"><a href="#cb10-136"></a></span>
+<span id="cb10-137"><a href="#cb10-137"></a><span class="fu">## SP matrix methods</span></span>
+<span id="cb10-138"><a href="#cb10-138"></a></span>
+<span id="cb10-139"><a href="#cb10-139"></a><span class="fu">### bipartite_from_scipy</span></span>
+<span id="cb10-140"><a href="#cb10-140"></a></span>
+<span id="cb10-143"><a href="#cb10-143"></a><span class="in">```{python}</span></span>
+<span id="cb10-144"><a href="#cb10-144"></a><span class="im">import</span> scipy.sparse <span class="im">as</span> sp</span>
+<span id="cb10-145"><a href="#cb10-145"></a></span>
+<span id="cb10-146"><a href="#cb10-146"></a>sp_matrix <span class="op">=</span> data[<span class="st">'PvsA'</span>]</span>
+<span id="cb10-147"><a href="#cb10-147"></a><span class="bu">print</span>(<span class="bu">type</span>(sp_matrix))</span>
+<span id="cb10-148"><a href="#cb10-148"></a></span>
+<span id="cb10-149"><a href="#cb10-149"></a><span class="bu">print</span>(<span class="st">'#Papers:'</span>, sp_matrix.shape[<span class="dv">0</span>])</span>
+<span id="cb10-150"><a href="#cb10-150"></a><span class="bu">print</span>(<span class="st">'#Authors:'</span>,sp_matrix.shape[<span class="dv">1</span>])</span>
+<span id="cb10-151"><a href="#cb10-151"></a><span class="bu">print</span>(<span class="st">'#Links:'</span>, sp_matrix.nnz)</span>
+<span id="cb10-152"><a href="#cb10-152"></a></span>
+<span id="cb10-153"><a href="#cb10-153"></a><span class="co"># ways of populating graph with coo_matrix</span></span>
+<span id="cb10-154"><a href="#cb10-154"></a></span>
+<span id="cb10-155"><a href="#cb10-155"></a>pp_g <span class="op">=</span> dgl.bipartite_from_scipy(sp_matrix, utype<span class="op">=</span><span class="st">'paper'</span>, etype<span class="op">=</span><span class="st">'written-by'</span>, vtype<span class="op">=</span><span class="st">'author'</span>)</span>
+<span id="cb10-156"><a href="#cb10-156"></a></span>
+<span id="cb10-157"><a href="#cb10-157"></a>pp_g.is_homogeneous</span>
+<span id="cb10-158"><a href="#cb10-158"></a><span class="bu">print</span>(pp_g.number_of_nodes())</span>
+<span id="cb10-159"><a href="#cb10-159"></a><span class="bu">print</span>(pp_g.number_of_edges())</span>
+<span id="cb10-160"><a href="#cb10-160"></a><span class="bu">print</span>(pp_g.successors(<span class="dv">3</span>))</span>
+<span id="cb10-161"><a href="#cb10-161"></a></span>
+<span id="cb10-162"><a href="#cb10-162"></a><span class="bu">print</span>(<span class="st">'Node types:'</span>, pp_g.ntypes)</span>
+<span id="cb10-163"><a href="#cb10-163"></a><span class="bu">print</span>(<span class="st">'Edge types:'</span>, pp_g.etypes)</span>
+<span id="cb10-164"><a href="#cb10-164"></a><span class="bu">print</span>(<span class="st">'Canonical edge types:'</span>, pp_g.canonical_etypes)</span>
+<span id="cb10-165"><a href="#cb10-165"></a></span>
+<span id="cb10-166"><a href="#cb10-166"></a><span class="in">```</span></span>
+<span id="cb10-167"><a href="#cb10-167"></a></span>
+<span id="cb10-168"><a href="#cb10-168"></a>In order to visualize the interactions (edges) between nodes let use following function.</span>
+<span id="cb10-169"><a href="#cb10-169"></a></span>
+<span id="cb10-172"><a href="#cb10-172"></a><span class="in">```{python}</span></span>
+<span id="cb10-173"><a href="#cb10-173"></a><span class="im">import</span> pygraphviz <span class="im">as</span> pgv</span>
+<span id="cb10-174"><a href="#cb10-174"></a><span class="kw">def</span> plot_graph(nxg, plot_name):</span>
+<span id="cb10-175"><a href="#cb10-175"></a>    ag <span class="op">=</span> pgv.AGraph(strict<span class="op">=</span><span class="va">False</span>, directed<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-176"><a href="#cb10-176"></a>    <span class="cf">for</span> u, v, k <span class="kw">in</span> nxg.edges(keys<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb10-177"><a href="#cb10-177"></a>        ag.add_edge(u, v, label<span class="op">=</span>k)</span>
+<span id="cb10-178"><a href="#cb10-178"></a>    ag.layout(<span class="st">'dot'</span>)</span>
+<span id="cb10-179"><a href="#cb10-179"></a>    ag.draw(plot_name<span class="op">+</span><span class="st">'.png'</span>)</span>
+<span id="cb10-180"><a href="#cb10-180"></a></span>
+<span id="cb10-181"><a href="#cb10-181"></a><span class="in">```</span></span>
+<span id="cb10-182"><a href="#cb10-182"></a></span>
+<span id="cb10-185"><a href="#cb10-185"></a><span class="in">```{python}</span></span>
+<span id="cb10-186"><a href="#cb10-186"></a>plot_graph(nxg<span class="op">=</span>pp_g.metagraph(),plot_name<span class="op">=</span><span class="st">'simple_graph'</span>)</span>
+<span id="cb10-187"><a href="#cb10-187"></a><span class="in">```</span></span>
+<span id="cb10-188"><a href="#cb10-188"></a></span>
+<span id="cb10-189"><a href="#cb10-189"></a><span class="al">![](simple_graph.png)</span></span>
+<span id="cb10-190"><a href="#cb10-190"></a></span>
+<span id="cb10-191"><a href="#cb10-191"></a><span class="fu">### heterograph</span></span>
+<span id="cb10-192"><a href="#cb10-192"></a></span>
+<span id="cb10-193"><a href="#cb10-193"></a>Using ACM dataset</span>
+<span id="cb10-194"><a href="#cb10-194"></a></span>
+<span id="cb10-197"><a href="#cb10-197"></a><span class="in">```{python}</span></span>
+<span id="cb10-198"><a href="#cb10-198"></a><span class="im">import</span> torch</span>
+<span id="cb10-199"><a href="#cb10-199"></a></span>
+<span id="cb10-200"><a href="#cb10-200"></a><span class="co"># Unfortunately following code no longer works</span></span>
+<span id="cb10-201"><a href="#cb10-201"></a>G <span class="op">=</span> dgl.heterograph({</span>
+<span id="cb10-202"><a href="#cb10-202"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : data[<span class="st">'PvsA'</span>],</span>
+<span id="cb10-203"><a href="#cb10-203"></a>        (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsA'</span>].transpose(),</span>
+<span id="cb10-204"><a href="#cb10-204"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>],</span>
+<span id="cb10-205"><a href="#cb10-205"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>].transpose(),</span>
+<span id="cb10-206"><a href="#cb10-206"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : data[<span class="st">'PvsL'</span>],</span>
+<span id="cb10-207"><a href="#cb10-207"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsL'</span>].transpose(),</span>
+<span id="cb10-208"><a href="#cb10-208"></a>    })</span>
+<span id="cb10-209"><a href="#cb10-209"></a></span>
+<span id="cb10-210"><a href="#cb10-210"></a><span class="co"># we need to a little bit tweak the code the get the same result as above.</span></span>
+<span id="cb10-211"><a href="#cb10-211"></a>G <span class="op">=</span> dgl.heterograph({</span>
+<span id="cb10-212"><a href="#cb10-212"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : </span>
+<span id="cb10-213"><a href="#cb10-213"></a>          (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row )),</span>
+<span id="cb10-214"><a href="#cb10-214"></a>         (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb10-215"><a href="#cb10-215"></a>           (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col)),</span>
+<span id="cb10-216"><a href="#cb10-216"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb10-217"><a href="#cb10-217"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row )),</span>
+<span id="cb10-218"><a href="#cb10-218"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb10-219"><a href="#cb10-219"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col)),</span>
+<span id="cb10-220"><a href="#cb10-220"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : </span>
+<span id="cb10-221"><a href="#cb10-221"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row )),</span>
+<span id="cb10-222"><a href="#cb10-222"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb10-223"><a href="#cb10-223"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col))</span>
+<span id="cb10-224"><a href="#cb10-224"></a>    })</span>
+<span id="cb10-225"><a href="#cb10-225"></a>  </span>
+<span id="cb10-226"><a href="#cb10-226"></a>plot_graph(nxg<span class="op">=</span>G.metagraph(),plot_name<span class="op">=</span><span class="st">'more_complicated_graph'</span>)</span>
+<span id="cb10-227"><a href="#cb10-227"></a></span>
 <span id="cb10-228"><a href="#cb10-228"></a></span>
 <span id="cb10-229"><a href="#cb10-229"></a></span>
-<span id="cb10-230"><a href="#cb10-230"></a></span>
-<span id="cb10-231"><a href="#cb10-231"></a><span class="in">```</span></span>
-<span id="cb10-232"><a href="#cb10-232"></a></span>
-<span id="cb10-233"><a href="#cb10-233"></a><span class="al">![](more_complicated_graph.png)</span></span>
-<span id="cb10-234"><a href="#cb10-234"></a></span>
-<span id="cb10-235"><a href="#cb10-235"></a><span class="fu">## pandas method</span></span>
-<span id="cb10-236"><a href="#cb10-236"></a></span>
-<span id="cb10-237"><a href="#cb10-237"></a>On <span class="co">[</span><span class="ot">github repository</span><span class="co">](https://github.com/yoonjong12/pinsage/blob/main/builder.py)</span> we can find a method allowing for building graphs using pandas dataphrame.</span>
-<span id="cb10-238"><a href="#cb10-238"></a></span>
-<span id="cb10-241"><a href="#cb10-241"></a><span class="in">```{python}</span></span>
-<span id="cb10-242"><a href="#cb10-242"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb10-243"><a href="#cb10-243"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb10-244"><a href="#cb10-244"></a><span class="im">import</span> sys</span>
-<span id="cb10-245"><a href="#cb10-245"></a>sys.path.insert(<span class="dv">1</span>, repo_directory)</span>
-<span id="cb10-246"><a href="#cb10-246"></a><span class="im">from</span> builder <span class="im">import</span> PandasGraphBuilder</span>
-<span id="cb10-247"><a href="#cb10-247"></a></span>
-<span id="cb10-248"><a href="#cb10-248"></a>users<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">101</span>), columns<span class="op">=</span>[<span class="st">'user_id'</span>])</span>
-<span id="cb10-249"><a href="#cb10-249"></a>products<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">50</span>), columns<span class="op">=</span>[<span class="st">'product_id'</span>])</span>
-<span id="cb10-250"><a href="#cb10-250"></a>interactions<span class="op">=</span>pd.DataFrame(data<span class="op">=</span>{</span>
-<span id="cb10-251"><a href="#cb10-251"></a>  <span class="st">'user_id'</span>: np.random.choice(users.user_id,<span class="dv">1000</span>,replace<span class="op">=</span><span class="va">True</span>),</span>
-<span id="cb10-252"><a href="#cb10-252"></a>  <span class="st">'product_id'</span> :np.random.choice(products.product_id,<span class="dv">1000</span>,replace<span class="op">=</span><span class="va">True</span>)}</span>
-<span id="cb10-253"><a href="#cb10-253"></a>  )</span>
+<span id="cb10-230"><a href="#cb10-230"></a><span class="in">```</span></span>
+<span id="cb10-231"><a href="#cb10-231"></a></span>
+<span id="cb10-232"><a href="#cb10-232"></a><span class="al">![](more_complicated_graph.png)</span></span>
+<span id="cb10-233"><a href="#cb10-233"></a></span>
+<span id="cb10-234"><a href="#cb10-234"></a><span class="fu">## pandas method</span></span>
+<span id="cb10-235"><a href="#cb10-235"></a></span>
+<span id="cb10-236"><a href="#cb10-236"></a>On <span class="co">[</span><span class="ot">github repository</span><span class="co">](https://github.com/yoonjong12/pinsage/blob/main/builder.py)</span> we can find a method allowing for building graphs using pandas dataphrame.</span>
+<span id="cb10-237"><a href="#cb10-237"></a></span>
+<span id="cb10-240"><a href="#cb10-240"></a><span class="in">```{python}</span></span>
+<span id="cb10-241"><a href="#cb10-241"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-242"><a href="#cb10-242"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-243"><a href="#cb10-243"></a><span class="im">import</span> sys</span>
+<span id="cb10-244"><a href="#cb10-244"></a>sys.path.insert(<span class="dv">1</span>, repo_directory)</span>
+<span id="cb10-245"><a href="#cb10-245"></a><span class="im">from</span> builder <span class="im">import</span> PandasGraphBuilder</span>
+<span id="cb10-246"><a href="#cb10-246"></a></span>
+<span id="cb10-247"><a href="#cb10-247"></a>users<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">101</span>), columns<span class="op">=</span>[<span class="st">'user_id'</span>])</span>
+<span id="cb10-248"><a href="#cb10-248"></a>products<span class="op">=</span>pd.DataFrame(data<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">50</span>), columns<span class="op">=</span>[<span class="st">'product_id'</span>])</span>
+<span id="cb10-249"><a href="#cb10-249"></a>interactions<span class="op">=</span>pd.DataFrame(data<span class="op">=</span>{</span>
+<span id="cb10-250"><a href="#cb10-250"></a>  <span class="st">'user_id'</span>: np.random.choice(users.user_id,<span class="dv">1000</span>,replace<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb10-251"><a href="#cb10-251"></a>  <span class="st">'product_id'</span> :np.random.choice(products.product_id,<span class="dv">1000</span>,replace<span class="op">=</span><span class="va">True</span>)}</span>
+<span id="cb10-252"><a href="#cb10-252"></a>  )</span>
+<span id="cb10-253"><a href="#cb10-253"></a></span>
 <span id="cb10-254"><a href="#cb10-254"></a></span>
 <span id="cb10-255"><a href="#cb10-255"></a></span>
 <span id="cb10-256"><a href="#cb10-256"></a></span>
-<span id="cb10-257"><a href="#cb10-257"></a></span>
-<span id="cb10-258"><a href="#cb10-258"></a>graph_builder <span class="op">=</span> PandasGraphBuilder()</span>
-<span id="cb10-259"><a href="#cb10-259"></a>graph_builder.add_entities(users, <span class="st">'user_id'</span>, <span class="st">'user'</span>)</span>
-<span id="cb10-260"><a href="#cb10-260"></a>graph_builder.add_entities(products, <span class="st">'product_id'</span>, <span class="st">'product'</span>)</span>
-<span id="cb10-261"><a href="#cb10-261"></a></span>
-<span id="cb10-262"><a href="#cb10-262"></a>graph_builder.add_binary_relations(interactions, <span class="st">'user_id'</span>,<span class="st">'product_id'</span>, <span class="st">'interaction'</span>)</span>
-<span id="cb10-263"><a href="#cb10-263"></a>graph_builder.add_binary_relations(interactions, <span class="st">'product_id'</span>,<span class="st">'user_id'</span>, <span class="st">'interaction-by'</span>)</span>
-<span id="cb10-264"><a href="#cb10-264"></a></span>
-<span id="cb10-265"><a href="#cb10-265"></a><span class="bu">print</span>(<span class="st">'starting graph building'</span>)</span>
-<span id="cb10-266"><a href="#cb10-266"></a>g <span class="op">=</span> graph_builder.build()</span>
-<span id="cb10-267"><a href="#cb10-267"></a></span>
-<span id="cb10-268"><a href="#cb10-268"></a>plot_graph(nxg<span class="op">=</span>g.metagraph(),plot_name<span class="op">=</span><span class="st">'pandas_graph'</span>)</span>
-<span id="cb10-269"><a href="#cb10-269"></a></span>
-<span id="cb10-270"><a href="#cb10-270"></a><span class="in">```</span></span>
-<span id="cb10-271"><a href="#cb10-271"></a></span>
-<span id="cb10-272"><a href="#cb10-272"></a><span class="al">![](pandas_graph.png)</span></span>
+<span id="cb10-257"><a href="#cb10-257"></a>graph_builder <span class="op">=</span> PandasGraphBuilder()</span>
+<span id="cb10-258"><a href="#cb10-258"></a>graph_builder.add_entities(users, <span class="st">'user_id'</span>, <span class="st">'user'</span>)</span>
+<span id="cb10-259"><a href="#cb10-259"></a>graph_builder.add_entities(products, <span class="st">'product_id'</span>, <span class="st">'product'</span>)</span>
+<span id="cb10-260"><a href="#cb10-260"></a></span>
+<span id="cb10-261"><a href="#cb10-261"></a>graph_builder.add_binary_relations(interactions, <span class="st">'user_id'</span>,<span class="st">'product_id'</span>, <span class="st">'interaction'</span>)</span>
+<span id="cb10-262"><a href="#cb10-262"></a>graph_builder.add_binary_relations(interactions, <span class="st">'product_id'</span>,<span class="st">'user_id'</span>, <span class="st">'interaction-by'</span>)</span>
+<span id="cb10-263"><a href="#cb10-263"></a></span>
+<span id="cb10-264"><a href="#cb10-264"></a><span class="bu">print</span>(<span class="st">'starting graph building'</span>)</span>
+<span id="cb10-265"><a href="#cb10-265"></a>g <span class="op">=</span> graph_builder.build()</span>
+<span id="cb10-266"><a href="#cb10-266"></a></span>
+<span id="cb10-267"><a href="#cb10-267"></a>plot_graph(nxg<span class="op">=</span>g.metagraph(),plot_name<span class="op">=</span><span class="st">'pandas_graph'</span>)</span>
+<span id="cb10-268"><a href="#cb10-268"></a></span>
+<span id="cb10-269"><a href="#cb10-269"></a><span class="in">```</span></span>
+<span id="cb10-270"><a href="#cb10-270"></a></span>
+<span id="cb10-271"><a href="#cb10-271"></a><span class="al">![](pandas_graph.png)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

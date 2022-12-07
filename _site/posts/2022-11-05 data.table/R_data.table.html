@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-11-07">
 <meta name="description" content="R data.table">
 
 <title>Lukasz Rabalski blog - R lib: data.table</title>
@@ -184,12 +183,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <div class="quarto-title-meta">
 
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">November 7, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -492,77 +485,77 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-3"><a href="#cb9-3"></a><span class="an">title:</span><span class="co"> "R lib: data.table"</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="an">categories:</span><span class="co"> ["data.table"]</span></span>
 <span id="cb9-5"><a href="#cb9-5"></a><span class="an">tags:</span><span class="co"> ["R", "data.table", "datagrapling","rolling joins"]</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="an">date:</span><span class="co"> '2022-11-07'</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="an">toc:</span><span class="co"> true</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">---</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#markdown ----</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb9-15"><a href="#cb9-15"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>                      ) </span>
-<span id="cb9-17"><a href="#cb9-17"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a>                      <span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="co">#echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
-<span id="cb9-19"><a href="#cb9-19"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-20"><a href="#cb9-20"></a>                      <span class="at">message =</span><span class="cn">FALSE</span></span>
-<span id="cb9-21"><a href="#cb9-21"></a>                      </span>
-<span id="cb9-22"><a href="#cb9-22"></a>                      )</span>
-<span id="cb9-23"><a href="#cb9-23"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">---</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#markdown ----</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb9-14"><a href="#cb9-14"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a>                      ) </span>
+<span id="cb9-16"><a href="#cb9-16"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a>                      <span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="co">#echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-19"><a href="#cb9-19"></a>                      <span class="at">message =</span><span class="cn">FALSE</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a>                      </span>
+<span id="cb9-21"><a href="#cb9-21"></a>                      )</span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb9-23"><a href="#cb9-23"></a></span>
 <span id="cb9-24"><a href="#cb9-24"></a></span>
 <span id="cb9-25"><a href="#cb9-25"></a></span>
-<span id="cb9-26"><a href="#cb9-26"></a></span>
-<span id="cb9-27"><a href="#cb9-27"></a><span class="in">```</span></span>
-<span id="cb9-28"><a href="#cb9-28"></a></span>
-<span id="cb9-29"><a href="#cb9-29"></a><span class="fu">## Rolling join</span></span>
-<span id="cb9-30"><a href="#cb9-30"></a></span>
-<span id="cb9-31"><a href="#cb9-31"></a><span class="co">[</span><span class="ot">source</span><span class="co">](https://www.gormanalysis.com/blog/r-data-table-rolling-joins/)</span></span>
-<span id="cb9-32"><a href="#cb9-32"></a></span>
-<span id="cb9-33"><a href="#cb9-33"></a><span class="fu">### Problem</span></span>
-<span id="cb9-34"><a href="#cb9-34"></a></span>
-<span id="cb9-35"><a href="#cb9-35"></a>suppose you have a table of product sales and a table of commercials. You might want to associate each product sale with the most recent commercial that aired prior to the sale. In this case, you cannot do a basic join between the sales table and the commercials table because each sale was not tracked with a CommercialId attribute. Instead, you need to generate a mapping between sales and commercials based on logic involving their dates.</span>
-<span id="cb9-36"><a href="#cb9-36"></a></span>
-<span id="cb9-39"><a href="#cb9-39"></a><span class="in">```{r}</span></span>
-<span id="cb9-40"><a href="#cb9-40"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-41"><a href="#cb9-41"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb9-42"><a href="#cb9-42"></a><span class="in">```</span></span>
-<span id="cb9-43"><a href="#cb9-43"></a></span>
-<span id="cb9-46"><a href="#cb9-46"></a><span class="in">```{r}</span></span>
-<span id="cb9-47"><a href="#cb9-47"></a>sales <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
-<span id="cb9-48"><a href="#cb9-48"></a>  <span class="at">SaleId =</span> <span class="fu">c</span>(<span class="st">"S1"</span>, <span class="st">"S2"</span>, <span class="st">"S3"</span>, <span class="st">"S4"</span>, <span class="st">"S5"</span>),</span>
-<span id="cb9-49"><a href="#cb9-49"></a>  <span class="at">SaleDate =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2014-2-20"</span>, <span class="st">"2014-5-1"</span>, <span class="st">"2014-6-15"</span>, <span class="st">"2014-7-1"</span>, <span class="st">"2014-12-31"</span>))</span>
-<span id="cb9-50"><a href="#cb9-50"></a>)</span>
-<span id="cb9-51"><a href="#cb9-51"></a></span>
-<span id="cb9-52"><a href="#cb9-52"></a>commercials <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
-<span id="cb9-53"><a href="#cb9-53"></a>  <span class="at">CommercialId =</span> <span class="fu">c</span>(<span class="st">"C1"</span>, <span class="st">"C2"</span>, <span class="st">"C3"</span>, <span class="st">"C4"</span>),</span>
-<span id="cb9-54"><a href="#cb9-54"></a>  <span class="at">CommercialDate =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2014-1-1"</span>, <span class="st">"2014-4-1"</span>, <span class="st">"2014-7-1"</span>, <span class="st">"2014-9-15"</span>))</span>
-<span id="cb9-55"><a href="#cb9-55"></a>)</span>
-<span id="cb9-56"><a href="#cb9-56"></a></span>
-<span id="cb9-57"><a href="#cb9-57"></a>sales[, RollDate <span class="sc">:</span><span class="er">=</span> SaleDate]</span>
-<span id="cb9-58"><a href="#cb9-58"></a>commercials[, RollDate <span class="sc">:</span><span class="er">=</span> CommercialDate]</span>
-<span id="cb9-59"><a href="#cb9-59"></a></span>
-<span id="cb9-60"><a href="#cb9-60"></a><span class="fu">setkey</span>(sales, <span class="st">"RollDate"</span>)</span>
-<span id="cb9-61"><a href="#cb9-61"></a><span class="fu">setkey</span>(commercials, <span class="st">"RollDate"</span>)</span>
-<span id="cb9-62"><a href="#cb9-62"></a><span class="in">```</span></span>
-<span id="cb9-63"><a href="#cb9-63"></a></span>
-<span id="cb9-64"><a href="#cb9-64"></a>data.table is associating each commercial with the most recent sale prior to the commercial date (and including the commercial date). In other words, the most recent sale prior to each commercial is said to "roll forward", and the SaleDate is mapped to the CommercialDate. Notice that sale S4 was the most recent sale prior to commercial C3 and C4, so S4 appears twice in the resultant table.</span>
-<span id="cb9-65"><a href="#cb9-65"></a></span>
-<span id="cb9-66"><a href="#cb9-66"></a>THIS HAVE NO logical SENSE. go forward</span>
-<span id="cb9-67"><a href="#cb9-67"></a></span>
-<span id="cb9-70"><a href="#cb9-70"></a><span class="in">```{r}</span></span>
-<span id="cb9-71"><a href="#cb9-71"></a>sales[commercials, roll <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
-<span id="cb9-72"><a href="#cb9-72"></a><span class="in">```</span></span>
-<span id="cb9-73"><a href="#cb9-73"></a></span>
-<span id="cb9-74"><a href="#cb9-74"></a>Here data.table is associating each sale with the most recent commercial prior to (or including) the SaleDate. This is the solution to our originally stated problem.</span>
-<span id="cb9-75"><a href="#cb9-75"></a></span>
-<span id="cb9-78"><a href="#cb9-78"></a><span class="in">```{r}</span></span>
-<span id="cb9-79"><a href="#cb9-79"></a>commercials[sales, roll <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
-<span id="cb9-80"><a href="#cb9-80"></a><span class="in">```</span></span>
-<span id="cb9-81"><a href="#cb9-81"></a></span>
-<span id="cb9-82"><a href="#cb9-82"></a><span class="al">![](https://www.gormanalysis.com/blog/r-data-table-rolling-joins_files/roll-2.gif)</span></span>
-<span id="cb9-83"><a href="#cb9-83"></a></span>
-<span id="cb9-84"><a href="#cb9-84"></a>data.table also supports backward rolling joins by setting roll = -Inf.</span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="in">```</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="fu">## Rolling join</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">[</span><span class="ot">source</span><span class="co">](https://www.gormanalysis.com/blog/r-data-table-rolling-joins/)</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="fu">### Problem</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a></span>
+<span id="cb9-34"><a href="#cb9-34"></a>suppose you have a table of product sales and a table of commercials. You might want to associate each product sale with the most recent commercial that aired prior to the sale. In this case, you cannot do a basic join between the sales table and the commercials table because each sale was not tracked with a CommercialId attribute. Instead, you need to generate a mapping between sales and commercials based on logic involving their dates.</span>
+<span id="cb9-35"><a href="#cb9-35"></a></span>
+<span id="cb9-38"><a href="#cb9-38"></a><span class="in">```{r}</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-40"><a href="#cb9-40"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb9-41"><a href="#cb9-41"></a><span class="in">```</span></span>
+<span id="cb9-42"><a href="#cb9-42"></a></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="in">```{r}</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a>sales <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb9-47"><a href="#cb9-47"></a>  <span class="at">SaleId =</span> <span class="fu">c</span>(<span class="st">"S1"</span>, <span class="st">"S2"</span>, <span class="st">"S3"</span>, <span class="st">"S4"</span>, <span class="st">"S5"</span>),</span>
+<span id="cb9-48"><a href="#cb9-48"></a>  <span class="at">SaleDate =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2014-2-20"</span>, <span class="st">"2014-5-1"</span>, <span class="st">"2014-6-15"</span>, <span class="st">"2014-7-1"</span>, <span class="st">"2014-12-31"</span>))</span>
+<span id="cb9-49"><a href="#cb9-49"></a>)</span>
+<span id="cb9-50"><a href="#cb9-50"></a></span>
+<span id="cb9-51"><a href="#cb9-51"></a>commercials <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb9-52"><a href="#cb9-52"></a>  <span class="at">CommercialId =</span> <span class="fu">c</span>(<span class="st">"C1"</span>, <span class="st">"C2"</span>, <span class="st">"C3"</span>, <span class="st">"C4"</span>),</span>
+<span id="cb9-53"><a href="#cb9-53"></a>  <span class="at">CommercialDate =</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2014-1-1"</span>, <span class="st">"2014-4-1"</span>, <span class="st">"2014-7-1"</span>, <span class="st">"2014-9-15"</span>))</span>
+<span id="cb9-54"><a href="#cb9-54"></a>)</span>
+<span id="cb9-55"><a href="#cb9-55"></a></span>
+<span id="cb9-56"><a href="#cb9-56"></a>sales[, RollDate <span class="sc">:</span><span class="er">=</span> SaleDate]</span>
+<span id="cb9-57"><a href="#cb9-57"></a>commercials[, RollDate <span class="sc">:</span><span class="er">=</span> CommercialDate]</span>
+<span id="cb9-58"><a href="#cb9-58"></a></span>
+<span id="cb9-59"><a href="#cb9-59"></a><span class="fu">setkey</span>(sales, <span class="st">"RollDate"</span>)</span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="fu">setkey</span>(commercials, <span class="st">"RollDate"</span>)</span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="in">```</span></span>
+<span id="cb9-62"><a href="#cb9-62"></a></span>
+<span id="cb9-63"><a href="#cb9-63"></a>data.table is associating each commercial with the most recent sale prior to the commercial date (and including the commercial date). In other words, the most recent sale prior to each commercial is said to "roll forward", and the SaleDate is mapped to the CommercialDate. Notice that sale S4 was the most recent sale prior to commercial C3 and C4, so S4 appears twice in the resultant table.</span>
+<span id="cb9-64"><a href="#cb9-64"></a></span>
+<span id="cb9-65"><a href="#cb9-65"></a>THIS HAVE NO logical SENSE. go forward</span>
+<span id="cb9-66"><a href="#cb9-66"></a></span>
+<span id="cb9-69"><a href="#cb9-69"></a><span class="in">```{r}</span></span>
+<span id="cb9-70"><a href="#cb9-70"></a>sales[commercials, roll <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
+<span id="cb9-71"><a href="#cb9-71"></a><span class="in">```</span></span>
+<span id="cb9-72"><a href="#cb9-72"></a></span>
+<span id="cb9-73"><a href="#cb9-73"></a>Here data.table is associating each sale with the most recent commercial prior to (or including) the SaleDate. This is the solution to our originally stated problem.</span>
+<span id="cb9-74"><a href="#cb9-74"></a></span>
+<span id="cb9-77"><a href="#cb9-77"></a><span class="in">```{r}</span></span>
+<span id="cb9-78"><a href="#cb9-78"></a>commercials[sales, roll <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
+<span id="cb9-79"><a href="#cb9-79"></a><span class="in">```</span></span>
+<span id="cb9-80"><a href="#cb9-80"></a></span>
+<span id="cb9-81"><a href="#cb9-81"></a><span class="al">![](https://www.gormanalysis.com/blog/r-data-table-rolling-joins_files/roll-2.gif)</span></span>
+<span id="cb9-82"><a href="#cb9-82"></a></span>
+<span id="cb9-83"><a href="#cb9-83"></a>data.table also supports backward rolling joins by setting roll = -Inf.</span>
+<span id="cb9-84"><a href="#cb9-84"></a></span>
 <span id="cb9-87"><a href="#cb9-87"></a><span class="in">```{r}</span></span>
 <span id="cb9-88"><a href="#cb9-88"></a>commercials[sales, roll <span class="ot">=</span> <span class="sc">-</span><span class="cn">Inf</span>]</span>
 <span id="cb9-89"><a href="#cb9-89"></a><span class="in">```</span></span>
