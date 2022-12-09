@@ -1,6 +1,6 @@
 ---
 title: Unit Tests
-author: Package Build
+author: Łukasz Rąbalski
 toc: true
 categories: ['Unit testing']
 tags: ['Python', 'Unit testing']
