@@ -2,7 +2,7 @@
 title: "DGL graph datastructure"
 categories: ["DGL"]
 tags: ["DGL", "graph", "graph datastructure", "compressed sparsed matrix"]
-toc: TRUE
+toc: true
 ---
 
 ```{r include=FALSE}
