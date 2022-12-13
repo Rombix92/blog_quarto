@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2022-10-25">
 
 <title>Lukasz Rabalski blog - Grow of Metropolis</title>
 <style>
@@ -127,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -178,12 +177,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <div class="quarto-title-meta">
 
       
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">October 25, 2022</p>
-      </div>
-    </div>
     
       
     </div>
@@ -192,7 +185,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about" id="toc-about" class="nav-link active" data-scroll-target="#about">About</a></li>
+  <li><a href="#preparing-environment" id="toc-preparing-environment" class="nav-link" data-scroll-target="#preparing-environment">Preparing environment</a></li>
+  <li><a href="#metropolis-in-poland" id="toc-metropolis-in-poland" class="nav-link" data-scroll-target="#metropolis-in-poland">Metropolis in Poland</a></li>
+  <li><a href="#metropolis-absorption-algorithm" id="toc-metropolis-absorption-algorithm" class="nav-link" data-scroll-target="#metropolis-absorption-algorithm">metropolis absorption algorithm</a>
+  <ul class="collapse">
+  <li><a href="#instruction" id="toc-instruction" class="nav-link" data-scroll-target="#instruction">Instruction</a></li>
+  <li><a href="#wlasciwy-algorytm" id="toc-wlasciwy-algorytm" class="nav-link" data-scroll-target="#wlasciwy-algorytm">wlasciwy algorytm</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -218,20 +226,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb1-3"><a href="#cb1-3"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="do">## python:         /Users/lrabalski1/miniforge3/envs/everyday_use/bin/python</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="do">## libpython:      /Users/lrabalski1/miniforge3/envs/everyday_use/lib/libpython3.8.dylib</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="do">## pythonhome:     /Users/lrabalski1/miniforge3/envs/everyday_use:/Users/lrabalski1/miniforge3/envs/everyday_use</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="do">## version:        3.8.12 | packaged by conda-forge | (default, Oct 12 2021, 21:21:17)  [Clang 11.1.0 ]</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="do">## numpy:          /Users/lrabalski1/miniforge3/envs/everyday_use/lib/python3.8/site-packages/numpy</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="do">## numpy_version:  1.21.4</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="do">## </span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="do">## </span><span class="al">NOTE</span><span class="do">: Python version was forced by RETICULATE_PYTHON</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="do">## python:         /Users/lrabalski1/miniforge3/envs/everyday_use/bin/python</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="do">## libpython:      /Users/lrabalski1/miniforge3/envs/everyday_use/lib/libpython3.8.dylib</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="do">## pythonhome:     /Users/lrabalski1/miniforge3/envs/everyday_use:/Users/lrabalski1/miniforge3/envs/everyday_use</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="do">## version:        3.8.12 | packaged by conda-forge | (default, Oct 12 2021, 21:21:17)  [Clang 11.1.0 ]</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="do">## numpy:          /Users/lrabalski1/miniforge3/envs/everyday_use/lib/python3.8/site-packages/numpy</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="do">## numpy_version:  1.21.4</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="do">## </span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="do">## </span><span class="al">NOTE</span><span class="do">: Python version was forced by RETICULATE_PYTHON</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb1-15"><a href="#cb1-15"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Bellow I present two function:</p>
@@ -703,272 +712,276 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-2"><a href="#cb12-2"></a><span class="an">title:</span><span class="co"> "Grow of Metropolis"</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a><span class="an">categories:</span><span class="co"> ["Python"]</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a><span class="an">tags:</span><span class="co"> ["python", "geocoding"]</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="co">---</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="fu">## About</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a></span>
-<span id="cb12-9"><a href="#cb12-9"></a>Aims:</span>
-<span id="cb12-10"><a href="#cb12-10"></a></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="ss">1.  </span>FIlter out the data localisation where people are supposed to live in (cities; villages etc)</span>
-<span id="cb12-12"><a href="#cb12-12"></a></span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="ss">2.  </span>Select cities which are metropolis based on population on external source</span>
-<span id="cb12-14"><a href="#cb12-14"></a></span>
-<span id="cb12-15"><a href="#cb12-15"></a><span class="ss">3.  </span>Write a script which will ascribe metropolis to a city. Additionally model a process of consecutive cities which would be ascribed to the city bearing in mind that city will grow thanks to this process.</span>
-<span id="cb12-16"><a href="#cb12-16"></a></span>
-<span id="cb12-17"><a href="#cb12-17"></a><span class="co">[</span><span class="ot">Data Source</span><span class="co">](http://www.geonames.org/)</span></span>
-<span id="cb12-18"><a href="#cb12-18"></a></span>
-<span id="cb12-19"><a href="#cb12-19"></a><span class="co">[</span><span class="ot">Documentation</span><span class="co">](http://www.geonames.org/export/codes.html)</span></span>
-<span id="cb12-20"><a href="#cb12-20"></a></span>
-<span id="cb12-21"><a href="#cb12-21"></a><span class="fu">## Preparing environment</span></span>
-<span id="cb12-22"><a href="#cb12-22"></a></span>
-<span id="cb12-23"><a href="#cb12-23"></a>Setting default markdown option responsible of code chunk behaviour.</span>
-<span id="cb12-24"><a href="#cb12-24"></a></span>
-<span id="cb12-25"><a href="#cb12-25"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
-<span id="cb12-26"><a href="#cb12-26"></a><span class="co">#markdown ----</span></span>
-<span id="cb12-27"><a href="#cb12-27"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb12-28"><a href="#cb12-28"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb12-29"><a href="#cb12-29"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb12-30"><a href="#cb12-30"></a>                      ) </span>
-<span id="cb12-31"><a href="#cb12-31"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, </span>
-<span id="cb12-32"><a href="#cb12-32"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb12-33"><a href="#cb12-33"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
-<span id="cb12-34"><a href="#cb12-34"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span></span>
-<span id="cb12-35"><a href="#cb12-35"></a>)</span>
-<span id="cb12-36"><a href="#cb12-36"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
-<span id="cb12-37"><a href="#cb12-37"></a><span class="in">```</span></span>
-<span id="cb12-38"><a href="#cb12-38"></a></span>
-<span id="cb12-39"><a href="#cb12-39"></a>Firstly I choose prefered python environment on which I have installed useful libraries.</span>
-<span id="cb12-40"><a href="#cb12-40"></a></span>
-<span id="cb12-43"><a href="#cb12-43"></a><span class="in">```{r}</span></span>
-<span id="cb12-44"><a href="#cb12-44"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb12-45"><a href="#cb12-45"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb12-46"><a href="#cb12-46"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb12-47"><a href="#cb12-47"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-48"><a href="#cb12-48"></a></span>
-<span id="cb12-49"><a href="#cb12-49"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb12-50"><a href="#cb12-50"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
-<span id="cb12-51"><a href="#cb12-51"></a><span class="in">```</span></span>
-<span id="cb12-52"><a href="#cb12-52"></a></span>
-<span id="cb12-53"><a href="#cb12-53"></a><span class="in">```{python, include=FALSE}</span></span>
-<span id="cb12-54"><a href="#cb12-54"></a>file_path_name<span class="op">=</span><span class="st">'/Users/lrabalski1/Desktop/prv/data/geonames_org.csv'</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">---</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="fu">## About</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a>Aims:</span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="ss">1.  </span>FIlter out the data localisation where people are supposed to live in (cities; villages etc)</span>
+<span id="cb12-13"><a href="#cb12-13"></a></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="ss">2.  </span>Select cities which are metropolis based on population on external source</span>
+<span id="cb12-15"><a href="#cb12-15"></a></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="ss">3.  </span>Write a script which will ascribe metropolis to a city. Additionally model a process of consecutive cities which would be ascribed to the city bearing in mind that city will grow thanks to this process.</span>
+<span id="cb12-17"><a href="#cb12-17"></a></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co">[</span><span class="ot">Data Source</span><span class="co">](http://www.geonames.org/)</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a></span>
+<span id="cb12-20"><a href="#cb12-20"></a><span class="co">[</span><span class="ot">Documentation</span><span class="co">](http://www.geonames.org/export/codes.html)</span></span>
+<span id="cb12-21"><a href="#cb12-21"></a></span>
+<span id="cb12-22"><a href="#cb12-22"></a><span class="fu">## Preparing environment</span></span>
+<span id="cb12-23"><a href="#cb12-23"></a></span>
+<span id="cb12-24"><a href="#cb12-24"></a>Setting default markdown option responsible of code chunk behaviour.</span>
+<span id="cb12-25"><a href="#cb12-25"></a></span>
+<span id="cb12-26"><a href="#cb12-26"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb12-27"><a href="#cb12-27"></a><span class="co">#markdown ----</span></span>
+<span id="cb12-28"><a href="#cb12-28"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb12-29"><a href="#cb12-29"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb12-30"><a href="#cb12-30"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb12-31"><a href="#cb12-31"></a>                      ) </span>
+<span id="cb12-32"><a href="#cb12-32"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, </span>
+<span id="cb12-33"><a href="#cb12-33"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-34"><a href="#cb12-34"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb12-35"><a href="#cb12-35"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span></span>
+<span id="cb12-36"><a href="#cb12-36"></a>)</span>
+<span id="cb12-37"><a href="#cb12-37"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb12-38"><a href="#cb12-38"></a><span class="in">```</span></span>
+<span id="cb12-39"><a href="#cb12-39"></a></span>
+<span id="cb12-40"><a href="#cb12-40"></a>Firstly I choose prefered python environment on which I have installed useful libraries.</span>
+<span id="cb12-41"><a href="#cb12-41"></a></span>
+<span id="cb12-44"><a href="#cb12-44"></a><span class="in">```{r}</span></span>
+<span id="cb12-45"><a href="#cb12-45"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb12-46"><a href="#cb12-46"></a></span>
+<span id="cb12-47"><a href="#cb12-47"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb12-48"><a href="#cb12-48"></a>reticulate<span class="sc">::</span><span class="fu">py_config</span>()</span>
+<span id="cb12-49"><a href="#cb12-49"></a></span>
+<span id="cb12-50"><a href="#cb12-50"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb12-51"><a href="#cb12-51"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb12-52"><a href="#cb12-52"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-53"><a href="#cb12-53"></a></span>
+<span id="cb12-54"><a href="#cb12-54"></a></span>
 <span id="cb12-55"><a href="#cb12-55"></a><span class="in">```</span></span>
 <span id="cb12-56"><a href="#cb12-56"></a></span>
 <span id="cb12-57"><a href="#cb12-57"></a><span class="in">```{python, include=FALSE}</span></span>
-<span id="cb12-58"><a href="#cb12-58"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb12-59"><a href="#cb12-59"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb12-60"><a href="#cb12-60"></a><span class="im">import</span> mpu</span>
-<span id="cb12-61"><a href="#cb12-61"></a><span class="im">import</span> geopy.distance</span>
-<span id="cb12-62"><a href="#cb12-62"></a><span class="in">```</span></span>
-<span id="cb12-63"><a href="#cb12-63"></a></span>
-<span id="cb12-64"><a href="#cb12-64"></a>Bellow I present two function:</span>
-<span id="cb12-65"><a href="#cb12-65"></a></span>
-<span id="cb12-66"><a href="#cb12-66"></a><span class="ss">-   </span>radius - function which based on city population is calculating a radius within which city is able to absorb cities from this range</span>
+<span id="cb12-58"><a href="#cb12-58"></a>file_path_name<span class="op">=</span><span class="st">'/Users/lrabalski1/Desktop/prv/data/geonames_org.csv'</span></span>
+<span id="cb12-59"><a href="#cb12-59"></a><span class="in">```</span></span>
+<span id="cb12-60"><a href="#cb12-60"></a></span>
+<span id="cb12-61"><a href="#cb12-61"></a><span class="in">```{python, include=FALSE}</span></span>
+<span id="cb12-62"><a href="#cb12-62"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-63"><a href="#cb12-63"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb12-64"><a href="#cb12-64"></a><span class="im">import</span> mpu</span>
+<span id="cb12-65"><a href="#cb12-65"></a><span class="im">import</span> geopy.distance</span>
+<span id="cb12-66"><a href="#cb12-66"></a><span class="in">```</span></span>
 <span id="cb12-67"><a href="#cb12-67"></a></span>
-<span id="cb12-68"><a href="#cb12-68"></a><span class="ss">-   </span><span class="sc">\_</span>calcualate_metrocity_impact - calculate impact on metrocity on given city</span>
+<span id="cb12-68"><a href="#cb12-68"></a>Bellow I present two function:</span>
 <span id="cb12-69"><a href="#cb12-69"></a></span>
-<span id="cb12-72"><a href="#cb12-72"></a><span class="in">```{python}</span></span>
-<span id="cb12-73"><a href="#cb12-73"></a><span class="kw">def</span> radius(population):</span>
-<span id="cb12-74"><a href="#cb12-74"></a>    METRO_CITY_POPULATION_CONSTANT <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">1443000</span></span>
-<span id="cb12-75"><a href="#cb12-75"></a>    MIN_METRO_CITY_RADIUS <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb12-76"><a href="#cb12-76"></a>    MAX_METRO_CITY_RADIUS <span class="op">=</span> <span class="dv">100</span> <span class="op">-</span> MIN_METRO_CITY_RADIUS</span>
-<span id="cb12-77"><a href="#cb12-77"></a>    <span class="cf">return</span> MIN_METRO_CITY_RADIUS <span class="op">+</span> MAX_METRO_CITY_RADIUS <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> np.exp(METRO_CITY_POPULATION_CONSTANT <span class="op">*</span>  population))</span>
-<span id="cb12-78"><a href="#cb12-78"></a></span>
-<span id="cb12-79"><a href="#cb12-79"></a><span class="kw">def</span> _calcualate_metrocity_impact(max_radius, distance_to_metro_city):</span>
-<span id="cb12-80"><a href="#cb12-80"></a>    METRO_CITY_POWER_CONSTANT <span class="op">=</span> <span class="op">-</span><span class="fl">1.4</span></span>
-<span id="cb12-81"><a href="#cb12-81"></a>    impact <span class="op">=</span> np.exp(METRO_CITY_POWER_CONSTANT  <span class="op">*</span> distance_to_metro_city <span class="op">/</span> max_radius)</span>
-<span id="cb12-82"><a href="#cb12-82"></a>    <span class="cf">return</span> impact</span>
-<span id="cb12-83"><a href="#cb12-83"></a><span class="in">```</span></span>
-<span id="cb12-84"><a href="#cb12-84"></a></span>
-<span id="cb12-85"><a href="#cb12-85"></a>Function responsible for calculating distances between 2 points on earth surface.</span>
-<span id="cb12-86"><a href="#cb12-86"></a></span>
-<span id="cb12-89"><a href="#cb12-89"></a><span class="in">```{python}</span></span>
-<span id="cb12-90"><a href="#cb12-90"></a><span class="co">#https://towardsdatascience.com/heres-how-to-calculate-distance-between-2-geolocations-in-python-93ecab5bbba4</span></span>
-<span id="cb12-91"><a href="#cb12-91"></a><span class="kw">def</span> haversine_distance_code(lat1, lon1, lat2, lon2):</span>
-<span id="cb12-92"><a href="#cb12-92"></a>    r <span class="op">=</span> <span class="dv">6371</span></span>
-<span id="cb12-93"><a href="#cb12-93"></a>    phi1 <span class="op">=</span> np.radians(lat1)</span>
-<span id="cb12-94"><a href="#cb12-94"></a>    phi2 <span class="op">=</span> np.radians(lat2)</span>
-<span id="cb12-95"><a href="#cb12-95"></a>    delta_phi <span class="op">=</span> np.radians(lat2 <span class="op">-</span> lat1)</span>
-<span id="cb12-96"><a href="#cb12-96"></a>    delta_lambda <span class="op">=</span> np.radians(lon2 <span class="op">-</span> lon1)</span>
-<span id="cb12-97"><a href="#cb12-97"></a>    a <span class="op">=</span> np.sin(delta_phi <span class="op">/</span> <span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> np.cos(phi1) <span class="op">*</span> np.cos(phi2) <span class="op">*</span>   np.sin(delta_lambda <span class="op">/</span> <span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb12-98"><a href="#cb12-98"></a>    res <span class="op">=</span> r <span class="op">*</span> (<span class="dv">2</span> <span class="op">*</span> np.arctan2(np.sqrt(a), np.sqrt(<span class="dv">1</span> <span class="op">-</span> a)))</span>
-<span id="cb12-99"><a href="#cb12-99"></a>    <span class="cf">return</span> np.<span class="bu">round</span>(res, <span class="dv">2</span>)</span>
-<span id="cb12-100"><a href="#cb12-100"></a><span class="in">```</span></span>
-<span id="cb12-101"><a href="#cb12-101"></a></span>
-<span id="cb12-104"><a href="#cb12-104"></a><span class="in">```{python}</span></span>
-<span id="cb12-105"><a href="#cb12-105"></a>df<span class="op">=</span> pd.read_csv(file_path_name, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, </span>
-<span id="cb12-106"><a href="#cb12-106"></a>                names<span class="op">=</span>[<span class="st">'geonameid'</span>,<span class="st">'name'</span>,<span class="st">'asciiname'</span>,<span class="st">'alternatenames'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>,<span class="st">'feature class'</span>,<span class="st">'feature code'</span>,<span class="st">'country code'</span>,<span class="st">'cc2'</span>,<span class="st">'admin1 code'</span>,<span class="st">'admin2 code'</span>,<span class="st">'admin3 code'</span>,<span class="st">'admin4 code'</span>,<span class="st">'population'</span>,<span class="st">'elevation'</span>,<span class="st">'dem'</span>,<span class="st">'timezone'</span>,<span class="st">'modification date'</span>,])</span>
-<span id="cb12-107"><a href="#cb12-107"></a></span>
-<span id="cb12-108"><a href="#cb12-108"></a></span>
-<span id="cb12-109"><a href="#cb12-109"></a><span class="in">```</span></span>
-<span id="cb12-110"><a href="#cb12-110"></a></span>
-<span id="cb12-111"><a href="#cb12-111"></a>Dataset readme states that column feature classes contains level information of:</span>
+<span id="cb12-70"><a href="#cb12-70"></a><span class="ss">-   </span>radius - function which based on city population is calculating a radius within which city is able to absorb cities from this range</span>
+<span id="cb12-71"><a href="#cb12-71"></a></span>
+<span id="cb12-72"><a href="#cb12-72"></a><span class="ss">-   </span><span class="sc">\_</span>calcualate_metrocity_impact - calculate impact on metrocity on given city</span>
+<span id="cb12-73"><a href="#cb12-73"></a></span>
+<span id="cb12-76"><a href="#cb12-76"></a><span class="in">```{python}</span></span>
+<span id="cb12-77"><a href="#cb12-77"></a><span class="kw">def</span> radius(population):</span>
+<span id="cb12-78"><a href="#cb12-78"></a>    METRO_CITY_POPULATION_CONSTANT <span class="op">=</span> <span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">1443000</span></span>
+<span id="cb12-79"><a href="#cb12-79"></a>    MIN_METRO_CITY_RADIUS <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb12-80"><a href="#cb12-80"></a>    MAX_METRO_CITY_RADIUS <span class="op">=</span> <span class="dv">100</span> <span class="op">-</span> MIN_METRO_CITY_RADIUS</span>
+<span id="cb12-81"><a href="#cb12-81"></a>    <span class="cf">return</span> MIN_METRO_CITY_RADIUS <span class="op">+</span> MAX_METRO_CITY_RADIUS <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> np.exp(METRO_CITY_POPULATION_CONSTANT <span class="op">*</span>  population))</span>
+<span id="cb12-82"><a href="#cb12-82"></a></span>
+<span id="cb12-83"><a href="#cb12-83"></a><span class="kw">def</span> _calcualate_metrocity_impact(max_radius, distance_to_metro_city):</span>
+<span id="cb12-84"><a href="#cb12-84"></a>    METRO_CITY_POWER_CONSTANT <span class="op">=</span> <span class="op">-</span><span class="fl">1.4</span></span>
+<span id="cb12-85"><a href="#cb12-85"></a>    impact <span class="op">=</span> np.exp(METRO_CITY_POWER_CONSTANT  <span class="op">*</span> distance_to_metro_city <span class="op">/</span> max_radius)</span>
+<span id="cb12-86"><a href="#cb12-86"></a>    <span class="cf">return</span> impact</span>
+<span id="cb12-87"><a href="#cb12-87"></a><span class="in">```</span></span>
+<span id="cb12-88"><a href="#cb12-88"></a></span>
+<span id="cb12-89"><a href="#cb12-89"></a>Function responsible for calculating distances between 2 points on earth surface.</span>
+<span id="cb12-90"><a href="#cb12-90"></a></span>
+<span id="cb12-93"><a href="#cb12-93"></a><span class="in">```{python}</span></span>
+<span id="cb12-94"><a href="#cb12-94"></a><span class="co">#https://towardsdatascience.com/heres-how-to-calculate-distance-between-2-geolocations-in-python-93ecab5bbba4</span></span>
+<span id="cb12-95"><a href="#cb12-95"></a><span class="kw">def</span> haversine_distance_code(lat1, lon1, lat2, lon2):</span>
+<span id="cb12-96"><a href="#cb12-96"></a>    r <span class="op">=</span> <span class="dv">6371</span></span>
+<span id="cb12-97"><a href="#cb12-97"></a>    phi1 <span class="op">=</span> np.radians(lat1)</span>
+<span id="cb12-98"><a href="#cb12-98"></a>    phi2 <span class="op">=</span> np.radians(lat2)</span>
+<span id="cb12-99"><a href="#cb12-99"></a>    delta_phi <span class="op">=</span> np.radians(lat2 <span class="op">-</span> lat1)</span>
+<span id="cb12-100"><a href="#cb12-100"></a>    delta_lambda <span class="op">=</span> np.radians(lon2 <span class="op">-</span> lon1)</span>
+<span id="cb12-101"><a href="#cb12-101"></a>    a <span class="op">=</span> np.sin(delta_phi <span class="op">/</span> <span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> np.cos(phi1) <span class="op">*</span> np.cos(phi2) <span class="op">*</span>   np.sin(delta_lambda <span class="op">/</span> <span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb12-102"><a href="#cb12-102"></a>    res <span class="op">=</span> r <span class="op">*</span> (<span class="dv">2</span> <span class="op">*</span> np.arctan2(np.sqrt(a), np.sqrt(<span class="dv">1</span> <span class="op">-</span> a)))</span>
+<span id="cb12-103"><a href="#cb12-103"></a>    <span class="cf">return</span> np.<span class="bu">round</span>(res, <span class="dv">2</span>)</span>
+<span id="cb12-104"><a href="#cb12-104"></a><span class="in">```</span></span>
+<span id="cb12-105"><a href="#cb12-105"></a></span>
+<span id="cb12-108"><a href="#cb12-108"></a><span class="in">```{python}</span></span>
+<span id="cb12-109"><a href="#cb12-109"></a>df<span class="op">=</span> pd.read_csv(file_path_name, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, </span>
+<span id="cb12-110"><a href="#cb12-110"></a>                names<span class="op">=</span>[<span class="st">'geonameid'</span>,<span class="st">'name'</span>,<span class="st">'asciiname'</span>,<span class="st">'alternatenames'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>,<span class="st">'feature class'</span>,<span class="st">'feature code'</span>,<span class="st">'country code'</span>,<span class="st">'cc2'</span>,<span class="st">'admin1 code'</span>,<span class="st">'admin2 code'</span>,<span class="st">'admin3 code'</span>,<span class="st">'admin4 code'</span>,<span class="st">'population'</span>,<span class="st">'elevation'</span>,<span class="st">'dem'</span>,<span class="st">'timezone'</span>,<span class="st">'modification date'</span>,])</span>
+<span id="cb12-111"><a href="#cb12-111"></a></span>
 <span id="cb12-112"><a href="#cb12-112"></a></span>
-<span id="cb12-113"><a href="#cb12-113"></a>A: country, state, region,...</span>
+<span id="cb12-113"><a href="#cb12-113"></a><span class="in">```</span></span>
 <span id="cb12-114"><a href="#cb12-114"></a></span>
-<span id="cb12-115"><a href="#cb12-115"></a>H: stream, lake, ...</span>
+<span id="cb12-115"><a href="#cb12-115"></a>Dataset readme states that column feature classes contains level information of:</span>
 <span id="cb12-116"><a href="#cb12-116"></a></span>
-<span id="cb12-117"><a href="#cb12-117"></a>L: parks,area, ...</span>
+<span id="cb12-117"><a href="#cb12-117"></a>A: country, state, region,...</span>
 <span id="cb12-118"><a href="#cb12-118"></a></span>
-<span id="cb12-119"><a href="#cb12-119"></a>P: city, village,...</span>
+<span id="cb12-119"><a href="#cb12-119"></a>H: stream, lake, ...</span>
 <span id="cb12-120"><a href="#cb12-120"></a></span>
-<span id="cb12-121"><a href="#cb12-121"></a>R: road, railroad</span>
+<span id="cb12-121"><a href="#cb12-121"></a>L: parks,area, ...</span>
 <span id="cb12-122"><a href="#cb12-122"></a></span>
-<span id="cb12-123"><a href="#cb12-123"></a>S: spot, building, farm</span>
+<span id="cb12-123"><a href="#cb12-123"></a>P: city, village,...</span>
 <span id="cb12-124"><a href="#cb12-124"></a></span>
-<span id="cb12-125"><a href="#cb12-125"></a>T: mountain,hill,rock,...</span>
+<span id="cb12-125"><a href="#cb12-125"></a>R: road, railroad</span>
 <span id="cb12-126"><a href="#cb12-126"></a></span>
-<span id="cb12-127"><a href="#cb12-127"></a>U: undersea</span>
+<span id="cb12-127"><a href="#cb12-127"></a>S: spot, building, farm</span>
 <span id="cb12-128"><a href="#cb12-128"></a></span>
-<span id="cb12-129"><a href="#cb12-129"></a>V: forest,heath,...</span>
+<span id="cb12-129"><a href="#cb12-129"></a>T: mountain,hill,rock,...</span>
 <span id="cb12-130"><a href="#cb12-130"></a></span>
-<span id="cb12-131"><a href="#cb12-131"></a>We will be interested on object of level P, and maybe A.</span>
+<span id="cb12-131"><a href="#cb12-131"></a>U: undersea</span>
 <span id="cb12-132"><a href="#cb12-132"></a></span>
-<span id="cb12-135"><a href="#cb12-135"></a><span class="in">```{python}</span></span>
-<span id="cb12-136"><a href="#cb12-136"></a><span class="im">import</span> requests</span>
-<span id="cb12-137"><a href="#cb12-137"></a></span>
-<span id="cb12-138"><a href="#cb12-138"></a>url <span class="op">=</span> <span class="st">'http://www.geonames.org/export/codes.html'</span></span>
-<span id="cb12-139"><a href="#cb12-139"></a>html <span class="op">=</span> requests.get(url).content</span>
-<span id="cb12-140"><a href="#cb12-140"></a>df_list <span class="op">=</span> pd.read_html(html)</span>
-<span id="cb12-141"><a href="#cb12-141"></a>df_legend <span class="op">=</span> df_list[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb12-142"><a href="#cb12-142"></a>df_legend <span class="op">=</span> df_legend.rename(columns<span class="op">=</span>{df_legend.columns[<span class="dv">0</span>]: <span class="st">'feature code'</span>,</span>
-<span id="cb12-143"><a href="#cb12-143"></a>                                     df_legend.columns[<span class="dv">1</span>]: <span class="st">'short  descr'</span>,</span>
-<span id="cb12-144"><a href="#cb12-144"></a>                                     df_legend.columns[<span class="dv">2</span>]: <span class="st">'long descr'</span>})</span>
-<span id="cb12-145"><a href="#cb12-145"></a>df_legend <span class="op">=</span> pd.merge(df[[<span class="st">'feature code'</span>,<span class="st">'feature class'</span>]].drop_duplicates(),df_legend, on<span class="op">=</span><span class="st">'feature code'</span>)</span>
-<span id="cb12-146"><a href="#cb12-146"></a>df_legend</span>
-<span id="cb12-147"><a href="#cb12-147"></a><span class="in">```</span></span>
-<span id="cb12-148"><a href="#cb12-148"></a></span>
-<span id="cb12-149"><a href="#cb12-149"></a><span class="in">```{python, results='hide'}</span></span>
-<span id="cb12-150"><a href="#cb12-150"></a>df <span class="op">=</span> df[df[<span class="st">'feature class'</span>].isin([<span class="st">'P'</span>,<span class="st">'A'</span>])]</span>
-<span id="cb12-151"><a href="#cb12-151"></a>df_check <span class="op">=</span> pd.merge(df,df_legend, on<span class="op">=</span>[<span class="st">'feature code'</span>,<span class="st">'feature class'</span>])</span>
+<span id="cb12-133"><a href="#cb12-133"></a>V: forest,heath,...</span>
+<span id="cb12-134"><a href="#cb12-134"></a></span>
+<span id="cb12-135"><a href="#cb12-135"></a>We will be interested on object of level P, and maybe A.</span>
+<span id="cb12-136"><a href="#cb12-136"></a></span>
+<span id="cb12-139"><a href="#cb12-139"></a><span class="in">```{python}</span></span>
+<span id="cb12-140"><a href="#cb12-140"></a><span class="im">import</span> requests</span>
+<span id="cb12-141"><a href="#cb12-141"></a></span>
+<span id="cb12-142"><a href="#cb12-142"></a>url <span class="op">=</span> <span class="st">'http://www.geonames.org/export/codes.html'</span></span>
+<span id="cb12-143"><a href="#cb12-143"></a>html <span class="op">=</span> requests.get(url).content</span>
+<span id="cb12-144"><a href="#cb12-144"></a>df_list <span class="op">=</span> pd.read_html(html)</span>
+<span id="cb12-145"><a href="#cb12-145"></a>df_legend <span class="op">=</span> df_list[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb12-146"><a href="#cb12-146"></a>df_legend <span class="op">=</span> df_legend.rename(columns<span class="op">=</span>{df_legend.columns[<span class="dv">0</span>]: <span class="st">'feature code'</span>,</span>
+<span id="cb12-147"><a href="#cb12-147"></a>                                     df_legend.columns[<span class="dv">1</span>]: <span class="st">'short  descr'</span>,</span>
+<span id="cb12-148"><a href="#cb12-148"></a>                                     df_legend.columns[<span class="dv">2</span>]: <span class="st">'long descr'</span>})</span>
+<span id="cb12-149"><a href="#cb12-149"></a>df_legend <span class="op">=</span> pd.merge(df[[<span class="st">'feature code'</span>,<span class="st">'feature class'</span>]].drop_duplicates(),df_legend, on<span class="op">=</span><span class="st">'feature code'</span>)</span>
+<span id="cb12-150"><a href="#cb12-150"></a>df_legend</span>
+<span id="cb12-151"><a href="#cb12-151"></a><span class="in">```</span></span>
 <span id="cb12-152"><a href="#cb12-152"></a></span>
-<span id="cb12-153"><a href="#cb12-153"></a><span class="co"># sorting by the biggest objects I can see that those are cities</span></span>
-<span id="cb12-154"><a href="#cb12-154"></a>df_check[df_check[<span class="st">'feature class'</span>]<span class="op">==</span><span class="st">'P'</span>].sort_values(<span class="st">'population'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">5</span>)</span>
-<span id="cb12-155"><a href="#cb12-155"></a></span>
-<span id="cb12-156"><a href="#cb12-156"></a><span class="co"># administrative object located in object of level P</span></span>
-<span id="cb12-157"><a href="#cb12-157"></a>df_check[df_check[<span class="st">'feature class'</span>]<span class="op">==</span><span class="st">'A'</span>].sort_values(<span class="st">'population'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">5</span>)</span>
-<span id="cb12-158"><a href="#cb12-158"></a></span>
-<span id="cb12-159"><a href="#cb12-159"></a><span class="co">#z tej tabeli wynika, ze PPLX to sekcje zaludnionych miejsc, sa to ulice, dzielnice, wiec wykluczam, sa czescia miast</span></span>
-<span id="cb12-160"><a href="#cb12-160"></a>df_check[[<span class="st">'feature class'</span>,<span class="st">'feature code'</span>, <span class="st">'short  descr'</span>]].drop_duplicates()</span>
-<span id="cb12-161"><a href="#cb12-161"></a></span>
-<span id="cb12-162"><a href="#cb12-162"></a><span class="co">#finalnie musze skupic sie na na obu klasach, jednoczesnie usuwajac duplikaty</span></span>
-<span id="cb12-163"><a href="#cb12-163"></a>df <span class="op">=</span> df[(df[<span class="st">'feature class'</span>].isin([<span class="st">'P'</span>])) <span class="op">&amp;</span> </span>
-<span id="cb12-164"><a href="#cb12-164"></a>        (df.population <span class="op">!=</span> <span class="dv">0</span>) <span class="op">&amp;</span> </span>
-<span id="cb12-165"><a href="#cb12-165"></a>        <span class="op">~</span>(df[<span class="st">'feature code'</span>].isin([<span class="st">'PPLX'</span>]))].drop_duplicates(<span class="st">'name'</span>)</span>
-<span id="cb12-166"><a href="#cb12-166"></a></span>
-<span id="cb12-167"><a href="#cb12-167"></a></span>
-<span id="cb12-168"><a href="#cb12-168"></a>df.index.name <span class="op">=</span> <span class="st">'city_id'</span></span>
-<span id="cb12-169"><a href="#cb12-169"></a>df.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-170"><a href="#cb12-170"></a><span class="in">```</span></span>
+<span id="cb12-153"><a href="#cb12-153"></a><span class="in">```{python, results='hide'}</span></span>
+<span id="cb12-154"><a href="#cb12-154"></a>df <span class="op">=</span> df[df[<span class="st">'feature class'</span>].isin([<span class="st">'P'</span>,<span class="st">'A'</span>])]</span>
+<span id="cb12-155"><a href="#cb12-155"></a>df_check <span class="op">=</span> pd.merge(df,df_legend, on<span class="op">=</span>[<span class="st">'feature code'</span>,<span class="st">'feature class'</span>])</span>
+<span id="cb12-156"><a href="#cb12-156"></a></span>
+<span id="cb12-157"><a href="#cb12-157"></a><span class="co"># sorting by the biggest objects I can see that those are cities</span></span>
+<span id="cb12-158"><a href="#cb12-158"></a>df_check[df_check[<span class="st">'feature class'</span>]<span class="op">==</span><span class="st">'P'</span>].sort_values(<span class="st">'population'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">5</span>)</span>
+<span id="cb12-159"><a href="#cb12-159"></a></span>
+<span id="cb12-160"><a href="#cb12-160"></a><span class="co"># administrative object located in object of level P</span></span>
+<span id="cb12-161"><a href="#cb12-161"></a>df_check[df_check[<span class="st">'feature class'</span>]<span class="op">==</span><span class="st">'A'</span>].sort_values(<span class="st">'population'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">5</span>)</span>
+<span id="cb12-162"><a href="#cb12-162"></a></span>
+<span id="cb12-163"><a href="#cb12-163"></a><span class="co">#z tej tabeli wynika, ze PPLX to sekcje zaludnionych miejsc, sa to ulice, dzielnice, wiec wykluczam, sa czescia miast</span></span>
+<span id="cb12-164"><a href="#cb12-164"></a>df_check[[<span class="st">'feature class'</span>,<span class="st">'feature code'</span>, <span class="st">'short  descr'</span>]].drop_duplicates()</span>
+<span id="cb12-165"><a href="#cb12-165"></a></span>
+<span id="cb12-166"><a href="#cb12-166"></a><span class="co">#finalnie musze skupic sie na na obu klasach, jednoczesnie usuwajac duplikaty</span></span>
+<span id="cb12-167"><a href="#cb12-167"></a>df <span class="op">=</span> df[(df[<span class="st">'feature class'</span>].isin([<span class="st">'P'</span>])) <span class="op">&amp;</span> </span>
+<span id="cb12-168"><a href="#cb12-168"></a>        (df.population <span class="op">!=</span> <span class="dv">0</span>) <span class="op">&amp;</span> </span>
+<span id="cb12-169"><a href="#cb12-169"></a>        <span class="op">~</span>(df[<span class="st">'feature code'</span>].isin([<span class="st">'PPLX'</span>]))].drop_duplicates(<span class="st">'name'</span>)</span>
+<span id="cb12-170"><a href="#cb12-170"></a></span>
 <span id="cb12-171"><a href="#cb12-171"></a></span>
-<span id="cb12-174"><a href="#cb12-174"></a><span class="in">```{python}</span></span>
-<span id="cb12-175"><a href="#cb12-175"></a>df.groupby([<span class="st">'feature class'</span>,<span class="st">'feature code'</span>]).agg({<span class="st">'population'</span>: [<span class="st">'mean'</span>, <span class="st">'min'</span>, <span class="st">'max'</span>]})</span>
-<span id="cb12-176"><a href="#cb12-176"></a><span class="in">```</span></span>
-<span id="cb12-177"><a href="#cb12-177"></a></span>
-<span id="cb12-178"><a href="#cb12-178"></a><span class="fu">## Metropolis in Poland</span></span>
-<span id="cb12-179"><a href="#cb12-179"></a></span>
-<span id="cb12-180"><a href="#cb12-180"></a><span class="co">[</span><span class="ot">wikipedia</span><span class="co">](https://pl.wikipedia.org/wiki/Obszar_metropolitalny)</span> Warszawa, Katowice, Kraków, Łódź, Trójmiasto, Poznań, Wrocław, Bydgoszcz, Szczecin, Lublin.</span>
+<span id="cb12-172"><a href="#cb12-172"></a>df.index.name <span class="op">=</span> <span class="st">'city_id'</span></span>
+<span id="cb12-173"><a href="#cb12-173"></a>df.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-174"><a href="#cb12-174"></a><span class="in">```</span></span>
+<span id="cb12-175"><a href="#cb12-175"></a></span>
+<span id="cb12-178"><a href="#cb12-178"></a><span class="in">```{python}</span></span>
+<span id="cb12-179"><a href="#cb12-179"></a>df.groupby([<span class="st">'feature class'</span>,<span class="st">'feature code'</span>]).agg({<span class="st">'population'</span>: [<span class="st">'mean'</span>, <span class="st">'min'</span>, <span class="st">'max'</span>]})</span>
+<span id="cb12-180"><a href="#cb12-180"></a><span class="in">```</span></span>
 <span id="cb12-181"><a href="#cb12-181"></a></span>
-<span id="cb12-184"><a href="#cb12-184"></a><span class="in">```{python}</span></span>
-<span id="cb12-185"><a href="#cb12-185"></a>df_metropolie <span class="op">=</span> df[df.name.isin(</span>
-<span id="cb12-186"><a href="#cb12-186"></a>    [<span class="st">'Warsaw'</span>,<span class="st">'Katowice'</span>,<span class="st">'Kraków'</span>,<span class="st">'Łódź'</span>,</span>
-<span id="cb12-187"><a href="#cb12-187"></a>     <span class="st">'Gdańsk'</span>,<span class="st">'Gdynia'</span>,<span class="co">#'Trójmiasto',</span></span>
-<span id="cb12-188"><a href="#cb12-188"></a>     <span class="st">'Poznań'</span>,<span class="st">'Wrocław'</span>,<span class="st">'Bydgoszcz'</span>,<span class="st">'Szczecin'</span>,<span class="st">'Lublin'</span>])][</span>
-<span id="cb12-189"><a href="#cb12-189"></a>    [<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>]]</span>
-<span id="cb12-190"><a href="#cb12-190"></a>df_metropolie[<span class="st">'iteration'</span>]<span class="op">=</span><span class="dv">0</span> </span>
-<span id="cb12-191"><a href="#cb12-191"></a><span class="co">#df_metropolie['radius'] = radius(df_metropolie['population'])</span></span>
-<span id="cb12-192"><a href="#cb12-192"></a>df_metropolie<span class="op">=</span>df_metropolie.add_suffix(<span class="st">'_metro'</span>)</span>
-<span id="cb12-193"><a href="#cb12-193"></a>df_metropolie</span>
-<span id="cb12-194"><a href="#cb12-194"></a><span class="in">```</span></span>
-<span id="cb12-195"><a href="#cb12-195"></a></span>
-<span id="cb12-196"><a href="#cb12-196"></a><span class="fu">## metropolis absorption algorithm</span></span>
-<span id="cb12-197"><a href="#cb12-197"></a></span>
-<span id="cb12-198"><a href="#cb12-198"></a><span class="fu">### Instruction</span></span>
+<span id="cb12-182"><a href="#cb12-182"></a><span class="fu">## Metropolis in Poland</span></span>
+<span id="cb12-183"><a href="#cb12-183"></a></span>
+<span id="cb12-184"><a href="#cb12-184"></a><span class="co">[</span><span class="ot">wikipedia</span><span class="co">](https://pl.wikipedia.org/wiki/Obszar_metropolitalny)</span> Warszawa, Katowice, Kraków, Łódź, Trójmiasto, Poznań, Wrocław, Bydgoszcz, Szczecin, Lublin.</span>
+<span id="cb12-185"><a href="#cb12-185"></a></span>
+<span id="cb12-188"><a href="#cb12-188"></a><span class="in">```{python}</span></span>
+<span id="cb12-189"><a href="#cb12-189"></a>df_metropolie <span class="op">=</span> df[df.name.isin(</span>
+<span id="cb12-190"><a href="#cb12-190"></a>    [<span class="st">'Warsaw'</span>,<span class="st">'Katowice'</span>,<span class="st">'Kraków'</span>,<span class="st">'Łódź'</span>,</span>
+<span id="cb12-191"><a href="#cb12-191"></a>     <span class="st">'Gdańsk'</span>,<span class="st">'Gdynia'</span>,<span class="co">#'Trójmiasto',</span></span>
+<span id="cb12-192"><a href="#cb12-192"></a>     <span class="st">'Poznań'</span>,<span class="st">'Wrocław'</span>,<span class="st">'Bydgoszcz'</span>,<span class="st">'Szczecin'</span>,<span class="st">'Lublin'</span>])][</span>
+<span id="cb12-193"><a href="#cb12-193"></a>    [<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>]]</span>
+<span id="cb12-194"><a href="#cb12-194"></a>df_metropolie[<span class="st">'iteration'</span>]<span class="op">=</span><span class="dv">0</span> </span>
+<span id="cb12-195"><a href="#cb12-195"></a><span class="co">#df_metropolie['radius'] = radius(df_metropolie['population'])</span></span>
+<span id="cb12-196"><a href="#cb12-196"></a>df_metropolie<span class="op">=</span>df_metropolie.add_suffix(<span class="st">'_metro'</span>)</span>
+<span id="cb12-197"><a href="#cb12-197"></a>df_metropolie</span>
+<span id="cb12-198"><a href="#cb12-198"></a><span class="in">```</span></span>
 <span id="cb12-199"><a href="#cb12-199"></a></span>
-<span id="cb12-200"><a href="#cb12-200"></a><span class="ss">1.  </span>stworze id kolumne z indeksem</span>
+<span id="cb12-200"><a href="#cb12-200"></a><span class="fu">## metropolis absorption algorithm</span></span>
 <span id="cb12-201"><a href="#cb12-201"></a></span>
-<span id="cb12-202"><a href="#cb12-202"></a><span class="ss">2.  </span>zlacze tabele z metropoliami i wszystkimi miastami im do tej pory przypisanymi, wylicze zagregowana ludnosc oraz promien metropoli</span>
+<span id="cb12-202"><a href="#cb12-202"></a><span class="fu">### Instruction</span></span>
 <span id="cb12-203"><a href="#cb12-203"></a></span>
-<span id="cb12-204"><a href="#cb12-204"></a><span class="ss">3.  </span>croos joinuje do kazdego miasta bez przypisanej metropolii tabele z metropolia</span>
+<span id="cb12-204"><a href="#cb12-204"></a><span class="ss">1.  </span>stworze id kolumne z indeksem</span>
 <span id="cb12-205"><a href="#cb12-205"></a></span>
-<span id="cb12-206"><a href="#cb12-206"></a><span class="ss">4.  </span>wylicze odleglosc miejscowosci od metropoli i pozbede sie tych wierszy ktore sa poza promieniem</span>
+<span id="cb12-206"><a href="#cb12-206"></a><span class="ss">2.  </span>zlacze tabele z metropoliami i wszystkimi miastami im do tej pory przypisanymi, wylicze zagregowana ludnosc oraz promien metropoli</span>
 <span id="cb12-207"><a href="#cb12-207"></a></span>
-<span id="cb12-208"><a href="#cb12-208"></a><span class="ss">5.  </span>dla pozostalych miejscowosci wylicze moc metropolii</span>
+<span id="cb12-208"><a href="#cb12-208"></a><span class="ss">3.  </span>croos joinuje do kazdego miasta bez przypisanej metropolii tabele z metropolia</span>
 <span id="cb12-209"><a href="#cb12-209"></a></span>
-<span id="cb12-210"><a href="#cb12-210"></a><span class="ss">6.  </span>zrobie slice max groupujac po id miejscowosci pozostawiajc metropolie wchlaniajaca - tak powstanie tabela incrementalna do ktorej potem bede rbindowal nastepne tego typu tabele</span>
+<span id="cb12-210"><a href="#cb12-210"></a><span class="ss">4.  </span>wylicze odleglosc miejscowosci od metropoli i pozbede sie tych wierszy ktore sa poza promieniem</span>
 <span id="cb12-211"><a href="#cb12-211"></a></span>
-<span id="cb12-212"><a href="#cb12-212"></a><span class="ss">7.  </span>w obu tabelach powstanie tabele z indeksem mowiacy o n-iteracji z jakiej pochodzi przypisanie miejscowosci do metropolii oraz stan populacji</span>
+<span id="cb12-212"><a href="#cb12-212"></a><span class="ss">5.  </span>dla pozostalych miejscowosci wylicze moc metropolii</span>
 <span id="cb12-213"><a href="#cb12-213"></a></span>
-<span id="cb12-214"><a href="#cb12-214"></a><span class="ss">8.  </span>wszystko zamkne w lupie while ktory bedzie wykonywany tak dlugo jak zostanie odnotowany przyrost w tabeli incrementalnej</span>
+<span id="cb12-214"><a href="#cb12-214"></a><span class="ss">6.  </span>zrobie slice max groupujac po id miejscowosci pozostawiajc metropolie wchlaniajaca - tak powstanie tabela incrementalna do ktorej potem bede rbindowal nastepne tego typu tabele</span>
 <span id="cb12-215"><a href="#cb12-215"></a></span>
-<span id="cb12-218"><a href="#cb12-218"></a><span class="in">```{python}</span></span>
-<span id="cb12-219"><a href="#cb12-219"></a>df_cities <span class="op">=</span> df[[<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>]]</span>
-<span id="cb12-220"><a href="#cb12-220"></a>df_cities <span class="op">=</span> df_cities.loc[<span class="op">~</span>df_cities.city_id.isin(df_metropolie.city_id_metro)]</span>
-<span id="cb12-221"><a href="#cb12-221"></a>df_cities.head(<span class="dv">5</span>)</span>
-<span id="cb12-222"><a href="#cb12-222"></a><span class="in">```</span></span>
-<span id="cb12-223"><a href="#cb12-223"></a></span>
-<span id="cb12-224"><a href="#cb12-224"></a><span class="fu">### wlasciwy algorytm</span></span>
-<span id="cb12-225"><a href="#cb12-225"></a></span>
-<span id="cb12-228"><a href="#cb12-228"></a><span class="in">```{python}</span></span>
-<span id="cb12-229"><a href="#cb12-229"></a>df_miasta_w_puli <span class="op">=</span>df_cities</span>
-<span id="cb12-230"><a href="#cb12-230"></a>column_names <span class="op">=</span> [<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>] <span class="op">+</span>df_metropolie.columns.values.tolist()</span>
-<span id="cb12-231"><a href="#cb12-231"></a>df_miasta_wchloniete<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>column_names)</span>
-<span id="cb12-232"><a href="#cb12-232"></a>start <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb12-233"><a href="#cb12-233"></a>iteration <span class="op">=</span><span class="dv">0</span></span>
-<span id="cb12-234"><a href="#cb12-234"></a></span>
-<span id="cb12-235"><a href="#cb12-235"></a></span>
-<span id="cb12-236"><a href="#cb12-236"></a><span class="co"># start funkcji</span></span>
-<span id="cb12-237"><a href="#cb12-237"></a><span class="cf">while</span> start <span class="op">==</span> <span class="va">True</span>:</span>
-<span id="cb12-238"><a href="#cb12-238"></a>    df_metropolie_powiekszone<span class="op">=</span>df_metropolie.append(df_miasta_wchloniete, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-239"><a href="#cb12-239"></a>    df_metropolie_powiekszone.population <span class="op">=</span> df_metropolie_powiekszone.population.combine_first(df_metropolie_powiekszone.population_metro)</span>
-<span id="cb12-240"><a href="#cb12-240"></a>    </span>
-<span id="cb12-241"><a href="#cb12-241"></a>    df_metropolie_powiekszone_popul <span class="op">=</span> df_metropolie_powiekszone.groupby(</span>
-<span id="cb12-242"><a href="#cb12-242"></a>        [<span class="st">'city_id_metro'</span>,<span class="st">'name_metro'</span>,<span class="st">'population_metro'</span>,<span class="st">'latitude_metro'</span>,<span class="st">'longitude_metro'</span>,]).agg(</span>
-<span id="cb12-243"><a href="#cb12-243"></a>        {<span class="st">'population'</span>:[<span class="st">'sum'</span>]}).reset_index()</span>
-<span id="cb12-244"><a href="#cb12-244"></a>    df_metropolie_powiekszone_popul.columns <span class="op">=</span> df_metropolie_powiekszone_popul.columns.droplevel(<span class="dv">1</span>)</span>
-<span id="cb12-245"><a href="#cb12-245"></a>    df_metropolie_powiekszone_popul[<span class="st">'radius'</span>] <span class="op">=</span> radius(df_metropolie_powiekszone_popul[<span class="st">'population'</span>])</span>
-<span id="cb12-246"><a href="#cb12-246"></a>    df_miasta_w_puli[<span class="st">'key'</span>] <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb12-247"><a href="#cb12-247"></a>    df_metropolie_powiekszone_popul[<span class="st">'key'</span>] <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb12-248"><a href="#cb12-248"></a>    df_x <span class="op">=</span> pd.merge(df_miasta_w_puli, df_metropolie_powiekszone_popul, on<span class="op">=</span><span class="st">'key'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>,<span class="st">'_y'</span>)).drop(<span class="st">"key"</span>, <span class="dv">1</span>)</span>
-<span id="cb12-249"><a href="#cb12-249"></a>    <span class="co">#calculating distance between two coordinates </span></span>
-<span id="cb12-250"><a href="#cb12-250"></a>    <span class="co">#https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude</span></span>
-<span id="cb12-251"><a href="#cb12-251"></a>    distances_km <span class="op">=</span> []</span>
-<span id="cb12-252"><a href="#cb12-252"></a>    <span class="cf">for</span> row <span class="kw">in</span> df_x.itertuples():</span>
-<span id="cb12-253"><a href="#cb12-253"></a>        distances_km.append(</span>
-<span id="cb12-254"><a href="#cb12-254"></a>            haversine_distance_code( row.latitude, row.longitude ,row.latitude_metro, row.longitude_metro)</span>
-<span id="cb12-255"><a href="#cb12-255"></a>        )</span>
-<span id="cb12-256"><a href="#cb12-256"></a>    df_x[<span class="st">'distance_km'</span>] <span class="op">=</span> distances_km</span>
-<span id="cb12-257"><a href="#cb12-257"></a>    df_x <span class="op">=</span> df_x[df_x.radius <span class="op">&gt;=</span> df_x.distance_km]</span>
-<span id="cb12-258"><a href="#cb12-258"></a>    df_x[<span class="st">'impact'</span>] <span class="op">=</span> _calcualate_metrocity_impact(df_x.radius,df_x.distance_km)</span>
-<span id="cb12-259"><a href="#cb12-259"></a>    <span class="co">#stwierdzam do ktorej finalnie metropoli miejscowosci zostaje zaliczon</span></span>
-<span id="cb12-260"><a href="#cb12-260"></a>    idx <span class="op">=</span> df_x.groupby([<span class="st">'name'</span>,<span class="st">'population'</span>])[<span class="st">'impact'</span>].transform(<span class="bu">max</span>) <span class="op">==</span> df_x[<span class="st">'impact'</span>]</span>
-<span id="cb12-261"><a href="#cb12-261"></a>    df_x <span class="op">=</span> df_x[idx]</span>
-<span id="cb12-262"><a href="#cb12-262"></a>    iteration<span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb12-263"><a href="#cb12-263"></a>    df_x[<span class="st">'iteration_metro'</span>]<span class="op">=</span>iteration</span>
-<span id="cb12-264"><a href="#cb12-264"></a>    pre_rows_num<span class="op">=</span>df_miasta_wchloniete.shape[<span class="dv">0</span>]</span>
-<span id="cb12-265"><a href="#cb12-265"></a>    df_miasta_wchloniete<span class="op">=</span>df_miasta_wchloniete.append(</span>
-<span id="cb12-266"><a href="#cb12-266"></a>        df_x[column_names], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-267"><a href="#cb12-267"></a>    <span class="co">#pozbywam sie miast juz wchlonietych</span></span>
-<span id="cb12-268"><a href="#cb12-268"></a>    indx <span class="op">=</span> df_miasta_w_puli.city_id.isin(df_miasta_wchloniete.city_id)</span>
-<span id="cb12-269"><a href="#cb12-269"></a>    df_miasta_w_puli <span class="op">=</span> df_miasta_w_puli[<span class="op">~</span>indx]</span>
-<span id="cb12-270"><a href="#cb12-270"></a>    <span class="cf">if</span> pre_rows_num <span class="op">==</span> df_miasta_wchloniete.shape[<span class="dv">0</span>]:</span>
-<span id="cb12-271"><a href="#cb12-271"></a>        start <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb12-272"><a href="#cb12-272"></a></span>
-<span id="cb12-273"><a href="#cb12-273"></a>df_metropolie_powiekszone_popul <span class="op">=</span> df_metropolie_powiekszone.groupby(</span>
-<span id="cb12-274"><a href="#cb12-274"></a>    [<span class="st">'city_id_metro'</span>,<span class="st">'name_metro'</span>,<span class="st">'population_metro'</span>,<span class="st">'latitude_metro'</span>,<span class="st">'longitude_metro'</span>,]).agg(</span>
-<span id="cb12-275"><a href="#cb12-275"></a>    {<span class="st">'population'</span>:[<span class="st">'sum'</span>]}).reset_index()</span>
-<span id="cb12-276"><a href="#cb12-276"></a>df_metropolie_powiekszone_popul.columns <span class="op">=</span> df_metropolie_powiekszone_popul.columns.droplevel(<span class="dv">1</span>)</span>
-<span id="cb12-277"><a href="#cb12-277"></a>df_metropolie_powiekszone_popul[<span class="st">'radius'</span>] <span class="op">=</span> radius(df_metropolie_powiekszone_popul[<span class="st">'population'</span>])</span>
-<span id="cb12-278"><a href="#cb12-278"></a></span>
-<span id="cb12-279"><a href="#cb12-279"></a></span>
-<span id="cb12-280"><a href="#cb12-280"></a><span class="in">```</span></span>
-<span id="cb12-281"><a href="#cb12-281"></a></span>
-<span id="cb12-284"><a href="#cb12-284"></a><span class="in">```{python}</span></span>
-<span id="cb12-285"><a href="#cb12-285"></a><span class="co">#finalne populacje metropoli</span></span>
-<span id="cb12-286"><a href="#cb12-286"></a>df_metropolie_powiekszone_popul.head(<span class="dv">5</span>)</span>
-<span id="cb12-287"><a href="#cb12-287"></a></span>
-<span id="cb12-288"><a href="#cb12-288"></a><span class="co">#przypisanie miast do metropoli wraz numerem iteracji</span></span>
-<span id="cb12-289"><a href="#cb12-289"></a>df_miasta_wchloniete.head(<span class="dv">5</span>)</span>
-<span id="cb12-290"><a href="#cb12-290"></a><span class="in">```</span></span>
+<span id="cb12-216"><a href="#cb12-216"></a><span class="ss">7.  </span>w obu tabelach powstanie tabele z indeksem mowiacy o n-iteracji z jakiej pochodzi przypisanie miejscowosci do metropolii oraz stan populacji</span>
+<span id="cb12-217"><a href="#cb12-217"></a></span>
+<span id="cb12-218"><a href="#cb12-218"></a><span class="ss">8.  </span>wszystko zamkne w lupie while ktory bedzie wykonywany tak dlugo jak zostanie odnotowany przyrost w tabeli incrementalnej</span>
+<span id="cb12-219"><a href="#cb12-219"></a></span>
+<span id="cb12-222"><a href="#cb12-222"></a><span class="in">```{python}</span></span>
+<span id="cb12-223"><a href="#cb12-223"></a>df_cities <span class="op">=</span> df[[<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>,<span class="st">'latitude'</span>,<span class="st">'longitude'</span>]]</span>
+<span id="cb12-224"><a href="#cb12-224"></a>df_cities <span class="op">=</span> df_cities.loc[<span class="op">~</span>df_cities.city_id.isin(df_metropolie.city_id_metro)]</span>
+<span id="cb12-225"><a href="#cb12-225"></a>df_cities.head(<span class="dv">5</span>)</span>
+<span id="cb12-226"><a href="#cb12-226"></a><span class="in">```</span></span>
+<span id="cb12-227"><a href="#cb12-227"></a></span>
+<span id="cb12-228"><a href="#cb12-228"></a><span class="fu">### wlasciwy algorytm</span></span>
+<span id="cb12-229"><a href="#cb12-229"></a></span>
+<span id="cb12-232"><a href="#cb12-232"></a><span class="in">```{python}</span></span>
+<span id="cb12-233"><a href="#cb12-233"></a>df_miasta_w_puli <span class="op">=</span>df_cities</span>
+<span id="cb12-234"><a href="#cb12-234"></a>column_names <span class="op">=</span> [<span class="st">'city_id'</span>,<span class="st">'name'</span>,<span class="st">'population'</span>] <span class="op">+</span>df_metropolie.columns.values.tolist()</span>
+<span id="cb12-235"><a href="#cb12-235"></a>df_miasta_wchloniete<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>column_names)</span>
+<span id="cb12-236"><a href="#cb12-236"></a>start <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb12-237"><a href="#cb12-237"></a>iteration <span class="op">=</span><span class="dv">0</span></span>
+<span id="cb12-238"><a href="#cb12-238"></a></span>
+<span id="cb12-239"><a href="#cb12-239"></a></span>
+<span id="cb12-240"><a href="#cb12-240"></a><span class="co"># start funkcji</span></span>
+<span id="cb12-241"><a href="#cb12-241"></a><span class="cf">while</span> start <span class="op">==</span> <span class="va">True</span>:</span>
+<span id="cb12-242"><a href="#cb12-242"></a>    df_metropolie_powiekszone<span class="op">=</span>df_metropolie.append(df_miasta_wchloniete, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-243"><a href="#cb12-243"></a>    df_metropolie_powiekszone.population <span class="op">=</span> df_metropolie_powiekszone.population.combine_first(df_metropolie_powiekszone.population_metro)</span>
+<span id="cb12-244"><a href="#cb12-244"></a>    </span>
+<span id="cb12-245"><a href="#cb12-245"></a>    df_metropolie_powiekszone_popul <span class="op">=</span> df_metropolie_powiekszone.groupby(</span>
+<span id="cb12-246"><a href="#cb12-246"></a>        [<span class="st">'city_id_metro'</span>,<span class="st">'name_metro'</span>,<span class="st">'population_metro'</span>,<span class="st">'latitude_metro'</span>,<span class="st">'longitude_metro'</span>,]).agg(</span>
+<span id="cb12-247"><a href="#cb12-247"></a>        {<span class="st">'population'</span>:[<span class="st">'sum'</span>]}).reset_index()</span>
+<span id="cb12-248"><a href="#cb12-248"></a>    df_metropolie_powiekszone_popul.columns <span class="op">=</span> df_metropolie_powiekszone_popul.columns.droplevel(<span class="dv">1</span>)</span>
+<span id="cb12-249"><a href="#cb12-249"></a>    df_metropolie_powiekszone_popul[<span class="st">'radius'</span>] <span class="op">=</span> radius(df_metropolie_powiekszone_popul[<span class="st">'population'</span>])</span>
+<span id="cb12-250"><a href="#cb12-250"></a>    df_miasta_w_puli[<span class="st">'key'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb12-251"><a href="#cb12-251"></a>    df_metropolie_powiekszone_popul[<span class="st">'key'</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb12-252"><a href="#cb12-252"></a>    df_x <span class="op">=</span> pd.merge(df_miasta_w_puli, df_metropolie_powiekszone_popul, on<span class="op">=</span><span class="st">'key'</span>, suffixes<span class="op">=</span>(<span class="st">''</span>,<span class="st">'_y'</span>)).drop(<span class="st">"key"</span>, <span class="dv">1</span>)</span>
+<span id="cb12-253"><a href="#cb12-253"></a>    <span class="co">#calculating distance between two coordinates </span></span>
+<span id="cb12-254"><a href="#cb12-254"></a>    <span class="co">#https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude</span></span>
+<span id="cb12-255"><a href="#cb12-255"></a>    distances_km <span class="op">=</span> []</span>
+<span id="cb12-256"><a href="#cb12-256"></a>    <span class="cf">for</span> row <span class="kw">in</span> df_x.itertuples():</span>
+<span id="cb12-257"><a href="#cb12-257"></a>        distances_km.append(</span>
+<span id="cb12-258"><a href="#cb12-258"></a>            haversine_distance_code( row.latitude, row.longitude ,row.latitude_metro, row.longitude_metro)</span>
+<span id="cb12-259"><a href="#cb12-259"></a>        )</span>
+<span id="cb12-260"><a href="#cb12-260"></a>    df_x[<span class="st">'distance_km'</span>] <span class="op">=</span> distances_km</span>
+<span id="cb12-261"><a href="#cb12-261"></a>    df_x <span class="op">=</span> df_x[df_x.radius <span class="op">&gt;=</span> df_x.distance_km]</span>
+<span id="cb12-262"><a href="#cb12-262"></a>    df_x[<span class="st">'impact'</span>] <span class="op">=</span> _calcualate_metrocity_impact(df_x.radius,df_x.distance_km)</span>
+<span id="cb12-263"><a href="#cb12-263"></a>    <span class="co">#stwierdzam do ktorej finalnie metropoli miejscowosci zostaje zaliczon</span></span>
+<span id="cb12-264"><a href="#cb12-264"></a>    idx <span class="op">=</span> df_x.groupby([<span class="st">'name'</span>,<span class="st">'population'</span>])[<span class="st">'impact'</span>].transform(<span class="bu">max</span>) <span class="op">==</span> df_x[<span class="st">'impact'</span>]</span>
+<span id="cb12-265"><a href="#cb12-265"></a>    df_x <span class="op">=</span> df_x[idx]</span>
+<span id="cb12-266"><a href="#cb12-266"></a>    iteration<span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-267"><a href="#cb12-267"></a>    df_x[<span class="st">'iteration_metro'</span>]<span class="op">=</span>iteration</span>
+<span id="cb12-268"><a href="#cb12-268"></a>    pre_rows_num<span class="op">=</span>df_miasta_wchloniete.shape[<span class="dv">0</span>]</span>
+<span id="cb12-269"><a href="#cb12-269"></a>    df_miasta_wchloniete<span class="op">=</span>df_miasta_wchloniete.append(</span>
+<span id="cb12-270"><a href="#cb12-270"></a>        df_x[column_names], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-271"><a href="#cb12-271"></a>    <span class="co">#pozbywam sie miast juz wchlonietych</span></span>
+<span id="cb12-272"><a href="#cb12-272"></a>    indx <span class="op">=</span> df_miasta_w_puli.city_id.isin(df_miasta_wchloniete.city_id)</span>
+<span id="cb12-273"><a href="#cb12-273"></a>    df_miasta_w_puli <span class="op">=</span> df_miasta_w_puli[<span class="op">~</span>indx]</span>
+<span id="cb12-274"><a href="#cb12-274"></a>    <span class="cf">if</span> pre_rows_num <span class="op">==</span> df_miasta_wchloniete.shape[<span class="dv">0</span>]:</span>
+<span id="cb12-275"><a href="#cb12-275"></a>        start <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb12-276"><a href="#cb12-276"></a></span>
+<span id="cb12-277"><a href="#cb12-277"></a>df_metropolie_powiekszone_popul <span class="op">=</span> df_metropolie_powiekszone.groupby(</span>
+<span id="cb12-278"><a href="#cb12-278"></a>    [<span class="st">'city_id_metro'</span>,<span class="st">'name_metro'</span>,<span class="st">'population_metro'</span>,<span class="st">'latitude_metro'</span>,<span class="st">'longitude_metro'</span>,]).agg(</span>
+<span id="cb12-279"><a href="#cb12-279"></a>    {<span class="st">'population'</span>:[<span class="st">'sum'</span>]}).reset_index()</span>
+<span id="cb12-280"><a href="#cb12-280"></a>df_metropolie_powiekszone_popul.columns <span class="op">=</span> df_metropolie_powiekszone_popul.columns.droplevel(<span class="dv">1</span>)</span>
+<span id="cb12-281"><a href="#cb12-281"></a>df_metropolie_powiekszone_popul[<span class="st">'radius'</span>] <span class="op">=</span> radius(df_metropolie_powiekszone_popul[<span class="st">'population'</span>])</span>
+<span id="cb12-282"><a href="#cb12-282"></a></span>
+<span id="cb12-283"><a href="#cb12-283"></a></span>
+<span id="cb12-284"><a href="#cb12-284"></a><span class="in">```</span></span>
+<span id="cb12-285"><a href="#cb12-285"></a></span>
+<span id="cb12-288"><a href="#cb12-288"></a><span class="in">```{python}</span></span>
+<span id="cb12-289"><a href="#cb12-289"></a><span class="co">#finalne populacje metropoli</span></span>
+<span id="cb12-290"><a href="#cb12-290"></a>df_metropolie_powiekszone_popul.head(<span class="dv">5</span>)</span>
+<span id="cb12-291"><a href="#cb12-291"></a></span>
+<span id="cb12-292"><a href="#cb12-292"></a><span class="co">#przypisanie miast do metropoli wraz numerem iteracji</span></span>
+<span id="cb12-293"><a href="#cb12-293"></a>df_miasta_wchloniete.head(<span class="dv">5</span>)</span>
+<span id="cb12-294"><a href="#cb12-294"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

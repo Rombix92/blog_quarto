@@ -3,7 +3,7 @@ description: R data.table
 title: "R lib: data.table"
 categories: ["data.table"]
 tags: ["R", "data.table", "datagrapling","rolling joins"]
-toc: true
+toc: TRUE
 ---
 
 ```{r markdown_parameters, include=FALSE}

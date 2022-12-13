@@ -3,7 +3,7 @@ description: Describing statistical methods
 title: Statistics
 categories: ["Statistics"]
 tags: ["R", "Statistics", "Bayes"]
-toc: true
+toc: TRUE
 ---
 
 ## Logistic Regression

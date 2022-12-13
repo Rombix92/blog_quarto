@@ -41,12 +41,15 @@ Firstly I choose prefered python environment on which I have installed useful li
 
 ```{r}
 library(reticulate)
+
+Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python")
+reticulate::py_config()
+
 myenvs=conda_list()
 envname=myenvs$name[3]
 use_condaenv(envname, required = TRUE)
 
-Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python")
-reticulate::py_config()
+
 ```
 
 ```{python, include=FALSE}

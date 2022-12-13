@@ -2,7 +2,7 @@
 description: Presentation of R Markdown functionality
 title: R_Markdown
 categories: ["Rmarkdown"]
-toc: true
+toc: TRUE
 ---
 
 ```{r data, , include=FALSE}

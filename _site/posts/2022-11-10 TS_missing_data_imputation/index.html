@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -193,7 +193,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dealing-with-missing-data-in-time-series" id="toc-dealing-with-missing-data-in-time-series" class="nav-link active" data-scroll-target="#dealing-with-missing-data-in-time-series">Dealing with missing data in Time Series</a></li>
+  <li><a href="#metrics" id="toc-metrics" class="nav-link" data-scroll-target="#metrics">Metrics</a>
+  <ul class="collapse">
+  <li><a href="#autocorelation" id="toc-autocorelation" class="nav-link" data-scroll-target="#autocorelation">autocorelation</a></li>
+  </ul></li>
+  <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">Visualisation</a>
+  <ul class="collapse">
+  <li><a href="#partial-autocorelation" id="toc-partial-autocorelation" class="nav-link" data-scroll-target="#partial-autocorelation">partial-autocorelation</a></li>
+  </ul></li>
+  <li><a href="#simulation" id="toc-simulation" class="nav-link" data-scroll-target="#simulation">Simulation</a></li>
+  <li><a href="#smoothing" id="toc-smoothing" class="nav-link" data-scroll-target="#smoothing">Smoothing</a>
+  <ul class="collapse">
+  <li><a href="#moving-average" id="toc-moving-average" class="nav-link" data-scroll-target="#moving-average">moving average</a></li>
+  <li><a href="#weighted-moving-average" id="toc-weighted-moving-average" class="nav-link" data-scroll-target="#weighted-moving-average">Weighted Moving Average</a></li>
+  <li><a href="#exponentially-weightening" id="toc-exponentially-weightening" class="nav-link" data-scroll-target="#exponentially-weightening">exponentially weightening</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#double-exponential-smoothing" id="toc-double-exponential-smoothing" class="nav-link" data-scroll-target="#double-exponential-smoothing">Double exponential smoothing</a></li>
+  <li><a href="#triple-exponential-smoothing" id="toc-triple-exponential-smoothing" class="nav-link" data-scroll-target="#triple-exponential-smoothing">Triple Exponential Smoothing</a></li>
+  <li><a href="#fitting-data" id="toc-fitting-data" class="nav-link" data-scroll-target="#fitting-data">fitting data</a></li>
+  <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot">plot</a></li>
+  </ul></li>
+  <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression">regression</a>
+  <ul class="collapse">
+  <li><a href="#autoregression-models" id="toc-autoregression-models" class="nav-link" data-scroll-target="#autoregression-models">autoregression models</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -299,13 +331,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-92"><a href="#cb1-92"></a><span class="do">## Using root mean square error to compare methods</span></span>
 <span id="cb1-93"><a href="#cb1-93"></a><span class="fu">print</span>(rand.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
 <span id="cb1-94"><a href="#cb1-94"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="do">##      impute.ff impute.rm.nolookahead impute.rm.lookahead   impute.li</span></span>
-<span id="cb1-96"><a href="#cb1-96"></a><span class="do">## 1: 0.009476615           0.007698324         0.005860335 0.001494989</span></span>
+<span id="cb1-95"><a href="#cb1-95"></a><span class="do">##      impute.ff impute.rm.nolookahead impute.rm.lookahead impute.li</span></span>
+<span id="cb1-96"><a href="#cb1-96"></a><span class="do">## 1: 0.006336303           0.007951505           0.1085368 0.0263179</span></span>
 <span id="cb1-97"><a href="#cb1-97"></a></span>
 <span id="cb1-98"><a href="#cb1-98"></a><span class="fu">print</span>(bias.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
 <span id="cb1-99"><a href="#cb1-99"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="do">##     impute.ff impute.rm.nolookahead impute.rm.lookahead   impute.li</span></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="do">## 1: 0.04706013            0.02379379          0.01049718 0.003763425</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-100"><a href="#cb1-100"></a><span class="do">##      impute.ff impute.rm.nolookahead impute.rm.lookahead   impute.li</span></span>
+<span id="cb1-101"><a href="#cb1-101"></a><span class="do">## 1: 0.006982183           0.004494382         0.003303371 0.001120391</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -360,13 +392,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-7"><a href="#cb5-7"></a><span class="fu">timevis</span>(d[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d), <span class="dv">20</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="htmlwidget-64daad4f11989b4766f5" class="timevis html-widget" style="width:100%;height:384px;">
+<div id="htmlwidget-9b16b1134d345b8a652d" class="timevis html-widget" style="width:100%;height:384px;">
 <div class="btn-group zoom-menu">
 <button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
 <button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
 </div>
 </div>
-<script type="application/json" data-for="htmlwidget-64daad4f11989b4766f5">{"x":{"items":[{"content":"660","start":"2017-08-23 14:49:18","end":"2018-05-29 11:03:34"},{"content":"929","start":"2015-08-08 12:34:03","end":"2018-03-14 11:22:06"},{"content":"386","start":"2015-04-08 14:57:46","end":"2017-08-07 17:32:33"},{"content":"688","start":"2017-08-10 22:58:21","end":"2018-02-01 18:02:39"},{"content":"101","start":"2016-09-24 13:22:33","end":"2017-10-14 11:34:39"},{"content":"380","start":"2017-02-15 13:54:13","end":"2017-12-11 16:51:45"},{"content":"179","start":"2018-03-17 22:12:10","end":"2018-04-24 12:16:23"},{"content":"807","start":"2017-10-01 20:53:05","end":"2018-03-28 13:47:44"},{"content":"527","start":"2016-06-22 16:35:36","end":"2016-10-02 13:10:15"},{"content":"678","start":"2016-05-13 18:41:28","end":"2017-06-23 15:23:53"},{"content":"730","start":"2016-10-17 12:46:53","end":"2017-07-18 14:48:49"},{"content":"69","start":"2017-06-14 12:50:54","end":"2017-11-08 13:58:54"},{"content":"16","start":"2017-05-31 15:59:39","end":"2017-10-01 12:42:23"},{"content":"597","start":"2017-08-24 11:58:39","end":"2018-04-13 16:25:31"},{"content":"665","start":"2016-01-18 21:27:10","end":"2018-05-08 22:19:58"},{"content":"188","start":"2016-09-22 14:22:17","end":"2017-02-02 17:51:34"},{"content":"134","start":"2015-02-11 20:47:34","end":"2018-04-10 15:36:12"},{"content":"924","start":"2018-04-05 13:36:40","end":"2018-05-22 16:24:25"},{"content":"912","start":"2018-03-07 17:45:30","end":"2018-05-07 11:26:37"},{"content":"906","start":"2017-02-16 20:59:12","end":"2017-10-16 21:01:36"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-9b16b1134d345b8a652d">{"x":{"items":[{"content":"887","start":"2017-05-27 13:23:39","end":"2018-02-19 12:06:37"},{"content":"308","start":"2018-05-15 13:15:10","end":"2018-05-19 16:29:51"},{"content":"932","start":"2015-08-09 17:55:18","end":"2018-02-22 16:03:49"},{"content":"545","start":"2017-12-14 13:20:15","end":"2018-01-23 22:59:24"},{"content":"407","start":"2017-08-11 20:11:59","end":"2017-09-28 16:59:38"},{"content":"418","start":"2016-08-18 17:42:42","end":"2018-02-03 17:51:29"},{"content":"949","start":"2017-01-16 21:15:38","end":"2018-04-29 22:50:09"},{"content":"908","start":"2016-04-22 15:44:53","end":"2018-04-25 20:05:41"},{"content":"443","start":"2017-09-24 17:43:08","end":"2018-02-01 22:13:25"},{"content":"821","start":"2017-08-28 19:08:08","end":"2018-03-07 11:14:12"},{"content":"705","start":"2015-08-31 19:14:29","end":"2017-08-01 22:24:31"},{"content":"24","start":"2016-08-19 17:06:20","end":"2018-04-09 12:57:00"},{"content":"467","start":"2018-01-20 12:07:21","end":"2018-04-23 15:29:12"},{"content":"653","start":"2016-07-12 21:09:46","end":"2018-06-03 11:12:41"},{"content":"204","start":"2017-04-22 11:30:18","end":"2018-01-13 16:34:12"},{"content":"920","start":"2017-01-17 18:30:57","end":"2017-06-02 16:51:40"},{"content":"673","start":"2017-10-13 13:21:45","end":"2018-05-28 22:42:27"},{"content":"726","start":"2015-09-13 20:40:56","end":"2017-12-28 18:38:25"},{"content":"75","start":"2015-03-02 18:00:01","end":"2018-01-11 20:18:27"},{"content":"929","start":"2015-08-08 12:34:03","end":"2018-03-14 11:22:06"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="partial-autocorelation" class="level3">
@@ -897,525 +929,526 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb19-2"><a href="#cb19-2"></a><span class="an">title:</span><span class="co"> "TS - missing data imputation &amp; Smoothing"</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a><span class="an">tags:</span><span class="co"> ['missing data','time series','imputation', 'python', 'R']</span></span>
 <span id="cb19-4"><a href="#cb19-4"></a><span class="an">categories:</span><span class="co"> ['Time Series', 'Smoothing']</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co">---</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#markdown ----</span></span>
-<span id="cb19-9"><a href="#cb19-9"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
-<span id="cb19-10"><a href="#cb19-10"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
-<span id="cb19-11"><a href="#cb19-11"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
-<span id="cb19-12"><a href="#cb19-12"></a>                      ) </span>
-<span id="cb19-13"><a href="#cb19-13"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
-<span id="cb19-14"><a href="#cb19-14"></a></span>
-<span id="cb19-15"><a href="#cb19-15"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb19-16"><a href="#cb19-16"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
-<span id="cb19-17"><a href="#cb19-17"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb19-18"><a href="#cb19-18"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
-<span id="cb19-19"><a href="#cb19-19"></a>                      )</span>
-<span id="cb19-20"><a href="#cb19-20"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
-<span id="cb19-21"><a href="#cb19-21"></a><span class="in">```</span></span>
-<span id="cb19-22"><a href="#cb19-22"></a></span>
-<span id="cb19-23"><a href="#cb19-23"></a><span class="in">```{r, include =FALSE}</span></span>
-<span id="cb19-24"><a href="#cb19-24"></a></span>
-<span id="cb19-25"><a href="#cb19-25"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb19-26"><a href="#cb19-26"></a></span>
-<span id="cb19-27"><a href="#cb19-27"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
-<span id="cb19-28"><a href="#cb19-28"></a></span>
-<span id="cb19-29"><a href="#cb19-29"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
-<span id="cb19-30"><a href="#cb19-30"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
-<span id="cb19-31"><a href="#cb19-31"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-32"><a href="#cb19-32"></a></span>
-<span id="cb19-33"><a href="#cb19-33"></a><span class="in">```</span></span>
-<span id="cb19-34"><a href="#cb19-34"></a></span>
-<span id="cb19-35"><a href="#cb19-35"></a><span class="in">```{r, include =FALSE}</span></span>
-<span id="cb19-36"><a href="#cb19-36"></a>data_file_path <span class="ot">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
-<span id="cb19-37"><a href="#cb19-37"></a><span class="in">```</span></span>
-<span id="cb19-38"><a href="#cb19-38"></a></span>
-<span id="cb19-39"><a href="#cb19-39"></a><span class="fu">## Dealing with missing data in Time Series</span></span>
-<span id="cb19-40"><a href="#cb19-40"></a></span>
-<span id="cb19-43"><a href="#cb19-43"></a><span class="in">```{r}</span></span>
-<span id="cb19-44"><a href="#cb19-44"></a><span class="fu">require</span>(zoo)</span>
-<span id="cb19-45"><a href="#cb19-45"></a><span class="fu">require</span>(data.table)</span>
-<span id="cb19-46"><a href="#cb19-46"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb19-47"><a href="#cb19-47"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb19-48"><a href="#cb19-48"></a></span>
-<span id="cb19-49"><a href="#cb19-49"></a>unemp <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">paste0</span>(data_file_path,<span class="st">"bezrobocie_USA.csv"</span>)) <span class="sc">%&gt;%</span> data.table<span class="sc">::</span><span class="fu">melt</span>( <span class="at">id.vars=</span><span class="st">'Year'</span>,</span>
-<span id="cb19-50"><a href="#cb19-50"></a>                                                           <span class="at">variable.name =</span> <span class="st">"months"</span>,</span>
-<span id="cb19-51"><a href="#cb19-51"></a>                                                           <span class="at">value.name=</span><span class="st">'UNRATE'</span>) <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(</span>
-<span id="cb19-52"><a href="#cb19-52"></a>  <span class="fu">data.frame</span>(<span class="at">month_nr=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),</span>
-<span id="cb19-53"><a href="#cb19-53"></a>             <span class="at">months=</span> <span class="fu">c</span>(<span class="st">"Jan"</span>,<span class="st">"Feb"</span>,<span class="st">"Mar"</span>,</span>
-<span id="cb19-54"><a href="#cb19-54"></a>                       <span class="st">"Apr"</span>,<span class="st">"May"</span>,<span class="st">"Jun"</span>,</span>
-<span id="cb19-55"><a href="#cb19-55"></a>                       <span class="st">"Jul"</span>,<span class="st">"Aug"</span>,<span class="st">"Sep"</span>,</span>
-<span id="cb19-56"><a href="#cb19-56"></a>                       <span class="st">"Oct"</span>,<span class="st">"Nov"</span>,<span class="st">"Dec"</span>))</span>
-<span id="cb19-57"><a href="#cb19-57"></a>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">DATE=</span><span class="fu">as_date</span>(<span class="st">'0000-01-01'</span>,<span class="at">format =</span> <span class="st">'%Y-%m-%d'</span>)<span class="sc">+</span><span class="fu">years</span>(<span class="fu">as.numeric</span>(Year)) <span class="sc">+</span> <span class="fu">months</span>(month_nr<span class="dv">-1</span>)) </span>
-<span id="cb19-58"><a href="#cb19-58"></a></span>
-<span id="cb19-59"><a href="#cb19-59"></a><span class="fu">head</span>(unemp)</span>
-<span id="cb19-60"><a href="#cb19-60"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="an">toc:</span><span class="co"> TRUE</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">---</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#markdown ----</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb19-11"><a href="#cb19-11"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb19-12"><a href="#cb19-12"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a>                      ) </span>
+<span id="cb19-14"><a href="#cb19-14"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a></span>
+<span id="cb19-16"><a href="#cb19-16"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-17"><a href="#cb19-17"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb19-18"><a href="#cb19-18"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb19-19"><a href="#cb19-19"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
+<span id="cb19-20"><a href="#cb19-20"></a>                      )</span>
+<span id="cb19-21"><a href="#cb19-21"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb19-22"><a href="#cb19-22"></a><span class="in">```</span></span>
+<span id="cb19-23"><a href="#cb19-23"></a></span>
+<span id="cb19-24"><a href="#cb19-24"></a><span class="in">```{r, include =FALSE}</span></span>
+<span id="cb19-25"><a href="#cb19-25"></a></span>
+<span id="cb19-26"><a href="#cb19-26"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb19-27"><a href="#cb19-27"></a></span>
+<span id="cb19-28"><a href="#cb19-28"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">"/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python"</span>)</span>
+<span id="cb19-29"><a href="#cb19-29"></a></span>
+<span id="cb19-30"><a href="#cb19-30"></a>myenvs<span class="ot">=</span><span class="fu">conda_list</span>()</span>
+<span id="cb19-31"><a href="#cb19-31"></a>envname<span class="ot">=</span>myenvs<span class="sc">$</span>name[<span class="dv">3</span>]</span>
+<span id="cb19-32"><a href="#cb19-32"></a><span class="fu">use_condaenv</span>(envname, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-33"><a href="#cb19-33"></a></span>
+<span id="cb19-34"><a href="#cb19-34"></a><span class="in">```</span></span>
+<span id="cb19-35"><a href="#cb19-35"></a></span>
+<span id="cb19-36"><a href="#cb19-36"></a><span class="in">```{r, include =FALSE}</span></span>
+<span id="cb19-37"><a href="#cb19-37"></a>data_file_path <span class="ot">=</span> <span class="st">'/Users/lrabalski1/Desktop/prv/data/'</span></span>
+<span id="cb19-38"><a href="#cb19-38"></a><span class="in">```</span></span>
+<span id="cb19-39"><a href="#cb19-39"></a></span>
+<span id="cb19-40"><a href="#cb19-40"></a><span class="fu">## Dealing with missing data in Time Series</span></span>
+<span id="cb19-41"><a href="#cb19-41"></a></span>
+<span id="cb19-44"><a href="#cb19-44"></a><span class="in">```{r}</span></span>
+<span id="cb19-45"><a href="#cb19-45"></a><span class="fu">require</span>(zoo)</span>
+<span id="cb19-46"><a href="#cb19-46"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb19-47"><a href="#cb19-47"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb19-48"><a href="#cb19-48"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb19-49"><a href="#cb19-49"></a></span>
+<span id="cb19-50"><a href="#cb19-50"></a>unemp <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">paste0</span>(data_file_path,<span class="st">"bezrobocie_USA.csv"</span>)) <span class="sc">%&gt;%</span> data.table<span class="sc">::</span><span class="fu">melt</span>( <span class="at">id.vars=</span><span class="st">'Year'</span>,</span>
+<span id="cb19-51"><a href="#cb19-51"></a>                                                           <span class="at">variable.name =</span> <span class="st">"months"</span>,</span>
+<span id="cb19-52"><a href="#cb19-52"></a>                                                           <span class="at">value.name=</span><span class="st">'UNRATE'</span>) <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(</span>
+<span id="cb19-53"><a href="#cb19-53"></a>  <span class="fu">data.frame</span>(<span class="at">month_nr=</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>),</span>
+<span id="cb19-54"><a href="#cb19-54"></a>             <span class="at">months=</span> <span class="fu">c</span>(<span class="st">"Jan"</span>,<span class="st">"Feb"</span>,<span class="st">"Mar"</span>,</span>
+<span id="cb19-55"><a href="#cb19-55"></a>                       <span class="st">"Apr"</span>,<span class="st">"May"</span>,<span class="st">"Jun"</span>,</span>
+<span id="cb19-56"><a href="#cb19-56"></a>                       <span class="st">"Jul"</span>,<span class="st">"Aug"</span>,<span class="st">"Sep"</span>,</span>
+<span id="cb19-57"><a href="#cb19-57"></a>                       <span class="st">"Oct"</span>,<span class="st">"Nov"</span>,<span class="st">"Dec"</span>))</span>
+<span id="cb19-58"><a href="#cb19-58"></a>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">DATE=</span><span class="fu">as_date</span>(<span class="st">'0000-01-01'</span>,<span class="at">format =</span> <span class="st">'%Y-%m-%d'</span>)<span class="sc">+</span><span class="fu">years</span>(<span class="fu">as.numeric</span>(Year)) <span class="sc">+</span> <span class="fu">months</span>(month_nr<span class="dv">-1</span>)) </span>
+<span id="cb19-59"><a href="#cb19-59"></a></span>
+<span id="cb19-60"><a href="#cb19-60"></a><span class="fu">head</span>(unemp)</span>
 <span id="cb19-61"><a href="#cb19-61"></a></span>
-<span id="cb19-62"><a href="#cb19-62"></a>unemp <span class="ot">=</span> unemp[, DATE <span class="sc">:</span><span class="er">=</span> <span class="fu">as.Date</span>(DATE)][<span class="sc">!</span><span class="fu">is.na</span>(UNRATE),.(DATE, UNRATE)]</span>
-<span id="cb19-63"><a href="#cb19-63"></a><span class="fu">setkey</span>(unemp, DATE)</span>
-<span id="cb19-64"><a href="#cb19-64"></a></span>
-<span id="cb19-65"><a href="#cb19-65"></a><span class="do">## Creating dataset with random missing values</span></span>
-<span id="cb19-66"><a href="#cb19-66"></a>rand.unemp.idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(unemp), .<span class="dv">1</span><span class="sc">*</span><span class="fu">nrow</span>(unemp))</span>
-<span id="cb19-67"><a href="#cb19-67"></a>rand.unemp <span class="ot">&lt;-</span> unemp[<span class="sc">-</span>rand.unemp.idx]</span>
-<span id="cb19-68"><a href="#cb19-68"></a></span>
-<span id="cb19-69"><a href="#cb19-69"></a><span class="do">## Creating dataset with systematical missing values, appearing in month with highest unemployment rate</span></span>
-<span id="cb19-70"><a href="#cb19-70"></a>high.unemp.idx <span class="ot">&lt;-</span> <span class="fu">which</span>(unemp<span class="sc">$</span>UNRATE <span class="sc">&gt;</span> <span class="dv">8</span>)</span>
-<span id="cb19-71"><a href="#cb19-71"></a>high.unemp.idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(high.unemp.idx, .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">length</span>(high.unemp.idx))</span>
-<span id="cb19-72"><a href="#cb19-72"></a>bias.unemp <span class="ot">&lt;-</span> unemp[<span class="sc">-</span>high.unemp.idx]</span>
-<span id="cb19-73"><a href="#cb19-73"></a></span>
+<span id="cb19-62"><a href="#cb19-62"></a></span>
+<span id="cb19-63"><a href="#cb19-63"></a>unemp <span class="ot">=</span> unemp[, DATE <span class="sc">:</span><span class="er">=</span> <span class="fu">as.Date</span>(DATE)][<span class="sc">!</span><span class="fu">is.na</span>(UNRATE),.(DATE, UNRATE)]</span>
+<span id="cb19-64"><a href="#cb19-64"></a><span class="fu">setkey</span>(unemp, DATE)</span>
+<span id="cb19-65"><a href="#cb19-65"></a></span>
+<span id="cb19-66"><a href="#cb19-66"></a><span class="do">## Creating dataset with random missing values</span></span>
+<span id="cb19-67"><a href="#cb19-67"></a>rand.unemp.idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(unemp), .<span class="dv">1</span><span class="sc">*</span><span class="fu">nrow</span>(unemp))</span>
+<span id="cb19-68"><a href="#cb19-68"></a>rand.unemp <span class="ot">&lt;-</span> unemp[<span class="sc">-</span>rand.unemp.idx]</span>
+<span id="cb19-69"><a href="#cb19-69"></a></span>
+<span id="cb19-70"><a href="#cb19-70"></a><span class="do">## Creating dataset with systematical missing values, appearing in month with highest unemployment rate</span></span>
+<span id="cb19-71"><a href="#cb19-71"></a>high.unemp.idx <span class="ot">&lt;-</span> <span class="fu">which</span>(unemp<span class="sc">$</span>UNRATE <span class="sc">&gt;</span> <span class="dv">8</span>)</span>
+<span id="cb19-72"><a href="#cb19-72"></a>high.unemp.idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(high.unemp.idx, .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">length</span>(high.unemp.idx))</span>
+<span id="cb19-73"><a href="#cb19-73"></a>bias.unemp <span class="ot">&lt;-</span> unemp[<span class="sc">-</span>high.unemp.idx]</span>
 <span id="cb19-74"><a href="#cb19-74"></a></span>
-<span id="cb19-75"><a href="#cb19-75"></a><span class="do">## to identyfy missing data I wil use rolling joins tool from data.table package    </span></span>
-<span id="cb19-76"><a href="#cb19-76"></a>all.dates <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> unemp<span class="sc">$</span>DATE[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">tail</span>(unemp<span class="sc">$</span>DATE, <span class="dv">1</span>), <span class="at">by =</span> <span class="st">"months"</span>)</span>
-<span id="cb19-77"><a href="#cb19-77"></a>rand.unemp <span class="ot">=</span> rand.unemp[<span class="fu">J</span>(all.dates), roll<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb19-78"><a href="#cb19-78"></a>bias.unemp <span class="ot">=</span> bias.unemp[<span class="fu">J</span>(all.dates), roll<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb19-79"><a href="#cb19-79"></a></span>
-<span id="cb19-80"><a href="#cb19-80"></a><span class="do">## forward filling</span></span>
-<span id="cb19-81"><a href="#cb19-81"></a>rand.unemp[, impute.ff <span class="sc">:</span><span class="er">=</span> <span class="fu">na.locf</span>(UNRATE, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)]</span>
-<span id="cb19-82"><a href="#cb19-82"></a>bias.unemp[, impute.ff <span class="sc">:</span><span class="er">=</span> <span class="fu">na.locf</span>(UNRATE, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)]</span>
-<span id="cb19-83"><a href="#cb19-83"></a></span>
-<span id="cb19-84"><a href="#cb19-84"></a><span class="do">## Mean moving average with use of lookahead phenomen</span></span>
-<span id="cb19-85"><a href="#cb19-85"></a>rand.unemp[, impute.rm.lookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="at">data=</span><span class="fu">c</span>(UNRATE,<span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">width=</span><span class="dv">3</span>,</span>
-<span id="cb19-86"><a href="#cb19-86"></a>          <span class="at">FUN=</span> <span class="cf">function</span>(x) {</span>
-<span id="cb19-87"><a href="#cb19-87"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">1</span>])) x[<span class="dv">1</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-88"><a href="#cb19-88"></a>                         })]         </span>
-<span id="cb19-89"><a href="#cb19-89"></a>bias.unemp[, impute.rm.lookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(UNRATE, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="dv">3</span>,</span>
-<span id="cb19-90"><a href="#cb19-90"></a>            <span class="at">FUN=</span> <span class="cf">function</span>(x) {</span>
-<span id="cb19-91"><a href="#cb19-91"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">1</span>])) x[<span class="dv">1</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-92"><a href="#cb19-92"></a>                         })]         </span>
-<span id="cb19-93"><a href="#cb19-93"></a></span>
+<span id="cb19-75"><a href="#cb19-75"></a></span>
+<span id="cb19-76"><a href="#cb19-76"></a><span class="do">## to identyfy missing data I wil use rolling joins tool from data.table package    </span></span>
+<span id="cb19-77"><a href="#cb19-77"></a>all.dates <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> unemp<span class="sc">$</span>DATE[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">tail</span>(unemp<span class="sc">$</span>DATE, <span class="dv">1</span>), <span class="at">by =</span> <span class="st">"months"</span>)</span>
+<span id="cb19-78"><a href="#cb19-78"></a>rand.unemp <span class="ot">=</span> rand.unemp[<span class="fu">J</span>(all.dates), roll<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb19-79"><a href="#cb19-79"></a>bias.unemp <span class="ot">=</span> bias.unemp[<span class="fu">J</span>(all.dates), roll<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb19-80"><a href="#cb19-80"></a></span>
+<span id="cb19-81"><a href="#cb19-81"></a><span class="do">## forward filling</span></span>
+<span id="cb19-82"><a href="#cb19-82"></a>rand.unemp[, impute.ff <span class="sc">:</span><span class="er">=</span> <span class="fu">na.locf</span>(UNRATE, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)]</span>
+<span id="cb19-83"><a href="#cb19-83"></a>bias.unemp[, impute.ff <span class="sc">:</span><span class="er">=</span> <span class="fu">na.locf</span>(UNRATE, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)]</span>
+<span id="cb19-84"><a href="#cb19-84"></a></span>
+<span id="cb19-85"><a href="#cb19-85"></a><span class="do">## Mean moving average with use of lookahead phenomen</span></span>
+<span id="cb19-86"><a href="#cb19-86"></a>rand.unemp[, impute.rm.lookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="at">data=</span><span class="fu">c</span>(UNRATE,<span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">width=</span><span class="dv">3</span>,</span>
+<span id="cb19-87"><a href="#cb19-87"></a>          <span class="at">FUN=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb19-88"><a href="#cb19-88"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">1</span>])) x[<span class="dv">1</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-89"><a href="#cb19-89"></a>                         })]         </span>
+<span id="cb19-90"><a href="#cb19-90"></a>bias.unemp[, impute.rm.lookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(UNRATE, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="dv">3</span>,</span>
+<span id="cb19-91"><a href="#cb19-91"></a>            <span class="at">FUN=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb19-92"><a href="#cb19-92"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">1</span>])) x[<span class="dv">1</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-93"><a href="#cb19-93"></a>                         })]         </span>
 <span id="cb19-94"><a href="#cb19-94"></a></span>
 <span id="cb19-95"><a href="#cb19-95"></a></span>
 <span id="cb19-96"><a href="#cb19-96"></a></span>
 <span id="cb19-97"><a href="#cb19-97"></a></span>
-<span id="cb19-98"><a href="#cb19-98"></a><span class="do">## Mean moving average withou use of lookahead phenomen</span></span>
-<span id="cb19-99"><a href="#cb19-99"></a>rand.unemp[, impute.rm.nolookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, UNRATE), <span class="dv">3</span>,</span>
-<span id="cb19-100"><a href="#cb19-100"></a>             <span class="cf">function</span>(x) {</span>
-<span id="cb19-101"><a href="#cb19-101"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">3</span>])) x[<span class="dv">3</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-102"><a href="#cb19-102"></a>                         })]         </span>
-<span id="cb19-103"><a href="#cb19-103"></a>bias.unemp[, impute.rm.nolookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, UNRATE), <span class="dv">3</span>,</span>
-<span id="cb19-104"><a href="#cb19-104"></a>             <span class="cf">function</span>(x) {</span>
-<span id="cb19-105"><a href="#cb19-105"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">3</span>])) x[<span class="dv">3</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-106"><a href="#cb19-106"></a>                         })]    </span>
-<span id="cb19-107"><a href="#cb19-107"></a></span>
+<span id="cb19-98"><a href="#cb19-98"></a></span>
+<span id="cb19-99"><a href="#cb19-99"></a><span class="do">## Mean moving average withou use of lookahead phenomen</span></span>
+<span id="cb19-100"><a href="#cb19-100"></a>rand.unemp[, impute.rm.nolookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, UNRATE), <span class="dv">3</span>,</span>
+<span id="cb19-101"><a href="#cb19-101"></a>             <span class="cf">function</span>(x) {</span>
+<span id="cb19-102"><a href="#cb19-102"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">3</span>])) x[<span class="dv">3</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-103"><a href="#cb19-103"></a>                         })]         </span>
+<span id="cb19-104"><a href="#cb19-104"></a>bias.unemp[, impute.rm.nolookahead <span class="sc">:</span><span class="er">=</span> <span class="fu">rollapply</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, UNRATE), <span class="dv">3</span>,</span>
+<span id="cb19-105"><a href="#cb19-105"></a>             <span class="cf">function</span>(x) {</span>
+<span id="cb19-106"><a href="#cb19-106"></a>                         <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(x[<span class="dv">3</span>])) x[<span class="dv">3</span>] <span class="cf">else</span> <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-107"><a href="#cb19-107"></a>                         })]    </span>
 <span id="cb19-108"><a href="#cb19-108"></a></span>
 <span id="cb19-109"><a href="#cb19-109"></a></span>
 <span id="cb19-110"><a href="#cb19-110"></a></span>
 <span id="cb19-111"><a href="#cb19-111"></a></span>
-<span id="cb19-112"><a href="#cb19-112"></a><span class="do">## linear interpolation fullfilling NA with linear interpolation between two data points</span></span>
-<span id="cb19-113"><a href="#cb19-113"></a>rand.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE, <span class="at">maxgap=</span><span class="cn">Inf</span>)]</span>
-<span id="cb19-114"><a href="#cb19-114"></a>bias.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE)]</span>
-<span id="cb19-115"><a href="#cb19-115"></a></span>
-<span id="cb19-116"><a href="#cb19-116"></a>zz <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">10</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="dv">0</span>)</span>
-<span id="cb19-117"><a href="#cb19-117"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="dv">2</span>)</span>
-<span id="cb19-118"><a href="#cb19-118"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
-<span id="cb19-119"><a href="#cb19-119"></a><span class="fu">na.approx</span>(zz,<span class="at">xout=</span><span class="dv">11</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
-<span id="cb19-120"><a href="#cb19-120"></a></span>
+<span id="cb19-112"><a href="#cb19-112"></a></span>
+<span id="cb19-113"><a href="#cb19-113"></a><span class="do">## linear interpolation fullfilling NA with linear interpolation between two data points</span></span>
+<span id="cb19-114"><a href="#cb19-114"></a>rand.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE, <span class="at">maxgap=</span><span class="cn">Inf</span>)]</span>
+<span id="cb19-115"><a href="#cb19-115"></a>bias.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE)]</span>
+<span id="cb19-116"><a href="#cb19-116"></a></span>
+<span id="cb19-117"><a href="#cb19-117"></a>zz <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">10</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="dv">0</span>)</span>
+<span id="cb19-118"><a href="#cb19-118"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="dv">2</span>)</span>
+<span id="cb19-119"><a href="#cb19-119"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
+<span id="cb19-120"><a href="#cb19-120"></a><span class="fu">na.approx</span>(zz,<span class="at">xout=</span><span class="dv">11</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
 <span id="cb19-121"><a href="#cb19-121"></a></span>
 <span id="cb19-122"><a href="#cb19-122"></a></span>
 <span id="cb19-123"><a href="#cb19-123"></a></span>
 <span id="cb19-124"><a href="#cb19-124"></a></span>
-<span id="cb19-125"><a href="#cb19-125"></a><span class="do">## Using root mean square error to compare methods</span></span>
-<span id="cb19-126"><a href="#cb19-126"></a><span class="fu">print</span>(rand.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb19-127"><a href="#cb19-127"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb19-128"><a href="#cb19-128"></a></span>
-<span id="cb19-129"><a href="#cb19-129"></a><span class="fu">print</span>(bias.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb19-130"><a href="#cb19-130"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb19-131"><a href="#cb19-131"></a></span>
-<span id="cb19-132"><a href="#cb19-132"></a><span class="in">```</span></span>
-<span id="cb19-133"><a href="#cb19-133"></a></span>
-<span id="cb19-134"><a href="#cb19-134"></a><span class="fu">## Metrics</span></span>
-<span id="cb19-135"><a href="#cb19-135"></a></span>
-<span id="cb19-136"><a href="#cb19-136"></a><span class="fu">### autocorelation</span></span>
-<span id="cb19-137"><a href="#cb19-137"></a></span>
-<span id="cb19-138"><a href="#cb19-138"></a>Autocorelation is measuring the direction of change basing on one point. Since the point on sinusoid close to each other have similar value this autocorelation is high if measuring on distance of pi /6 (0.52). In case of distance of 1 pi value is just opposite so ACF is equal -1.</span>
-<span id="cb19-139"><a href="#cb19-139"></a></span>
-<span id="cb19-142"><a href="#cb19-142"></a><span class="in">```{r}</span></span>
-<span id="cb19-143"><a href="#cb19-143"></a><span class="fu">require</span>(data.table)</span>
-<span id="cb19-144"><a href="#cb19-144"></a><span class="do">## R</span></span>
-<span id="cb19-145"><a href="#cb19-145"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
-<span id="cb19-146"><a href="#cb19-146"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x <span class="sc">*</span> pi <span class="sc">/</span><span class="dv">6</span>)</span>
-<span id="cb19-147"><a href="#cb19-147"></a><span class="fu">plot</span>(y, <span class="at">type =</span> <span class="st">"b"</span>)</span>
-<span id="cb19-148"><a href="#cb19-148"></a><span class="fu">acf</span>(y)</span>
-<span id="cb19-149"><a href="#cb19-149"></a></span>
-<span id="cb19-150"><a href="#cb19-150"></a><span class="do">## R</span></span>
-<span id="cb19-151"><a href="#cb19-151"></a><span class="fu">cor</span>(y, <span class="fu">shift</span>(y, <span class="dv">1</span>), <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
-<span id="cb19-152"><a href="#cb19-152"></a><span class="fu">cor</span>(y, <span class="fu">shift</span>(y, <span class="dv">2</span>), <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>) </span>
-<span id="cb19-153"><a href="#cb19-153"></a><span class="in">```</span></span>
-<span id="cb19-154"><a href="#cb19-154"></a></span>
-<span id="cb19-155"><a href="#cb19-155"></a><span class="fu">## Visualisation</span></span>
-<span id="cb19-156"><a href="#cb19-156"></a></span>
-<span id="cb19-157"><a href="#cb19-157"></a>Allows for visualising multiple micro time series within dataset. It is called Gant chart,</span>
-<span id="cb19-158"><a href="#cb19-158"></a></span>
-<span id="cb19-161"><a href="#cb19-161"></a><span class="in">```{r}</span></span>
-<span id="cb19-162"><a href="#cb19-162"></a><span class="fu">require</span>(timevis)</span>
-<span id="cb19-163"><a href="#cb19-163"></a><span class="fu">require</span>(data.table)</span>
-<span id="cb19-164"><a href="#cb19-164"></a>donations <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">paste0</span>(data_file_path,<span class="st">"donations.csv"</span>))</span>
-<span id="cb19-165"><a href="#cb19-165"></a>d <span class="ot">&lt;-</span> donations[, .(<span class="fu">min</span>(timestamp), <span class="fu">max</span>(timestamp)), user]</span>
-<span id="cb19-166"><a href="#cb19-166"></a><span class="fu">names</span>(d) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"content"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>)</span>
-<span id="cb19-167"><a href="#cb19-167"></a>d <span class="ot">&lt;-</span> d[start <span class="sc">!=</span> end]</span>
-<span id="cb19-168"><a href="#cb19-168"></a><span class="fu">timevis</span>(d[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d), <span class="dv">20</span>)])</span>
-<span id="cb19-169"><a href="#cb19-169"></a><span class="in">```</span></span>
-<span id="cb19-170"><a href="#cb19-170"></a></span>
-<span id="cb19-171"><a href="#cb19-171"></a><span class="fu">### partial-autocorelation</span></span>
-<span id="cb19-172"><a href="#cb19-172"></a></span>
-<span id="cb19-173"><a href="#cb19-173"></a>Partial autocorelation shows which point have informational meaning and which simple derives from harmonical periods of time. For seasonal, wihtout noise process, PACF show which correlation for given delay, are the true ones, eliminating redunduntion.It helps to aproximate how much data do we need to poses to apply sufficient window for given time scale.</span>
-<span id="cb19-174"><a href="#cb19-174"></a></span>
-<span id="cb19-177"><a href="#cb19-177"></a><span class="in">```{r}</span></span>
-<span id="cb19-178"><a href="#cb19-178"></a><span class="do">## R</span></span>
-<span id="cb19-179"><a href="#cb19-179"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x <span class="sc">*</span> pi <span class="sc">/</span><span class="dv">6</span>)</span>
-<span id="cb19-180"><a href="#cb19-180"></a><span class="fu">plot</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>], <span class="at">type =</span> <span class="st">"b"</span>) </span>
-<span id="cb19-181"><a href="#cb19-181"></a><span class="fu">pacf</span>(y)</span>
-<span id="cb19-182"><a href="#cb19-182"></a></span>
-<span id="cb19-183"><a href="#cb19-183"></a><span class="in">```</span></span>
-<span id="cb19-184"><a href="#cb19-184"></a></span>
-<span id="cb19-185"><a href="#cb19-185"></a><span class="fu">## Simulation</span></span>
-<span id="cb19-186"><a href="#cb19-186"></a></span>
-<span id="cb19-187"><a href="#cb19-187"></a><span class="fu">## Smoothing</span></span>
-<span id="cb19-188"><a href="#cb19-188"></a></span>
-<span id="cb19-189"><a href="#cb19-189"></a>Smoothing is commonelly used forecasting method. Smoothed time series can be used as zero hypothesis to for testing more sophisticated methods.</span>
-<span id="cb19-190"><a href="#cb19-190"></a></span>
-<span id="cb19-193"><a href="#cb19-193"></a><span class="in">```{python}</span></span>
-<span id="cb19-194"><a href="#cb19-194"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb19-195"><a href="#cb19-195"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb19-196"><a href="#cb19-196"></a><span class="im">import</span> datetime</span>
-<span id="cb19-197"><a href="#cb19-197"></a></span>
-<span id="cb19-198"><a href="#cb19-198"></a>unemp <span class="op">=</span> r.unemp</span>
-<span id="cb19-199"><a href="#cb19-199"></a><span class="co">#unemp.index = unemp.DATE</span></span>
-<span id="cb19-200"><a href="#cb19-200"></a></span>
-<span id="cb19-201"><a href="#cb19-201"></a>df <span class="op">=</span> unemp.copy()</span>
-<span id="cb19-202"><a href="#cb19-202"></a>df <span class="op">=</span> df[((df.DATE <span class="op">&gt;=</span>pd.to_datetime(<span class="st">'2014-01-01'</span>)) <span class="op">&amp;</span> (df.DATE <span class="op">&lt;</span> pd.to_datetime(<span class="st">'2019-01-01'</span>)))]</span>
-<span id="cb19-203"><a href="#cb19-203"></a>df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"UNRATE"</span>: <span class="st">"data"</span>})</span>
-<span id="cb19-204"><a href="#cb19-204"></a><span class="co">#df.reset_index(drop=True, inplace=True)</span></span>
-<span id="cb19-205"><a href="#cb19-205"></a></span>
+<span id="cb19-125"><a href="#cb19-125"></a></span>
+<span id="cb19-126"><a href="#cb19-126"></a><span class="do">## Using root mean square error to compare methods</span></span>
+<span id="cb19-127"><a href="#cb19-127"></a><span class="fu">print</span>(rand.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb19-128"><a href="#cb19-128"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
+<span id="cb19-129"><a href="#cb19-129"></a></span>
+<span id="cb19-130"><a href="#cb19-130"></a><span class="fu">print</span>(bias.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb19-131"><a href="#cb19-131"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
+<span id="cb19-132"><a href="#cb19-132"></a></span>
+<span id="cb19-133"><a href="#cb19-133"></a><span class="in">```</span></span>
+<span id="cb19-134"><a href="#cb19-134"></a></span>
+<span id="cb19-135"><a href="#cb19-135"></a><span class="fu">## Metrics</span></span>
+<span id="cb19-136"><a href="#cb19-136"></a></span>
+<span id="cb19-137"><a href="#cb19-137"></a><span class="fu">### autocorelation</span></span>
+<span id="cb19-138"><a href="#cb19-138"></a></span>
+<span id="cb19-139"><a href="#cb19-139"></a>Autocorelation is measuring the direction of change basing on one point. Since the point on sinusoid close to each other have similar value this autocorelation is high if measuring on distance of pi /6 (0.52). In case of distance of 1 pi value is just opposite so ACF is equal -1.</span>
+<span id="cb19-140"><a href="#cb19-140"></a></span>
+<span id="cb19-143"><a href="#cb19-143"></a><span class="in">```{r}</span></span>
+<span id="cb19-144"><a href="#cb19-144"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb19-145"><a href="#cb19-145"></a><span class="do">## R</span></span>
+<span id="cb19-146"><a href="#cb19-146"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb19-147"><a href="#cb19-147"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x <span class="sc">*</span> pi <span class="sc">/</span><span class="dv">6</span>)</span>
+<span id="cb19-148"><a href="#cb19-148"></a><span class="fu">plot</span>(y, <span class="at">type =</span> <span class="st">"b"</span>)</span>
+<span id="cb19-149"><a href="#cb19-149"></a><span class="fu">acf</span>(y)</span>
+<span id="cb19-150"><a href="#cb19-150"></a></span>
+<span id="cb19-151"><a href="#cb19-151"></a><span class="do">## R</span></span>
+<span id="cb19-152"><a href="#cb19-152"></a><span class="fu">cor</span>(y, <span class="fu">shift</span>(y, <span class="dv">1</span>), <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb19-153"><a href="#cb19-153"></a><span class="fu">cor</span>(y, <span class="fu">shift</span>(y, <span class="dv">2</span>), <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>) </span>
+<span id="cb19-154"><a href="#cb19-154"></a><span class="in">```</span></span>
+<span id="cb19-155"><a href="#cb19-155"></a></span>
+<span id="cb19-156"><a href="#cb19-156"></a><span class="fu">## Visualisation</span></span>
+<span id="cb19-157"><a href="#cb19-157"></a></span>
+<span id="cb19-158"><a href="#cb19-158"></a>Allows for visualising multiple micro time series within dataset. It is called Gant chart,</span>
+<span id="cb19-159"><a href="#cb19-159"></a></span>
+<span id="cb19-162"><a href="#cb19-162"></a><span class="in">```{r}</span></span>
+<span id="cb19-163"><a href="#cb19-163"></a><span class="fu">require</span>(timevis)</span>
+<span id="cb19-164"><a href="#cb19-164"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb19-165"><a href="#cb19-165"></a>donations <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">paste0</span>(data_file_path,<span class="st">"donations.csv"</span>))</span>
+<span id="cb19-166"><a href="#cb19-166"></a>d <span class="ot">&lt;-</span> donations[, .(<span class="fu">min</span>(timestamp), <span class="fu">max</span>(timestamp)), user]</span>
+<span id="cb19-167"><a href="#cb19-167"></a><span class="fu">names</span>(d) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"content"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>)</span>
+<span id="cb19-168"><a href="#cb19-168"></a>d <span class="ot">&lt;-</span> d[start <span class="sc">!=</span> end]</span>
+<span id="cb19-169"><a href="#cb19-169"></a><span class="fu">timevis</span>(d[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d), <span class="dv">20</span>)])</span>
+<span id="cb19-170"><a href="#cb19-170"></a><span class="in">```</span></span>
+<span id="cb19-171"><a href="#cb19-171"></a></span>
+<span id="cb19-172"><a href="#cb19-172"></a><span class="fu">### partial-autocorelation</span></span>
+<span id="cb19-173"><a href="#cb19-173"></a></span>
+<span id="cb19-174"><a href="#cb19-174"></a>Partial autocorelation shows which point have informational meaning and which simple derives from harmonical periods of time. For seasonal, wihtout noise process, PACF show which correlation for given delay, are the true ones, eliminating redunduntion.It helps to aproximate how much data do we need to poses to apply sufficient window for given time scale.</span>
+<span id="cb19-175"><a href="#cb19-175"></a></span>
+<span id="cb19-178"><a href="#cb19-178"></a><span class="in">```{r}</span></span>
+<span id="cb19-179"><a href="#cb19-179"></a><span class="do">## R</span></span>
+<span id="cb19-180"><a href="#cb19-180"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x <span class="sc">*</span> pi <span class="sc">/</span><span class="dv">6</span>)</span>
+<span id="cb19-181"><a href="#cb19-181"></a><span class="fu">plot</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>], <span class="at">type =</span> <span class="st">"b"</span>) </span>
+<span id="cb19-182"><a href="#cb19-182"></a><span class="fu">pacf</span>(y)</span>
+<span id="cb19-183"><a href="#cb19-183"></a></span>
+<span id="cb19-184"><a href="#cb19-184"></a><span class="in">```</span></span>
+<span id="cb19-185"><a href="#cb19-185"></a></span>
+<span id="cb19-186"><a href="#cb19-186"></a><span class="fu">## Simulation</span></span>
+<span id="cb19-187"><a href="#cb19-187"></a></span>
+<span id="cb19-188"><a href="#cb19-188"></a><span class="fu">## Smoothing</span></span>
+<span id="cb19-189"><a href="#cb19-189"></a></span>
+<span id="cb19-190"><a href="#cb19-190"></a>Smoothing is commonelly used forecasting method. Smoothed time series can be used as zero hypothesis to for testing more sophisticated methods.</span>
+<span id="cb19-191"><a href="#cb19-191"></a></span>
+<span id="cb19-194"><a href="#cb19-194"></a><span class="in">```{python}</span></span>
+<span id="cb19-195"><a href="#cb19-195"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb19-196"><a href="#cb19-196"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb19-197"><a href="#cb19-197"></a><span class="im">import</span> datetime</span>
+<span id="cb19-198"><a href="#cb19-198"></a></span>
+<span id="cb19-199"><a href="#cb19-199"></a>unemp <span class="op">=</span> r.unemp</span>
+<span id="cb19-200"><a href="#cb19-200"></a><span class="co">#unemp.index = unemp.DATE</span></span>
+<span id="cb19-201"><a href="#cb19-201"></a></span>
+<span id="cb19-202"><a href="#cb19-202"></a>df <span class="op">=</span> unemp.copy()</span>
+<span id="cb19-203"><a href="#cb19-203"></a>df <span class="op">=</span> df[((df.DATE <span class="op">&gt;=</span>pd.to_datetime(<span class="st">'2014-01-01'</span>)) <span class="op">&amp;</span> (df.DATE <span class="op">&lt;</span> pd.to_datetime(<span class="st">'2019-01-01'</span>)))]</span>
+<span id="cb19-204"><a href="#cb19-204"></a>df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"UNRATE"</span>: <span class="st">"data"</span>})</span>
+<span id="cb19-205"><a href="#cb19-205"></a><span class="co">#df.reset_index(drop=True, inplace=True)</span></span>
 <span id="cb19-206"><a href="#cb19-206"></a></span>
-<span id="cb19-207"><a href="#cb19-207"></a>train <span class="op">=</span> df[[<span class="st">'data'</span>]].iloc[:<span class="op">-</span><span class="dv">12</span>, :]</span>
-<span id="cb19-208"><a href="#cb19-208"></a>test <span class="op">=</span> df[[<span class="st">'data'</span>]].iloc[<span class="op">-</span><span class="dv">12</span>:, :]</span>
-<span id="cb19-209"><a href="#cb19-209"></a><span class="co"># train.index = pd.to_datetime(train.index)</span></span>
-<span id="cb19-210"><a href="#cb19-210"></a><span class="co"># test.index = pd.to_datetime(test.index)</span></span>
-<span id="cb19-211"><a href="#cb19-211"></a><span class="co">## We can use the pandas.DataFrame.ewm() function to calculate the exponentially weighted moving average for a certain number of previous periods.</span></span>
-<span id="cb19-212"><a href="#cb19-212"></a><span class="in">```</span></span>
-<span id="cb19-213"><a href="#cb19-213"></a></span>
-<span id="cb19-214"><a href="#cb19-214"></a><span class="fu">### moving average</span></span>
-<span id="cb19-215"><a href="#cb19-215"></a></span>
-<span id="cb19-216"><a href="#cb19-216"></a>An improvement over simple average is the average of n last points. Obviously the thinking here is that only the recent values matter. Calculation of the moving average involves what is sometimes called a "sliding window" of size n:</span>
-<span id="cb19-217"><a href="#cb19-217"></a></span>
-<span id="cb19-220"><a href="#cb19-220"></a><span class="in">```{python}</span></span>
-<span id="cb19-221"><a href="#cb19-221"></a><span class="kw">def</span> average(series):</span>
-<span id="cb19-222"><a href="#cb19-222"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="bu">sum</span>(series))<span class="op">/</span><span class="bu">len</span>(series)</span>
-<span id="cb19-223"><a href="#cb19-223"></a></span>
-<span id="cb19-224"><a href="#cb19-224"></a><span class="co"># moving average using n last points</span></span>
-<span id="cb19-225"><a href="#cb19-225"></a><span class="kw">def</span> moving_average(series, n):</span>
-<span id="cb19-226"><a href="#cb19-226"></a>    <span class="cf">return</span> average(series[<span class="op">-</span>n:])</span>
-<span id="cb19-227"><a href="#cb19-227"></a></span>
-<span id="cb19-228"><a href="#cb19-228"></a>moving_average(train.data,<span class="dv">4</span>)</span>
-<span id="cb19-229"><a href="#cb19-229"></a><span class="in">```</span></span>
-<span id="cb19-230"><a href="#cb19-230"></a></span>
-<span id="cb19-231"><a href="#cb19-231"></a><span class="fu">### Weighted Moving Average</span></span>
-<span id="cb19-232"><a href="#cb19-232"></a></span>
-<span id="cb19-233"><a href="#cb19-233"></a>A weighted moving average is a moving average where within the sliding window values are given different weights, typically so that more recent points matter more.</span>
-<span id="cb19-234"><a href="#cb19-234"></a></span>
-<span id="cb19-235"><a href="#cb19-235"></a>Instead of selecting a window size, it requires a list of weights (<span class="co">[</span><span class="ot">**which should add up to 1**</span><span class="co">]</span>{.underline}). For example if we picked <span class="sc">\[</span>0.1, 0.2, 0.3, 0.4<span class="sc">\]</span> as weights, we would be giving 10%, 20%, 30% and 40% to the last 4 points respectively. In Python:</span>
-<span id="cb19-236"><a href="#cb19-236"></a></span>
-<span id="cb19-239"><a href="#cb19-239"></a><span class="in">```{python}</span></span>
-<span id="cb19-240"><a href="#cb19-240"></a><span class="co"># weighted average, weights is a list of weights</span></span>
-<span id="cb19-241"><a href="#cb19-241"></a><span class="kw">def</span> weighted_average(series, weights):</span>
-<span id="cb19-242"><a href="#cb19-242"></a>    result <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb19-243"><a href="#cb19-243"></a>    weights.reverse()</span>
-<span id="cb19-244"><a href="#cb19-244"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(weights)):</span>
-<span id="cb19-245"><a href="#cb19-245"></a>        result <span class="op">+=</span> series[<span class="op">-</span>n<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> weights[n]</span>
-<span id="cb19-246"><a href="#cb19-246"></a>    <span class="cf">return</span> result</span>
-<span id="cb19-247"><a href="#cb19-247"></a>  </span>
-<span id="cb19-248"><a href="#cb19-248"></a>weights <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>]</span>
-<span id="cb19-249"><a href="#cb19-249"></a>weighted_average(train.data.values, weights)</span>
-<span id="cb19-250"><a href="#cb19-250"></a></span>
+<span id="cb19-207"><a href="#cb19-207"></a></span>
+<span id="cb19-208"><a href="#cb19-208"></a>train <span class="op">=</span> df[[<span class="st">'data'</span>]].iloc[:<span class="op">-</span><span class="dv">12</span>, :]</span>
+<span id="cb19-209"><a href="#cb19-209"></a>test <span class="op">=</span> df[[<span class="st">'data'</span>]].iloc[<span class="op">-</span><span class="dv">12</span>:, :]</span>
+<span id="cb19-210"><a href="#cb19-210"></a><span class="co"># train.index = pd.to_datetime(train.index)</span></span>
+<span id="cb19-211"><a href="#cb19-211"></a><span class="co"># test.index = pd.to_datetime(test.index)</span></span>
+<span id="cb19-212"><a href="#cb19-212"></a><span class="co">## We can use the pandas.DataFrame.ewm() function to calculate the exponentially weighted moving average for a certain number of previous periods.</span></span>
+<span id="cb19-213"><a href="#cb19-213"></a><span class="in">```</span></span>
+<span id="cb19-214"><a href="#cb19-214"></a></span>
+<span id="cb19-215"><a href="#cb19-215"></a><span class="fu">### moving average</span></span>
+<span id="cb19-216"><a href="#cb19-216"></a></span>
+<span id="cb19-217"><a href="#cb19-217"></a>An improvement over simple average is the average of n last points. Obviously the thinking here is that only the recent values matter. Calculation of the moving average involves what is sometimes called a "sliding window" of size n:</span>
+<span id="cb19-218"><a href="#cb19-218"></a></span>
+<span id="cb19-221"><a href="#cb19-221"></a><span class="in">```{python}</span></span>
+<span id="cb19-222"><a href="#cb19-222"></a><span class="kw">def</span> average(series):</span>
+<span id="cb19-223"><a href="#cb19-223"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="bu">sum</span>(series))<span class="op">/</span><span class="bu">len</span>(series)</span>
+<span id="cb19-224"><a href="#cb19-224"></a></span>
+<span id="cb19-225"><a href="#cb19-225"></a><span class="co"># moving average using n last points</span></span>
+<span id="cb19-226"><a href="#cb19-226"></a><span class="kw">def</span> moving_average(series, n):</span>
+<span id="cb19-227"><a href="#cb19-227"></a>    <span class="cf">return</span> average(series[<span class="op">-</span>n:])</span>
+<span id="cb19-228"><a href="#cb19-228"></a></span>
+<span id="cb19-229"><a href="#cb19-229"></a>moving_average(train.data,<span class="dv">4</span>)</span>
+<span id="cb19-230"><a href="#cb19-230"></a><span class="in">```</span></span>
+<span id="cb19-231"><a href="#cb19-231"></a></span>
+<span id="cb19-232"><a href="#cb19-232"></a><span class="fu">### Weighted Moving Average</span></span>
+<span id="cb19-233"><a href="#cb19-233"></a></span>
+<span id="cb19-234"><a href="#cb19-234"></a>A weighted moving average is a moving average where within the sliding window values are given different weights, typically so that more recent points matter more.</span>
+<span id="cb19-235"><a href="#cb19-235"></a></span>
+<span id="cb19-236"><a href="#cb19-236"></a>Instead of selecting a window size, it requires a list of weights (<span class="co">[</span><span class="ot">**which should add up to 1**</span><span class="co">]</span>{.underline}). For example if we picked <span class="sc">\[</span>0.1, 0.2, 0.3, 0.4<span class="sc">\]</span> as weights, we would be giving 10%, 20%, 30% and 40% to the last 4 points respectively. In Python:</span>
+<span id="cb19-237"><a href="#cb19-237"></a></span>
+<span id="cb19-240"><a href="#cb19-240"></a><span class="in">```{python}</span></span>
+<span id="cb19-241"><a href="#cb19-241"></a><span class="co"># weighted average, weights is a list of weights</span></span>
+<span id="cb19-242"><a href="#cb19-242"></a><span class="kw">def</span> weighted_average(series, weights):</span>
+<span id="cb19-243"><a href="#cb19-243"></a>    result <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb19-244"><a href="#cb19-244"></a>    weights.reverse()</span>
+<span id="cb19-245"><a href="#cb19-245"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(weights)):</span>
+<span id="cb19-246"><a href="#cb19-246"></a>        result <span class="op">+=</span> series[<span class="op">-</span>n<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> weights[n]</span>
+<span id="cb19-247"><a href="#cb19-247"></a>    <span class="cf">return</span> result</span>
+<span id="cb19-248"><a href="#cb19-248"></a>  </span>
+<span id="cb19-249"><a href="#cb19-249"></a>weights <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>]</span>
+<span id="cb19-250"><a href="#cb19-250"></a>weighted_average(train.data.values, weights)</span>
 <span id="cb19-251"><a href="#cb19-251"></a></span>
-<span id="cb19-252"><a href="#cb19-252"></a><span class="in">```</span></span>
-<span id="cb19-253"><a href="#cb19-253"></a></span>
-<span id="cb19-254"><a href="#cb19-254"></a><span class="fu">### exponentially weightening</span></span>
-<span id="cb19-255"><a href="#cb19-255"></a></span>
-<span id="cb19-256"><a href="#cb19-256"></a>The exponentially weighted function is calculated recursively:</span>
-<span id="cb19-257"><a href="#cb19-257"></a></span>
-<span id="cb19-258"><a href="#cb19-258"></a>$$\begin{split}\begin{split}</span>
-<span id="cb19-259"><a href="#cb19-259"></a>y_0 &amp;= x_0<span class="sc">\\</span></span>
-<span id="cb19-260"><a href="#cb19-260"></a>y_t &amp;= \alpha x_t + (1 - \alpha) y_{t-1} ,</span>
-<span id="cb19-261"><a href="#cb19-261"></a>\end{split}\end{split}$$</span>
-<span id="cb19-262"><a href="#cb19-262"></a></span>
-<span id="cb19-263"><a href="#cb19-263"></a>where alpha is smoothing factor $0 &lt; \alpha \leq 1$ . The higher the α, the faster the method "forgets".</span>
-<span id="cb19-264"><a href="#cb19-264"></a></span>
-<span id="cb19-265"><a href="#cb19-265"></a>There is an aspect of this method that programmers would appreciate that is of no concern to mathematicians: it's simple and efficient to implement. Here is some Python. Unlike the previous examples, this function returns expected values for the whole series, not just one point.</span>
-<span id="cb19-266"><a href="#cb19-266"></a></span>
-<span id="cb19-269"><a href="#cb19-269"></a><span class="in">```{python}</span></span>
-<span id="cb19-270"><a href="#cb19-270"></a><span class="co"># given a series and alpha, return series of smoothed points</span></span>
-<span id="cb19-271"><a href="#cb19-271"></a><span class="kw">def</span> exponential_smoothing(series, alpha):</span>
-<span id="cb19-272"><a href="#cb19-272"></a>    result <span class="op">=</span> [series[<span class="dv">0</span>]] <span class="co"># first value is same as series</span></span>
-<span id="cb19-273"><a href="#cb19-273"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(series)):</span>
-<span id="cb19-274"><a href="#cb19-274"></a>        result.append(alpha <span class="op">*</span> series[n] <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> alpha) <span class="op">*</span> result[n<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb19-275"><a href="#cb19-275"></a>    <span class="cf">return</span> result</span>
-<span id="cb19-276"><a href="#cb19-276"></a></span>
+<span id="cb19-252"><a href="#cb19-252"></a></span>
+<span id="cb19-253"><a href="#cb19-253"></a><span class="in">```</span></span>
+<span id="cb19-254"><a href="#cb19-254"></a></span>
+<span id="cb19-255"><a href="#cb19-255"></a><span class="fu">### exponentially weightening</span></span>
+<span id="cb19-256"><a href="#cb19-256"></a></span>
+<span id="cb19-257"><a href="#cb19-257"></a>The exponentially weighted function is calculated recursively:</span>
+<span id="cb19-258"><a href="#cb19-258"></a></span>
+<span id="cb19-259"><a href="#cb19-259"></a>$$\begin{split}\begin{split}</span>
+<span id="cb19-260"><a href="#cb19-260"></a>y_0 &amp;= x_0<span class="sc">\\</span></span>
+<span id="cb19-261"><a href="#cb19-261"></a>y_t &amp;= \alpha x_t + (1 - \alpha) y_{t-1} ,</span>
+<span id="cb19-262"><a href="#cb19-262"></a>\end{split}\end{split}$$</span>
+<span id="cb19-263"><a href="#cb19-263"></a></span>
+<span id="cb19-264"><a href="#cb19-264"></a>where alpha is smoothing factor $0 &lt; \alpha \leq 1$ . The higher the α, the faster the method "forgets".</span>
+<span id="cb19-265"><a href="#cb19-265"></a></span>
+<span id="cb19-266"><a href="#cb19-266"></a>There is an aspect of this method that programmers would appreciate that is of no concern to mathematicians: it's simple and efficient to implement. Here is some Python. Unlike the previous examples, this function returns expected values for the whole series, not just one point.</span>
+<span id="cb19-267"><a href="#cb19-267"></a></span>
+<span id="cb19-270"><a href="#cb19-270"></a><span class="in">```{python}</span></span>
+<span id="cb19-271"><a href="#cb19-271"></a><span class="co"># given a series and alpha, return series of smoothed points</span></span>
+<span id="cb19-272"><a href="#cb19-272"></a><span class="kw">def</span> exponential_smoothing(series, alpha):</span>
+<span id="cb19-273"><a href="#cb19-273"></a>    result <span class="op">=</span> [series[<span class="dv">0</span>]] <span class="co"># first value is same as series</span></span>
+<span id="cb19-274"><a href="#cb19-274"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(series)):</span>
+<span id="cb19-275"><a href="#cb19-275"></a>        result.append(alpha <span class="op">*</span> series[n] <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> alpha) <span class="op">*</span> result[n<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb19-276"><a href="#cb19-276"></a>    <span class="cf">return</span> result</span>
 <span id="cb19-277"><a href="#cb19-277"></a></span>
-<span id="cb19-278"><a href="#cb19-278"></a>res_exp_smooth8 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb19-279"><a href="#cb19-279"></a>res_exp_smooth5 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb19-280"><a href="#cb19-280"></a>res_exp_smooth2 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
-<span id="cb19-281"><a href="#cb19-281"></a></span>
+<span id="cb19-278"><a href="#cb19-278"></a></span>
+<span id="cb19-279"><a href="#cb19-279"></a>res_exp_smooth8 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb19-280"><a href="#cb19-280"></a>res_exp_smooth5 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb19-281"><a href="#cb19-281"></a>res_exp_smooth2 <span class="op">=</span> exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
 <span id="cb19-282"><a href="#cb19-282"></a></span>
 <span id="cb19-283"><a href="#cb19-283"></a></span>
 <span id="cb19-284"><a href="#cb19-284"></a></span>
-<span id="cb19-285"><a href="#cb19-285"></a><span class="in">```</span></span>
-<span id="cb19-286"><a href="#cb19-286"></a></span>
-<span id="cb19-287"><a href="#cb19-287"></a><span class="in">```{python, eval=FALSE, include=FALSE}</span></span>
-<span id="cb19-288"><a href="#cb19-288"></a></span>
-<span id="cb19-289"><a href="#cb19-289"></a>Using Pandas.</span>
-<span id="cb19-290"><a href="#cb19-290"></a></span>
-<span id="cb19-291"><a href="#cb19-291"></a>When adjust<span class="op">=</span><span class="va">False</span>, the exponentially weighted function <span class="kw">is</span> calculated recursively</span>
-<span id="cb19-292"><a href="#cb19-292"></a></span>
-<span id="cb19-293"><a href="#cb19-293"></a>The higher <span class="kw">is</span> alpha the lower impact of the most fresh data</span>
-<span id="cb19-294"><a href="#cb19-294"></a></span>
-<span id="cb19-295"><a href="#cb19-295"></a>unemp[<span class="st">'Smooth.1'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.1</span>,adjust<span class="op">=</span><span class="va">False</span>,).mean()</span>
-<span id="cb19-296"><a href="#cb19-296"></a>unemp[<span class="st">'Smooth.2'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.2</span>,adjust<span class="op">=</span><span class="va">False</span>).mean()</span>
-<span id="cb19-297"><a href="#cb19-297"></a></span>
-<span id="cb19-298"><a href="#cb19-298"></a>unemp[<span class="st">'Smooth.3'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.3</span>,adjust<span class="op">=</span><span class="va">False</span>,).mean()</span>
-<span id="cb19-299"><a href="#cb19-299"></a></span>
-<span id="cb19-300"><a href="#cb19-300"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb19-301"><a href="#cb19-301"></a></span>
-<span id="cb19-302"><a href="#cb19-302"></a>plt.clf()</span>
-<span id="cb19-303"><a href="#cb19-303"></a>plt.plot(unemp[<span class="st">'UNRATE'</span>], label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-304"><a href="#cb19-304"></a>plt.plot(unemp[<span class="st">'Smooth.1'</span>], label<span class="op">=</span><span class="st">'Smooth.1'</span>)</span>
-<span id="cb19-305"><a href="#cb19-305"></a>plt.plot(unemp[<span class="st">'Smooth.2'</span>], label<span class="op">=</span><span class="st">'Smooth.2'</span>)</span>
-<span id="cb19-306"><a href="#cb19-306"></a>plt.plot(unemp[<span class="st">'Smooth.3'</span>], label<span class="op">=</span><span class="st">'Smooth.3'</span>)</span>
-<span id="cb19-307"><a href="#cb19-307"></a>plt.xlim([datetime.date(<span class="dv">2015</span>, <span class="dv">1</span>, <span class="dv">1</span>), datetime.date(<span class="dv">2020</span>, <span class="dv">1</span>, <span class="dv">1</span>)])</span>
-<span id="cb19-308"><a href="#cb19-308"></a>plt.legend(loc<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb19-309"><a href="#cb19-309"></a>plt.show()</span>
-<span id="cb19-310"><a href="#cb19-310"></a></span>
-<span id="cb19-311"><a href="#cb19-311"></a><span class="in">```</span></span>
-<span id="cb19-312"><a href="#cb19-312"></a></span>
-<span id="cb19-313"><a href="#cb19-313"></a><span class="in">```{python, eval=FALSE, include=FALSE}</span></span>
-<span id="cb19-314"><a href="#cb19-314"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb19-315"><a href="#cb19-315"></a><span class="im">import</span> json</span>
-<span id="cb19-316"><a href="#cb19-316"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb19-317"><a href="#cb19-317"></a><span class="im">import</span> matplotlib.dates <span class="im">as</span> mdates</span>
-<span id="cb19-318"><a href="#cb19-318"></a><span class="im">from</span> statsmodels.tsa.holtwinters <span class="im">import</span> SimpleExpSmoothing, Holt</span>
-<span id="cb19-319"><a href="#cb19-319"></a></span>
+<span id="cb19-285"><a href="#cb19-285"></a></span>
+<span id="cb19-286"><a href="#cb19-286"></a><span class="in">```</span></span>
+<span id="cb19-287"><a href="#cb19-287"></a></span>
+<span id="cb19-288"><a href="#cb19-288"></a><span class="in">```{python, eval=FALSE, include=FALSE}</span></span>
+<span id="cb19-289"><a href="#cb19-289"></a></span>
+<span id="cb19-290"><a href="#cb19-290"></a>Using Pandas.</span>
+<span id="cb19-291"><a href="#cb19-291"></a></span>
+<span id="cb19-292"><a href="#cb19-292"></a>When adjust<span class="op">=</span><span class="va">False</span>, the exponentially weighted function <span class="kw">is</span> calculated recursively</span>
+<span id="cb19-293"><a href="#cb19-293"></a></span>
+<span id="cb19-294"><a href="#cb19-294"></a>The higher <span class="kw">is</span> alpha the lower impact of the most fresh data</span>
+<span id="cb19-295"><a href="#cb19-295"></a></span>
+<span id="cb19-296"><a href="#cb19-296"></a>unemp[<span class="st">'Smooth.1'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.1</span>,adjust<span class="op">=</span><span class="va">False</span>,).mean()</span>
+<span id="cb19-297"><a href="#cb19-297"></a>unemp[<span class="st">'Smooth.2'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.2</span>,adjust<span class="op">=</span><span class="va">False</span>).mean()</span>
+<span id="cb19-298"><a href="#cb19-298"></a></span>
+<span id="cb19-299"><a href="#cb19-299"></a>unemp[<span class="st">'Smooth.3'</span>] <span class="op">=</span> unemp.UNRATE.ewm(alpha<span class="op">=</span><span class="fl">0.3</span>,adjust<span class="op">=</span><span class="va">False</span>,).mean()</span>
+<span id="cb19-300"><a href="#cb19-300"></a></span>
+<span id="cb19-301"><a href="#cb19-301"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb19-302"><a href="#cb19-302"></a></span>
+<span id="cb19-303"><a href="#cb19-303"></a>plt.clf()</span>
+<span id="cb19-304"><a href="#cb19-304"></a>plt.plot(unemp[<span class="st">'UNRATE'</span>], label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-305"><a href="#cb19-305"></a>plt.plot(unemp[<span class="st">'Smooth.1'</span>], label<span class="op">=</span><span class="st">'Smooth.1'</span>)</span>
+<span id="cb19-306"><a href="#cb19-306"></a>plt.plot(unemp[<span class="st">'Smooth.2'</span>], label<span class="op">=</span><span class="st">'Smooth.2'</span>)</span>
+<span id="cb19-307"><a href="#cb19-307"></a>plt.plot(unemp[<span class="st">'Smooth.3'</span>], label<span class="op">=</span><span class="st">'Smooth.3'</span>)</span>
+<span id="cb19-308"><a href="#cb19-308"></a>plt.xlim([datetime.date(<span class="dv">2015</span>, <span class="dv">1</span>, <span class="dv">1</span>), datetime.date(<span class="dv">2020</span>, <span class="dv">1</span>, <span class="dv">1</span>)])</span>
+<span id="cb19-309"><a href="#cb19-309"></a>plt.legend(loc<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb19-310"><a href="#cb19-310"></a>plt.show()</span>
+<span id="cb19-311"><a href="#cb19-311"></a></span>
+<span id="cb19-312"><a href="#cb19-312"></a><span class="in">```</span></span>
+<span id="cb19-313"><a href="#cb19-313"></a></span>
+<span id="cb19-314"><a href="#cb19-314"></a><span class="in">```{python, eval=FALSE, include=FALSE}</span></span>
+<span id="cb19-315"><a href="#cb19-315"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb19-316"><a href="#cb19-316"></a><span class="im">import</span> json</span>
+<span id="cb19-317"><a href="#cb19-317"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb19-318"><a href="#cb19-318"></a><span class="im">import</span> matplotlib.dates <span class="im">as</span> mdates</span>
+<span id="cb19-319"><a href="#cb19-319"></a><span class="im">from</span> statsmodels.tsa.holtwinters <span class="im">import</span> SimpleExpSmoothing, Holt</span>
 <span id="cb19-320"><a href="#cb19-320"></a></span>
-<span id="cb19-321"><a href="#cb19-321"></a>pred <span class="op">=</span> test.copy()</span>
-<span id="cb19-322"><a href="#cb19-322"></a></span>
-<span id="cb19-323"><a href="#cb19-323"></a>model <span class="op">=</span> SimpleExpSmoothing(np.asarray(train[<span class="st">'data'</span>]))</span>
-<span id="cb19-324"><a href="#cb19-324"></a><span class="co">#model._index = pd.to_datetime(train.index)</span></span>
-<span id="cb19-325"><a href="#cb19-325"></a></span>
-<span id="cb19-326"><a href="#cb19-326"></a>fit1 <span class="op">=</span> model.fit()</span>
-<span id="cb19-327"><a href="#cb19-327"></a></span>
-<span id="cb19-328"><a href="#cb19-328"></a>pred1 <span class="op">=</span> fit1.forecast(<span class="dv">10</span>)</span>
-<span id="cb19-329"><a href="#cb19-329"></a>fit2 <span class="op">=</span> model.fit(smoothing_level<span class="op">=</span><span class="fl">.2</span>)</span>
-<span id="cb19-330"><a href="#cb19-330"></a>pred2 <span class="op">=</span> fit2.forecast(<span class="dv">10</span>)</span>
-<span id="cb19-331"><a href="#cb19-331"></a>fit3 <span class="op">=</span> model.fit(smoothing_level<span class="op">=</span><span class="fl">.5</span>)</span>
-<span id="cb19-332"><a href="#cb19-332"></a>pred3 <span class="op">=</span> fit3.forecast(<span class="dv">10</span>)</span>
-<span id="cb19-333"><a href="#cb19-333"></a></span>
-<span id="cb19-334"><a href="#cb19-334"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb19-335"><a href="#cb19-335"></a>ax.plot(train.index, train.values)</span>
-<span id="cb19-336"><a href="#cb19-336"></a>ax.plot(test.index, test.values, color<span class="op">=</span><span class="st">"gray"</span>)</span>
-<span id="cb19-337"><a href="#cb19-337"></a><span class="cf">for</span> p, f, c <span class="kw">in</span> <span class="bu">zip</span>((pred1, pred2, pred3),(fit1, fit2, fit3),(<span class="st">'#ff7823'</span>,<span class="st">'#3c763d'</span>,<span class="st">'c'</span>)):</span>
-<span id="cb19-338"><a href="#cb19-338"></a>    ax.plot(train.index, f.fittedvalues, color<span class="op">=</span>c)</span>
-<span id="cb19-339"><a href="#cb19-339"></a>    ax.plot(test.index, p, label<span class="op">=</span><span class="st">"alpha="</span><span class="op">+</span><span class="bu">str</span>(f.params[<span class="st">'smoothing_level'</span>])[:<span class="dv">3</span>], color<span class="op">=</span>c)</span>
-<span id="cb19-340"><a href="#cb19-340"></a>plt.title(<span class="st">"Simple Exponential Smoothing"</span>)    </span>
-<span id="cb19-341"><a href="#cb19-341"></a>plt.legend()<span class="op">;</span></span>
-<span id="cb19-342"><a href="#cb19-342"></a>plt.show()    </span>
-<span id="cb19-343"><a href="#cb19-343"></a></span>
+<span id="cb19-321"><a href="#cb19-321"></a></span>
+<span id="cb19-322"><a href="#cb19-322"></a>pred <span class="op">=</span> test.copy()</span>
+<span id="cb19-323"><a href="#cb19-323"></a></span>
+<span id="cb19-324"><a href="#cb19-324"></a>model <span class="op">=</span> SimpleExpSmoothing(np.asarray(train[<span class="st">'data'</span>]))</span>
+<span id="cb19-325"><a href="#cb19-325"></a><span class="co">#model._index = pd.to_datetime(train.index)</span></span>
+<span id="cb19-326"><a href="#cb19-326"></a></span>
+<span id="cb19-327"><a href="#cb19-327"></a>fit1 <span class="op">=</span> model.fit()</span>
+<span id="cb19-328"><a href="#cb19-328"></a></span>
+<span id="cb19-329"><a href="#cb19-329"></a>pred1 <span class="op">=</span> fit1.forecast(<span class="dv">10</span>)</span>
+<span id="cb19-330"><a href="#cb19-330"></a>fit2 <span class="op">=</span> model.fit(smoothing_level<span class="op">=</span><span class="fl">.2</span>)</span>
+<span id="cb19-331"><a href="#cb19-331"></a>pred2 <span class="op">=</span> fit2.forecast(<span class="dv">10</span>)</span>
+<span id="cb19-332"><a href="#cb19-332"></a>fit3 <span class="op">=</span> model.fit(smoothing_level<span class="op">=</span><span class="fl">.5</span>)</span>
+<span id="cb19-333"><a href="#cb19-333"></a>pred3 <span class="op">=</span> fit3.forecast(<span class="dv">10</span>)</span>
+<span id="cb19-334"><a href="#cb19-334"></a></span>
+<span id="cb19-335"><a href="#cb19-335"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb19-336"><a href="#cb19-336"></a>ax.plot(train.index, train.values)</span>
+<span id="cb19-337"><a href="#cb19-337"></a>ax.plot(test.index, test.values, color<span class="op">=</span><span class="st">"gray"</span>)</span>
+<span id="cb19-338"><a href="#cb19-338"></a><span class="cf">for</span> p, f, c <span class="kw">in</span> <span class="bu">zip</span>((pred1, pred2, pred3),(fit1, fit2, fit3),(<span class="st">'#ff7823'</span>,<span class="st">'#3c763d'</span>,<span class="st">'c'</span>)):</span>
+<span id="cb19-339"><a href="#cb19-339"></a>    ax.plot(train.index, f.fittedvalues, color<span class="op">=</span>c)</span>
+<span id="cb19-340"><a href="#cb19-340"></a>    ax.plot(test.index, p, label<span class="op">=</span><span class="st">"alpha="</span><span class="op">+</span><span class="bu">str</span>(f.params[<span class="st">'smoothing_level'</span>])[:<span class="dv">3</span>], color<span class="op">=</span>c)</span>
+<span id="cb19-341"><a href="#cb19-341"></a>plt.title(<span class="st">"Simple Exponential Smoothing"</span>)    </span>
+<span id="cb19-342"><a href="#cb19-342"></a>plt.legend()<span class="op">;</span></span>
+<span id="cb19-343"><a href="#cb19-343"></a>plt.show()    </span>
 <span id="cb19-344"><a href="#cb19-344"></a></span>
-<span id="cb19-345"><a href="#cb19-345"></a><span class="in">```</span></span>
-<span id="cb19-346"><a href="#cb19-346"></a></span>
-<span id="cb19-347"><a href="#cb19-347"></a><span class="fu">### Conclusion</span></span>
-<span id="cb19-348"><a href="#cb19-348"></a></span>
-<span id="cb19-349"><a href="#cb19-349"></a>I showed some basic forecasting methods: moving average, weighted moving average and, finally, single exponential smoothing. One very important characteristic of all of the above methods is that remarkably, they can only forecast a single point. That's correct, just one.</span>
-<span id="cb19-350"><a href="#cb19-350"></a></span>
-<span id="cb19-351"><a href="#cb19-351"></a><span class="fu">### Double exponential smoothing</span></span>
-<span id="cb19-352"><a href="#cb19-352"></a></span>
-<span id="cb19-353"><a href="#cb19-353"></a>a.k.a Holt Method</span>
-<span id="cb19-354"><a href="#cb19-354"></a></span>
-<span id="cb19-355"><a href="#cb19-355"></a>In case of forecasting simple exponential weightening isn't giving good results for data posessing longterm trend. For this purpose it is good to apply method aimed for data with trend (Holt) or with trend and seasonality (Holt-Winter).</span>
-<span id="cb19-356"><a href="#cb19-356"></a></span>
-<span id="cb19-357"><a href="#cb19-357"></a>Double exponential smoothing is nothing more than exponential smoothing applied to both level and trend.</span>
-<span id="cb19-358"><a href="#cb19-358"></a></span>
-<span id="cb19-361"><a href="#cb19-361"></a><span class="in">```{python}</span></span>
-<span id="cb19-362"><a href="#cb19-362"></a><span class="co"># given a series and alpha, return series of smoothed points</span></span>
-<span id="cb19-363"><a href="#cb19-363"></a><span class="kw">def</span> double_exponential_smoothing(series, alpha, beta):</span>
-<span id="cb19-364"><a href="#cb19-364"></a>    result <span class="op">=</span> [series[<span class="dv">0</span>]]</span>
-<span id="cb19-365"><a href="#cb19-365"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(series)<span class="op">+</span><span class="dv">1</span>):</span>
-<span id="cb19-366"><a href="#cb19-366"></a>        <span class="cf">if</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb19-367"><a href="#cb19-367"></a>            level, trend <span class="op">=</span> series[<span class="dv">0</span>], series[<span class="dv">1</span>] <span class="op">-</span> series[<span class="dv">0</span>]</span>
-<span id="cb19-368"><a href="#cb19-368"></a>        <span class="cf">if</span> n <span class="op">&gt;=</span> <span class="bu">len</span>(series): <span class="co"># we are forecasting</span></span>
-<span id="cb19-369"><a href="#cb19-369"></a>          value <span class="op">=</span> result[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb19-370"><a href="#cb19-370"></a>        <span class="cf">else</span>:</span>
-<span id="cb19-371"><a href="#cb19-371"></a>          value <span class="op">=</span> series[n]</span>
-<span id="cb19-372"><a href="#cb19-372"></a>        last_level<span class="op">=</span> level</span>
-<span id="cb19-373"><a href="#cb19-373"></a>        level <span class="op">=</span>  alpha<span class="op">*</span>value <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>alpha)<span class="op">*</span>(last_level<span class="op">+</span>trend)</span>
-<span id="cb19-374"><a href="#cb19-374"></a>        trend <span class="op">=</span> beta<span class="op">*</span>(level<span class="op">-</span>last_level) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>beta)<span class="op">*</span>trend</span>
-<span id="cb19-375"><a href="#cb19-375"></a>        result.append(level<span class="op">+</span>trend)</span>
-<span id="cb19-376"><a href="#cb19-376"></a>    <span class="cf">return</span> result</span>
-<span id="cb19-377"><a href="#cb19-377"></a></span>
+<span id="cb19-345"><a href="#cb19-345"></a></span>
+<span id="cb19-346"><a href="#cb19-346"></a><span class="in">```</span></span>
+<span id="cb19-347"><a href="#cb19-347"></a></span>
+<span id="cb19-348"><a href="#cb19-348"></a><span class="fu">### Conclusion</span></span>
+<span id="cb19-349"><a href="#cb19-349"></a></span>
+<span id="cb19-350"><a href="#cb19-350"></a>I showed some basic forecasting methods: moving average, weighted moving average and, finally, single exponential smoothing. One very important characteristic of all of the above methods is that remarkably, they can only forecast a single point. That's correct, just one.</span>
+<span id="cb19-351"><a href="#cb19-351"></a></span>
+<span id="cb19-352"><a href="#cb19-352"></a><span class="fu">### Double exponential smoothing</span></span>
+<span id="cb19-353"><a href="#cb19-353"></a></span>
+<span id="cb19-354"><a href="#cb19-354"></a>a.k.a Holt Method</span>
+<span id="cb19-355"><a href="#cb19-355"></a></span>
+<span id="cb19-356"><a href="#cb19-356"></a>In case of forecasting simple exponential weightening isn't giving good results for data posessing longterm trend. For this purpose it is good to apply method aimed for data with trend (Holt) or with trend and seasonality (Holt-Winter).</span>
+<span id="cb19-357"><a href="#cb19-357"></a></span>
+<span id="cb19-358"><a href="#cb19-358"></a>Double exponential smoothing is nothing more than exponential smoothing applied to both level and trend.</span>
+<span id="cb19-359"><a href="#cb19-359"></a></span>
+<span id="cb19-362"><a href="#cb19-362"></a><span class="in">```{python}</span></span>
+<span id="cb19-363"><a href="#cb19-363"></a><span class="co"># given a series and alpha, return series of smoothed points</span></span>
+<span id="cb19-364"><a href="#cb19-364"></a><span class="kw">def</span> double_exponential_smoothing(series, alpha, beta):</span>
+<span id="cb19-365"><a href="#cb19-365"></a>    result <span class="op">=</span> [series[<span class="dv">0</span>]]</span>
+<span id="cb19-366"><a href="#cb19-366"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(series)<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb19-367"><a href="#cb19-367"></a>        <span class="cf">if</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb19-368"><a href="#cb19-368"></a>            level, trend <span class="op">=</span> series[<span class="dv">0</span>], series[<span class="dv">1</span>] <span class="op">-</span> series[<span class="dv">0</span>]</span>
+<span id="cb19-369"><a href="#cb19-369"></a>        <span class="cf">if</span> n <span class="op">&gt;=</span> <span class="bu">len</span>(series): <span class="co"># we are forecasting</span></span>
+<span id="cb19-370"><a href="#cb19-370"></a>          value <span class="op">=</span> result[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb19-371"><a href="#cb19-371"></a>        <span class="cf">else</span>:</span>
+<span id="cb19-372"><a href="#cb19-372"></a>          value <span class="op">=</span> series[n]</span>
+<span id="cb19-373"><a href="#cb19-373"></a>        last_level<span class="op">=</span> level</span>
+<span id="cb19-374"><a href="#cb19-374"></a>        level <span class="op">=</span>  alpha<span class="op">*</span>value <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>alpha)<span class="op">*</span>(last_level<span class="op">+</span>trend)</span>
+<span id="cb19-375"><a href="#cb19-375"></a>        trend <span class="op">=</span> beta<span class="op">*</span>(level<span class="op">-</span>last_level) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>beta)<span class="op">*</span>trend</span>
+<span id="cb19-376"><a href="#cb19-376"></a>        result.append(level<span class="op">+</span>trend)</span>
+<span id="cb19-377"><a href="#cb19-377"></a>    <span class="cf">return</span> result</span>
 <span id="cb19-378"><a href="#cb19-378"></a></span>
-<span id="cb19-379"><a href="#cb19-379"></a>res_double_exp_smooth_alpha_9_beta9<span class="op">=</span>double_exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.9</span>, beta<span class="op">=</span><span class="fl">0.9</span>)</span>
-<span id="cb19-380"><a href="#cb19-380"></a></span>
-<span id="cb19-381"><a href="#cb19-381"></a><span class="in">```</span></span>
-<span id="cb19-382"><a href="#cb19-382"></a></span>
-<span id="cb19-383"><a href="#cb19-383"></a><span class="fu">### Triple Exponential Smoothing</span></span>
-<span id="cb19-384"><a href="#cb19-384"></a></span>
-<span id="cb19-385"><a href="#cb19-385"></a>a.k.a Holt-Winters Method</span>
-<span id="cb19-386"><a href="#cb19-386"></a></span>
-<span id="cb19-387"><a href="#cb19-387"></a><span class="fu">#### Initial Trend</span></span>
-<span id="cb19-388"><a href="#cb19-388"></a></span>
-<span id="cb19-389"><a href="#cb19-389"></a>For double exponential smoothing we simply used the first two points for the initial trend. With seasonal data we can do better than that, since we can observe many seasons and can extrapolate a better starting trend. The most common practice is to compute the average of trend averages across seasons.</span>
-<span id="cb19-390"><a href="#cb19-390"></a></span>
-<span id="cb19-393"><a href="#cb19-393"></a><span class="in">```{python}</span></span>
-<span id="cb19-394"><a href="#cb19-394"></a><span class="kw">def</span> initial_trend(series, slen):</span>
-<span id="cb19-395"><a href="#cb19-395"></a>    <span class="bu">sum</span> <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb19-396"><a href="#cb19-396"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(slen):</span>
-<span id="cb19-397"><a href="#cb19-397"></a>        <span class="bu">sum</span> <span class="op">+=</span> <span class="bu">float</span>(series[i<span class="op">+</span>slen] <span class="op">-</span> series[i]) <span class="op">/</span> slen</span>
-<span id="cb19-398"><a href="#cb19-398"></a>    <span class="cf">return</span> <span class="bu">sum</span> <span class="op">/</span> slen</span>
-<span id="cb19-399"><a href="#cb19-399"></a></span>
-<span id="cb19-400"><a href="#cb19-400"></a>res_initial <span class="op">=</span> initial_trend(train.data.values,<span class="dv">12</span>)</span>
-<span id="cb19-401"><a href="#cb19-401"></a>res_initial</span>
-<span id="cb19-402"><a href="#cb19-402"></a><span class="in">```</span></span>
-<span id="cb19-403"><a href="#cb19-403"></a></span>
-<span id="cb19-404"><a href="#cb19-404"></a>The value of <span class="in">`r round(py$res_initial,3)`</span> can be interpreted that unemployment rate between first two years change on average by <span class="in">`r round(py$res_initial,3)`</span> between each pair of the same month.</span>
-<span id="cb19-405"><a href="#cb19-405"></a></span>
-<span id="cb19-406"><a href="#cb19-406"></a><span class="fu">#### Initial Seasonal Components</span></span>
-<span id="cb19-407"><a href="#cb19-407"></a></span>
-<span id="cb19-408"><a href="#cb19-408"></a>The situation is even more complicated when it comes to initial values for the seasonal components. Briefly, we need to</span>
-<span id="cb19-409"><a href="#cb19-409"></a></span>
-<span id="cb19-410"><a href="#cb19-410"></a><span class="ss">1.  </span>compute the average level for every observed season (in our case YEAR) we have,</span>
-<span id="cb19-411"><a href="#cb19-411"></a></span>
-<span id="cb19-412"><a href="#cb19-412"></a><span class="ss">2.  </span>divide every observed value by the average for the season it's in</span>
-<span id="cb19-413"><a href="#cb19-413"></a></span>
-<span id="cb19-414"><a href="#cb19-414"></a><span class="ss">3.  </span>and finally average each of these numbers across our observed seasons.</span>
-<span id="cb19-415"><a href="#cb19-415"></a></span>
-<span id="cb19-418"><a href="#cb19-418"></a><span class="in">```{python}</span></span>
-<span id="cb19-419"><a href="#cb19-419"></a><span class="kw">def</span> initial_seasonal_components(series, slen):</span>
-<span id="cb19-420"><a href="#cb19-420"></a>    seasonals <span class="op">=</span> {}</span>
-<span id="cb19-421"><a href="#cb19-421"></a>    season_averages <span class="op">=</span> []</span>
-<span id="cb19-422"><a href="#cb19-422"></a>    n_seasons <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(series)<span class="op">/</span>slen)</span>
-<span id="cb19-423"><a href="#cb19-423"></a>    <span class="co"># compute season averages</span></span>
-<span id="cb19-424"><a href="#cb19-424"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_seasons):</span>
-<span id="cb19-425"><a href="#cb19-425"></a>        season_averages.append(<span class="bu">sum</span>(series[slen<span class="op">*</span>j:slen<span class="op">*</span>j<span class="op">+</span>slen])<span class="op">/</span><span class="bu">float</span>(slen))</span>
-<span id="cb19-426"><a href="#cb19-426"></a>    <span class="co"># compute initial values</span></span>
-<span id="cb19-427"><a href="#cb19-427"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(slen):</span>
-<span id="cb19-428"><a href="#cb19-428"></a>        sum_of_vals_over_avg <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb19-429"><a href="#cb19-429"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_seasons):</span>
-<span id="cb19-430"><a href="#cb19-430"></a>            sum_of_vals_over_avg <span class="op">+=</span> series[slen<span class="op">*</span>j<span class="op">+</span>i]<span class="op">-</span>season_averages[j]</span>
-<span id="cb19-431"><a href="#cb19-431"></a>        seasonals[i] <span class="op">=</span> sum_of_vals_over_avg<span class="op">/</span>n_seasons</span>
-<span id="cb19-432"><a href="#cb19-432"></a>    <span class="cf">return</span> seasonals</span>
-<span id="cb19-433"><a href="#cb19-433"></a></span>
-<span id="cb19-434"><a href="#cb19-434"></a>initial_seasonal_components(train.data.values,<span class="dv">12</span>)</span>
-<span id="cb19-435"><a href="#cb19-435"></a></span>
-<span id="cb19-436"><a href="#cb19-436"></a><span class="in">```</span></span>
-<span id="cb19-437"><a href="#cb19-437"></a></span>
-<span id="cb19-438"><a href="#cb19-438"></a>Seasonal values we can interpret as average distance value from seasonal average. We can see that January {0} is on higher than average and December value {11} is lower than average. We can see that those month differ from each other exactly with the power of those values</span>
-<span id="cb19-439"><a href="#cb19-439"></a></span>
-<span id="cb19-442"><a href="#cb19-442"></a><span class="in">```{python}</span></span>
-<span id="cb19-443"><a href="#cb19-443"></a>df[pd.to_datetime(df.DATE).dt.month.isin([<span class="dv">1</span>,<span class="dv">12</span>])]</span>
-<span id="cb19-444"><a href="#cb19-444"></a><span class="in">```</span></span>
-<span id="cb19-445"><a href="#cb19-445"></a></span>
-<span id="cb19-448"><a href="#cb19-448"></a><span class="in">```{python}</span></span>
-<span id="cb19-449"><a href="#cb19-449"></a><span class="kw">def</span> triple_exponential_smoothing(series, slen, alpha, beta, gamma, n_preds):</span>
-<span id="cb19-450"><a href="#cb19-450"></a>    result <span class="op">=</span> []</span>
-<span id="cb19-451"><a href="#cb19-451"></a>    seasonals <span class="op">=</span> initial_seasonal_components(series, slen)</span>
-<span id="cb19-452"><a href="#cb19-452"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(series)<span class="op">+</span>n_preds):</span>
-<span id="cb19-453"><a href="#cb19-453"></a>        <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>: <span class="co"># initial values</span></span>
-<span id="cb19-454"><a href="#cb19-454"></a>            smooth <span class="op">=</span> series[<span class="dv">0</span>]</span>
-<span id="cb19-455"><a href="#cb19-455"></a>            trend <span class="op">=</span> initial_trend(series, slen)</span>
-<span id="cb19-456"><a href="#cb19-456"></a>            result.append(series[<span class="dv">0</span>])</span>
-<span id="cb19-457"><a href="#cb19-457"></a>            <span class="cf">continue</span></span>
-<span id="cb19-458"><a href="#cb19-458"></a>        <span class="cf">if</span> i <span class="op">&gt;=</span> <span class="bu">len</span>(series): <span class="co"># we are forecasting</span></span>
-<span id="cb19-459"><a href="#cb19-459"></a>            m <span class="op">=</span> i <span class="op">-</span> <span class="bu">len</span>(series) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb19-460"><a href="#cb19-460"></a>            result.append((smooth <span class="op">+</span> m<span class="op">*</span>trend) <span class="op">+</span> seasonals[i<span class="op">%</span>slen])</span>
-<span id="cb19-461"><a href="#cb19-461"></a>        <span class="cf">else</span>:</span>
-<span id="cb19-462"><a href="#cb19-462"></a>            val <span class="op">=</span> series[i]</span>
-<span id="cb19-463"><a href="#cb19-463"></a>            last_smooth, smooth <span class="op">=</span> smooth, alpha<span class="op">*</span>(val<span class="op">-</span>seasonals[i<span class="op">%</span>slen]) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>alpha)<span class="op">*</span>(smooth<span class="op">+</span>trend)</span>
-<span id="cb19-464"><a href="#cb19-464"></a>            trend <span class="op">=</span> beta <span class="op">*</span> (smooth<span class="op">-</span>last_smooth) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>beta)<span class="op">*</span>trend</span>
-<span id="cb19-465"><a href="#cb19-465"></a>            seasonals[i<span class="op">%</span>slen] <span class="op">=</span> gamma<span class="op">*</span>(val<span class="op">-</span>smooth) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>gamma)<span class="op">*</span>seasonals[i<span class="op">%</span>slen]</span>
-<span id="cb19-466"><a href="#cb19-466"></a>            result.append(smooth<span class="op">+</span>trend<span class="op">+</span>seasonals[i<span class="op">%</span>slen])</span>
-<span id="cb19-467"><a href="#cb19-467"></a>    <span class="cf">return</span> result</span>
-<span id="cb19-468"><a href="#cb19-468"></a></span>
-<span id="cb19-469"><a href="#cb19-469"></a>res_triple_exp_smooth <span class="op">=</span> triple_exponential_smoothing(train.data.values, <span class="dv">12</span>, <span class="fl">0.7</span>, <span class="fl">0.02</span>, <span class="fl">0.9</span>, <span class="dv">10</span>)</span>
-<span id="cb19-470"><a href="#cb19-470"></a></span>
-<span id="cb19-471"><a href="#cb19-471"></a><span class="in">```</span></span>
-<span id="cb19-472"><a href="#cb19-472"></a></span>
-<span id="cb19-473"><a href="#cb19-473"></a>A Note on α, β and γ</span>
-<span id="cb19-474"><a href="#cb19-474"></a></span>
-<span id="cb19-475"><a href="#cb19-475"></a>You may be wondering from where values 0.7, 0.02 and 0.9 for α, β and γ It was done by way of trial and error: simply running the algorithm over and over again and selecting the values that give you the smallest SSE. This process is known as fitting.</span>
-<span id="cb19-476"><a href="#cb19-476"></a></span>
-<span id="cb19-477"><a href="#cb19-477"></a>There are more efficient methods at zooming in on best values. One good algorithm for this is Nelder-Mead, which is what tgres uses.</span>
-<span id="cb19-478"><a href="#cb19-478"></a></span>
-<span id="cb19-479"><a href="#cb19-479"></a><span class="fu">### fitting data</span></span>
-<span id="cb19-480"><a href="#cb19-480"></a></span>
-<span id="cb19-483"><a href="#cb19-483"></a><span class="in">```{python}</span></span>
-<span id="cb19-484"><a href="#cb19-484"></a>res <span class="op">=</span> [res_exp_smooth8,res_exp_smooth5,res_exp_smooth2,res_double_exp_smooth_alpha_9_beta9,res_triple_exp_smooth]</span>
-<span id="cb19-485"><a href="#cb19-485"></a>RMSE <span class="op">=</span> []</span>
-<span id="cb19-486"><a href="#cb19-486"></a>i<span class="op">=</span><span class="dv">1</span></span>
-<span id="cb19-487"><a href="#cb19-487"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(res)):</span>
-<span id="cb19-488"><a href="#cb19-488"></a>  RMSE.append(np.sqrt(np.mean(np.square((train.data.values[<span class="dv">0</span>:<span class="dv">48</span>]<span class="op">-</span> res[i][<span class="dv">0</span>:<span class="dv">48</span>])))))</span>
-<span id="cb19-489"><a href="#cb19-489"></a>RMSE</span>
-<span id="cb19-490"><a href="#cb19-490"></a></span>
-<span id="cb19-491"><a href="#cb19-491"></a><span class="in">```</span></span>
-<span id="cb19-492"><a href="#cb19-492"></a></span>
-<span id="cb19-493"><a href="#cb19-493"></a>In case of fitting smoothed data to raw data, the best fit possess single exponenetial smoothing method with **alpha =0.8** (putting higher weight on most recent data). This is exactly what could be expected. Is it then the best **forecasting method** for my data?</span>
-<span id="cb19-494"><a href="#cb19-494"></a></span>
-<span id="cb19-495"><a href="#cb19-495"></a>Obviously not.</span>
-<span id="cb19-496"><a href="#cb19-496"></a></span>
-<span id="cb19-497"><a href="#cb19-497"></a>Since all method take data point from time *t* for estimating smoothed value for time *t* such a models are not forecasting one's. We are dealing here with **lookahead** problem. In order to predict we are using data which shouldn't be available at the moment of making prediction.</span>
-<span id="cb19-498"><a href="#cb19-498"></a></span>
-<span id="cb19-499"><a href="#cb19-499"></a>Out of three methods prediction capabilities posses Holt method (using trend to linearly predict further data points) and Holt-Winter method (using trend and seasonality to predict further data points).</span>
-<span id="cb19-500"><a href="#cb19-500"></a></span>
-<span id="cb19-501"><a href="#cb19-501"></a><span class="fu">### plot</span></span>
-<span id="cb19-502"><a href="#cb19-502"></a></span>
-<span id="cb19-505"><a href="#cb19-505"></a><span class="in">```{python}</span></span>
-<span id="cb19-506"><a href="#cb19-506"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb19-507"><a href="#cb19-507"></a><span class="im">import</span> datetime</span>
-<span id="cb19-508"><a href="#cb19-508"></a>plt.style.use(<span class="st">'Solarize_Light2'</span>)</span>
-<span id="cb19-509"><a href="#cb19-509"></a></span>
-<span id="cb19-510"><a href="#cb19-510"></a>   </span>
-<span id="cb19-511"><a href="#cb19-511"></a>plt.clf()</span>
-<span id="cb19-512"><a href="#cb19-512"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">8</span>))</span>
-<span id="cb19-513"><a href="#cb19-513"></a><span class="co"># f.set_figwidth(10)#inches</span></span>
-<span id="cb19-514"><a href="#cb19-514"></a><span class="co"># f.set_figheight(20)#inches</span></span>
-<span id="cb19-515"><a href="#cb19-515"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>) </span>
-<span id="cb19-516"><a href="#cb19-516"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-517"><a href="#cb19-517"></a>plt.plot(res_exp_smooth8, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.8'</span>)</span>
-<span id="cb19-518"><a href="#cb19-518"></a>ax2 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb19-519"><a href="#cb19-519"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-520"><a href="#cb19-520"></a>plt.plot(res_exp_smooth5, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.5'</span>)</span>
-<span id="cb19-521"><a href="#cb19-521"></a>ax3 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
-<span id="cb19-522"><a href="#cb19-522"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-523"><a href="#cb19-523"></a>plt.plot(res_exp_smooth2, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.2'</span>)</span>
-<span id="cb19-524"><a href="#cb19-524"></a>ax4 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">4</span>)</span>
-<span id="cb19-525"><a href="#cb19-525"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-526"><a href="#cb19-526"></a>plt.plot(res_double_exp_smooth_alpha_9_beta9, label<span class="op">=</span><span class="st">'res_double_exp_smooth_alpha_9_beta9'</span>)</span>
-<span id="cb19-527"><a href="#cb19-527"></a>ax5 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">5</span>)</span>
-<span id="cb19-528"><a href="#cb19-528"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
-<span id="cb19-529"><a href="#cb19-529"></a>plt.plot(res_triple_exp_smooth, label<span class="op">=</span><span class="st">'res_triple_exp_smooth'</span>)</span>
-<span id="cb19-530"><a href="#cb19-530"></a>ax1.set_title(<span class="st">'raw data vs exponential forecast'</span>)</span>
-<span id="cb19-531"><a href="#cb19-531"></a>ax1.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb19-532"><a href="#cb19-532"></a>ax2.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb19-533"><a href="#cb19-533"></a>ax3.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb19-534"><a href="#cb19-534"></a>ax4.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb19-535"><a href="#cb19-535"></a>ax5.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb19-536"><a href="#cb19-536"></a>ax1.sharex(ax5)</span>
-<span id="cb19-537"><a href="#cb19-537"></a>ax2.sharex(ax5)</span>
-<span id="cb19-538"><a href="#cb19-538"></a>ax3.sharex(ax5)</span>
-<span id="cb19-539"><a href="#cb19-539"></a>ax4.sharex(ax5)</span>
-<span id="cb19-540"><a href="#cb19-540"></a></span>
-<span id="cb19-541"><a href="#cb19-541"></a>fig.tight_layout()</span>
-<span id="cb19-542"><a href="#cb19-542"></a>fig.savefig(<span class="st">'index_files/figure-html/unnamed-chunk-15-1.png'</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span>
-<span id="cb19-543"><a href="#cb19-543"></a></span>
-<span id="cb19-544"><a href="#cb19-544"></a>plt.show()</span>
-<span id="cb19-545"><a href="#cb19-545"></a></span>
+<span id="cb19-379"><a href="#cb19-379"></a></span>
+<span id="cb19-380"><a href="#cb19-380"></a>res_double_exp_smooth_alpha_9_beta9<span class="op">=</span>double_exponential_smoothing(train.data.values, alpha<span class="op">=</span><span class="fl">0.9</span>, beta<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb19-381"><a href="#cb19-381"></a></span>
+<span id="cb19-382"><a href="#cb19-382"></a><span class="in">```</span></span>
+<span id="cb19-383"><a href="#cb19-383"></a></span>
+<span id="cb19-384"><a href="#cb19-384"></a><span class="fu">### Triple Exponential Smoothing</span></span>
+<span id="cb19-385"><a href="#cb19-385"></a></span>
+<span id="cb19-386"><a href="#cb19-386"></a>a.k.a Holt-Winters Method</span>
+<span id="cb19-387"><a href="#cb19-387"></a></span>
+<span id="cb19-388"><a href="#cb19-388"></a><span class="fu">#### Initial Trend</span></span>
+<span id="cb19-389"><a href="#cb19-389"></a></span>
+<span id="cb19-390"><a href="#cb19-390"></a>For double exponential smoothing we simply used the first two points for the initial trend. With seasonal data we can do better than that, since we can observe many seasons and can extrapolate a better starting trend. The most common practice is to compute the average of trend averages across seasons.</span>
+<span id="cb19-391"><a href="#cb19-391"></a></span>
+<span id="cb19-394"><a href="#cb19-394"></a><span class="in">```{python}</span></span>
+<span id="cb19-395"><a href="#cb19-395"></a><span class="kw">def</span> initial_trend(series, slen):</span>
+<span id="cb19-396"><a href="#cb19-396"></a>    <span class="bu">sum</span> <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb19-397"><a href="#cb19-397"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(slen):</span>
+<span id="cb19-398"><a href="#cb19-398"></a>        <span class="bu">sum</span> <span class="op">+=</span> <span class="bu">float</span>(series[i<span class="op">+</span>slen] <span class="op">-</span> series[i]) <span class="op">/</span> slen</span>
+<span id="cb19-399"><a href="#cb19-399"></a>    <span class="cf">return</span> <span class="bu">sum</span> <span class="op">/</span> slen</span>
+<span id="cb19-400"><a href="#cb19-400"></a></span>
+<span id="cb19-401"><a href="#cb19-401"></a>res_initial <span class="op">=</span> initial_trend(train.data.values,<span class="dv">12</span>)</span>
+<span id="cb19-402"><a href="#cb19-402"></a>res_initial</span>
+<span id="cb19-403"><a href="#cb19-403"></a><span class="in">```</span></span>
+<span id="cb19-404"><a href="#cb19-404"></a></span>
+<span id="cb19-405"><a href="#cb19-405"></a>The value of <span class="in">`r round(py$res_initial,3)`</span> can be interpreted that unemployment rate between first two years change on average by <span class="in">`r round(py$res_initial,3)`</span> between each pair of the same month.</span>
+<span id="cb19-406"><a href="#cb19-406"></a></span>
+<span id="cb19-407"><a href="#cb19-407"></a><span class="fu">#### Initial Seasonal Components</span></span>
+<span id="cb19-408"><a href="#cb19-408"></a></span>
+<span id="cb19-409"><a href="#cb19-409"></a>The situation is even more complicated when it comes to initial values for the seasonal components. Briefly, we need to</span>
+<span id="cb19-410"><a href="#cb19-410"></a></span>
+<span id="cb19-411"><a href="#cb19-411"></a><span class="ss">1.  </span>compute the average level for every observed season (in our case YEAR) we have,</span>
+<span id="cb19-412"><a href="#cb19-412"></a></span>
+<span id="cb19-413"><a href="#cb19-413"></a><span class="ss">2.  </span>divide every observed value by the average for the season it's in</span>
+<span id="cb19-414"><a href="#cb19-414"></a></span>
+<span id="cb19-415"><a href="#cb19-415"></a><span class="ss">3.  </span>and finally average each of these numbers across our observed seasons.</span>
+<span id="cb19-416"><a href="#cb19-416"></a></span>
+<span id="cb19-419"><a href="#cb19-419"></a><span class="in">```{python}</span></span>
+<span id="cb19-420"><a href="#cb19-420"></a><span class="kw">def</span> initial_seasonal_components(series, slen):</span>
+<span id="cb19-421"><a href="#cb19-421"></a>    seasonals <span class="op">=</span> {}</span>
+<span id="cb19-422"><a href="#cb19-422"></a>    season_averages <span class="op">=</span> []</span>
+<span id="cb19-423"><a href="#cb19-423"></a>    n_seasons <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(series)<span class="op">/</span>slen)</span>
+<span id="cb19-424"><a href="#cb19-424"></a>    <span class="co"># compute season averages</span></span>
+<span id="cb19-425"><a href="#cb19-425"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_seasons):</span>
+<span id="cb19-426"><a href="#cb19-426"></a>        season_averages.append(<span class="bu">sum</span>(series[slen<span class="op">*</span>j:slen<span class="op">*</span>j<span class="op">+</span>slen])<span class="op">/</span><span class="bu">float</span>(slen))</span>
+<span id="cb19-427"><a href="#cb19-427"></a>    <span class="co"># compute initial values</span></span>
+<span id="cb19-428"><a href="#cb19-428"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(slen):</span>
+<span id="cb19-429"><a href="#cb19-429"></a>        sum_of_vals_over_avg <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb19-430"><a href="#cb19-430"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_seasons):</span>
+<span id="cb19-431"><a href="#cb19-431"></a>            sum_of_vals_over_avg <span class="op">+=</span> series[slen<span class="op">*</span>j<span class="op">+</span>i]<span class="op">-</span>season_averages[j]</span>
+<span id="cb19-432"><a href="#cb19-432"></a>        seasonals[i] <span class="op">=</span> sum_of_vals_over_avg<span class="op">/</span>n_seasons</span>
+<span id="cb19-433"><a href="#cb19-433"></a>    <span class="cf">return</span> seasonals</span>
+<span id="cb19-434"><a href="#cb19-434"></a></span>
+<span id="cb19-435"><a href="#cb19-435"></a>initial_seasonal_components(train.data.values,<span class="dv">12</span>)</span>
+<span id="cb19-436"><a href="#cb19-436"></a></span>
+<span id="cb19-437"><a href="#cb19-437"></a><span class="in">```</span></span>
+<span id="cb19-438"><a href="#cb19-438"></a></span>
+<span id="cb19-439"><a href="#cb19-439"></a>Seasonal values we can interpret as average distance value from seasonal average. We can see that January {0} is on higher than average and December value {11} is lower than average. We can see that those month differ from each other exactly with the power of those values</span>
+<span id="cb19-440"><a href="#cb19-440"></a></span>
+<span id="cb19-443"><a href="#cb19-443"></a><span class="in">```{python}</span></span>
+<span id="cb19-444"><a href="#cb19-444"></a>df[pd.to_datetime(df.DATE).dt.month.isin([<span class="dv">1</span>,<span class="dv">12</span>])]</span>
+<span id="cb19-445"><a href="#cb19-445"></a><span class="in">```</span></span>
+<span id="cb19-446"><a href="#cb19-446"></a></span>
+<span id="cb19-449"><a href="#cb19-449"></a><span class="in">```{python}</span></span>
+<span id="cb19-450"><a href="#cb19-450"></a><span class="kw">def</span> triple_exponential_smoothing(series, slen, alpha, beta, gamma, n_preds):</span>
+<span id="cb19-451"><a href="#cb19-451"></a>    result <span class="op">=</span> []</span>
+<span id="cb19-452"><a href="#cb19-452"></a>    seasonals <span class="op">=</span> initial_seasonal_components(series, slen)</span>
+<span id="cb19-453"><a href="#cb19-453"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(series)<span class="op">+</span>n_preds):</span>
+<span id="cb19-454"><a href="#cb19-454"></a>        <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>: <span class="co"># initial values</span></span>
+<span id="cb19-455"><a href="#cb19-455"></a>            smooth <span class="op">=</span> series[<span class="dv">0</span>]</span>
+<span id="cb19-456"><a href="#cb19-456"></a>            trend <span class="op">=</span> initial_trend(series, slen)</span>
+<span id="cb19-457"><a href="#cb19-457"></a>            result.append(series[<span class="dv">0</span>])</span>
+<span id="cb19-458"><a href="#cb19-458"></a>            <span class="cf">continue</span></span>
+<span id="cb19-459"><a href="#cb19-459"></a>        <span class="cf">if</span> i <span class="op">&gt;=</span> <span class="bu">len</span>(series): <span class="co"># we are forecasting</span></span>
+<span id="cb19-460"><a href="#cb19-460"></a>            m <span class="op">=</span> i <span class="op">-</span> <span class="bu">len</span>(series) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb19-461"><a href="#cb19-461"></a>            result.append((smooth <span class="op">+</span> m<span class="op">*</span>trend) <span class="op">+</span> seasonals[i<span class="op">%</span>slen])</span>
+<span id="cb19-462"><a href="#cb19-462"></a>        <span class="cf">else</span>:</span>
+<span id="cb19-463"><a href="#cb19-463"></a>            val <span class="op">=</span> series[i]</span>
+<span id="cb19-464"><a href="#cb19-464"></a>            last_smooth, smooth <span class="op">=</span> smooth, alpha<span class="op">*</span>(val<span class="op">-</span>seasonals[i<span class="op">%</span>slen]) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>alpha)<span class="op">*</span>(smooth<span class="op">+</span>trend)</span>
+<span id="cb19-465"><a href="#cb19-465"></a>            trend <span class="op">=</span> beta <span class="op">*</span> (smooth<span class="op">-</span>last_smooth) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>beta)<span class="op">*</span>trend</span>
+<span id="cb19-466"><a href="#cb19-466"></a>            seasonals[i<span class="op">%</span>slen] <span class="op">=</span> gamma<span class="op">*</span>(val<span class="op">-</span>smooth) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>gamma)<span class="op">*</span>seasonals[i<span class="op">%</span>slen]</span>
+<span id="cb19-467"><a href="#cb19-467"></a>            result.append(smooth<span class="op">+</span>trend<span class="op">+</span>seasonals[i<span class="op">%</span>slen])</span>
+<span id="cb19-468"><a href="#cb19-468"></a>    <span class="cf">return</span> result</span>
+<span id="cb19-469"><a href="#cb19-469"></a></span>
+<span id="cb19-470"><a href="#cb19-470"></a>res_triple_exp_smooth <span class="op">=</span> triple_exponential_smoothing(train.data.values, <span class="dv">12</span>, <span class="fl">0.7</span>, <span class="fl">0.02</span>, <span class="fl">0.9</span>, <span class="dv">10</span>)</span>
+<span id="cb19-471"><a href="#cb19-471"></a></span>
+<span id="cb19-472"><a href="#cb19-472"></a><span class="in">```</span></span>
+<span id="cb19-473"><a href="#cb19-473"></a></span>
+<span id="cb19-474"><a href="#cb19-474"></a>A Note on α, β and γ</span>
+<span id="cb19-475"><a href="#cb19-475"></a></span>
+<span id="cb19-476"><a href="#cb19-476"></a>You may be wondering from where values 0.7, 0.02 and 0.9 for α, β and γ It was done by way of trial and error: simply running the algorithm over and over again and selecting the values that give you the smallest SSE. This process is known as fitting.</span>
+<span id="cb19-477"><a href="#cb19-477"></a></span>
+<span id="cb19-478"><a href="#cb19-478"></a>There are more efficient methods at zooming in on best values. One good algorithm for this is Nelder-Mead, which is what tgres uses.</span>
+<span id="cb19-479"><a href="#cb19-479"></a></span>
+<span id="cb19-480"><a href="#cb19-480"></a><span class="fu">### fitting data</span></span>
+<span id="cb19-481"><a href="#cb19-481"></a></span>
+<span id="cb19-484"><a href="#cb19-484"></a><span class="in">```{python}</span></span>
+<span id="cb19-485"><a href="#cb19-485"></a>res <span class="op">=</span> [res_exp_smooth8,res_exp_smooth5,res_exp_smooth2,res_double_exp_smooth_alpha_9_beta9,res_triple_exp_smooth]</span>
+<span id="cb19-486"><a href="#cb19-486"></a>RMSE <span class="op">=</span> []</span>
+<span id="cb19-487"><a href="#cb19-487"></a>i<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb19-488"><a href="#cb19-488"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(res)):</span>
+<span id="cb19-489"><a href="#cb19-489"></a>  RMSE.append(np.sqrt(np.mean(np.square((train.data.values[<span class="dv">0</span>:<span class="dv">48</span>]<span class="op">-</span> res[i][<span class="dv">0</span>:<span class="dv">48</span>])))))</span>
+<span id="cb19-490"><a href="#cb19-490"></a>RMSE</span>
+<span id="cb19-491"><a href="#cb19-491"></a></span>
+<span id="cb19-492"><a href="#cb19-492"></a><span class="in">```</span></span>
+<span id="cb19-493"><a href="#cb19-493"></a></span>
+<span id="cb19-494"><a href="#cb19-494"></a>In case of fitting smoothed data to raw data, the best fit possess single exponenetial smoothing method with **alpha =0.8** (putting higher weight on most recent data). This is exactly what could be expected. Is it then the best **forecasting method** for my data?</span>
+<span id="cb19-495"><a href="#cb19-495"></a></span>
+<span id="cb19-496"><a href="#cb19-496"></a>Obviously not.</span>
+<span id="cb19-497"><a href="#cb19-497"></a></span>
+<span id="cb19-498"><a href="#cb19-498"></a>Since all method take data point from time *t* for estimating smoothed value for time *t* such a models are not forecasting one's. We are dealing here with **lookahead** problem. In order to predict we are using data which shouldn't be available at the moment of making prediction.</span>
+<span id="cb19-499"><a href="#cb19-499"></a></span>
+<span id="cb19-500"><a href="#cb19-500"></a>Out of three methods prediction capabilities posses Holt method (using trend to linearly predict further data points) and Holt-Winter method (using trend and seasonality to predict further data points).</span>
+<span id="cb19-501"><a href="#cb19-501"></a></span>
+<span id="cb19-502"><a href="#cb19-502"></a><span class="fu">### plot</span></span>
+<span id="cb19-503"><a href="#cb19-503"></a></span>
+<span id="cb19-506"><a href="#cb19-506"></a><span class="in">```{python}</span></span>
+<span id="cb19-507"><a href="#cb19-507"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb19-508"><a href="#cb19-508"></a><span class="im">import</span> datetime</span>
+<span id="cb19-509"><a href="#cb19-509"></a>plt.style.use(<span class="st">'Solarize_Light2'</span>)</span>
+<span id="cb19-510"><a href="#cb19-510"></a></span>
+<span id="cb19-511"><a href="#cb19-511"></a>   </span>
+<span id="cb19-512"><a href="#cb19-512"></a>plt.clf()</span>
+<span id="cb19-513"><a href="#cb19-513"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">8</span>))</span>
+<span id="cb19-514"><a href="#cb19-514"></a><span class="co"># f.set_figwidth(10)#inches</span></span>
+<span id="cb19-515"><a href="#cb19-515"></a><span class="co"># f.set_figheight(20)#inches</span></span>
+<span id="cb19-516"><a href="#cb19-516"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>) </span>
+<span id="cb19-517"><a href="#cb19-517"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-518"><a href="#cb19-518"></a>plt.plot(res_exp_smooth8, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.8'</span>)</span>
+<span id="cb19-519"><a href="#cb19-519"></a>ax2 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb19-520"><a href="#cb19-520"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-521"><a href="#cb19-521"></a>plt.plot(res_exp_smooth5, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.5'</span>)</span>
+<span id="cb19-522"><a href="#cb19-522"></a>ax3 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb19-523"><a href="#cb19-523"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-524"><a href="#cb19-524"></a>plt.plot(res_exp_smooth2, label<span class="op">=</span><span class="st">'exp_smooth_alpha_0.2'</span>)</span>
+<span id="cb19-525"><a href="#cb19-525"></a>ax4 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb19-526"><a href="#cb19-526"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-527"><a href="#cb19-527"></a>plt.plot(res_double_exp_smooth_alpha_9_beta9, label<span class="op">=</span><span class="st">'res_double_exp_smooth_alpha_9_beta9'</span>)</span>
+<span id="cb19-528"><a href="#cb19-528"></a>ax5 <span class="op">=</span>fig.add_subplot(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb19-529"><a href="#cb19-529"></a>plt.plot(train.data.values, label<span class="op">=</span><span class="st">'raw'</span>)</span>
+<span id="cb19-530"><a href="#cb19-530"></a>plt.plot(res_triple_exp_smooth, label<span class="op">=</span><span class="st">'res_triple_exp_smooth'</span>)</span>
+<span id="cb19-531"><a href="#cb19-531"></a>ax1.set_title(<span class="st">'raw data vs exponential forecast'</span>)</span>
+<span id="cb19-532"><a href="#cb19-532"></a>ax1.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb19-533"><a href="#cb19-533"></a>ax2.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb19-534"><a href="#cb19-534"></a>ax3.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb19-535"><a href="#cb19-535"></a>ax4.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb19-536"><a href="#cb19-536"></a>ax5.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb19-537"><a href="#cb19-537"></a>ax1.sharex(ax5)</span>
+<span id="cb19-538"><a href="#cb19-538"></a>ax2.sharex(ax5)</span>
+<span id="cb19-539"><a href="#cb19-539"></a>ax3.sharex(ax5)</span>
+<span id="cb19-540"><a href="#cb19-540"></a>ax4.sharex(ax5)</span>
+<span id="cb19-541"><a href="#cb19-541"></a></span>
+<span id="cb19-542"><a href="#cb19-542"></a>fig.tight_layout()</span>
+<span id="cb19-543"><a href="#cb19-543"></a>fig.savefig(<span class="st">'index_files/figure-html/unnamed-chunk-15-1.png'</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span>
+<span id="cb19-544"><a href="#cb19-544"></a></span>
+<span id="cb19-545"><a href="#cb19-545"></a>plt.show()</span>
 <span id="cb19-546"><a href="#cb19-546"></a></span>
-<span id="cb19-547"><a href="#cb19-547"></a><span class="in">```</span></span>
-<span id="cb19-548"><a href="#cb19-548"></a></span>
-<span id="cb19-549"><a href="#cb19-549"></a><span class="fu">## regression</span></span>
-<span id="cb19-550"><a href="#cb19-550"></a></span>
-<span id="cb19-551"><a href="#cb19-551"></a><span class="fu">### autoregression models</span></span>
-<span id="cb19-552"><a href="#cb19-552"></a></span>
-<span id="cb19-553"><a href="#cb19-553"></a>As name suggest autoregression is regression made upon past values. The simplest autoregression model is known as AR(1): $y_t=b_0+b_1*y_{t-1}+e_t$ $e_t$ is changeable within time error with stable variance and mean = 0.</span>
+<span id="cb19-547"><a href="#cb19-547"></a></span>
+<span id="cb19-548"><a href="#cb19-548"></a><span class="in">```</span></span>
+<span id="cb19-549"><a href="#cb19-549"></a></span>
+<span id="cb19-550"><a href="#cb19-550"></a><span class="fu">## regression</span></span>
+<span id="cb19-551"><a href="#cb19-551"></a></span>
+<span id="cb19-552"><a href="#cb19-552"></a><span class="fu">### autoregression models</span></span>
+<span id="cb19-553"><a href="#cb19-553"></a></span>
+<span id="cb19-554"><a href="#cb19-554"></a>As name suggest autoregression is regression made upon past values. The simplest autoregression model is known as AR(1): $y_t=b_0+b_1*y_{t-1}+e_t$ $e_t$ is changeable within time error with stable variance and mean = 0.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

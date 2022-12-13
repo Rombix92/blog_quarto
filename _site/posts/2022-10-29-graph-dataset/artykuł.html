@@ -220,17 +220,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co"># Nodes are integer IDs starting from zero. Nodes IDs of different types have</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># separate countings.</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> torch</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="im">import</span> dgl</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">## /Users/lrabalski1/miniforge3/envs/tensorflow_mac/lib/python3.8/site-packages/scipy/__init__.py:146: UserWarning: A NumPy version &gt;=1.16.5 and &lt;1.23.0 is required for this version of SciPy (detected version 1.23.4</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">##   warnings.warn(f"A NumPy version &gt;={np_minversion} and &lt;{np_maxversion}"</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): ModuleNotFoundError: No module named 'torch'</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> dgl</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): ModuleNotFoundError: No module named 'torch'</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a>ratings <span class="op">=</span> dgl.heterograph(</span>
 <span id="cb1-9"><a href="#cb1-9"></a>    {(<span class="st">'user'</span>, <span class="st">'+1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>), (<span class="dv">1</span>, <span class="dv">0</span>)],</span>
 <span id="cb1-10"><a href="#cb1-10"></a>     (<span class="st">'user'</span>, <span class="st">'-1'</span>, <span class="st">'movie'</span>) : [(<span class="dv">2</span>, <span class="dv">1</span>)]})</span>
-<span id="cb1-11"><a href="#cb1-11"></a>ratings</span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">## Graph(num_nodes={'movie': 2, 'user': 3},</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">##       num_edges={('user', '+1', 'movie'): 3, ('user', '-1', 'movie'): 1},</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">##       metagraph=[('user', 'movie', '+1'), ('user', 'movie', '-1')])</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'dgl' is not defined</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>ratings</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'ratings' is not defined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="saving-graph" class="level2">
@@ -345,21 +344,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-12"><a href="#cb5-12"></a><span class="co"># ways of populating graph with coo_matrix</span></span>
 <span id="cb5-13"><a href="#cb5-13"></a><span class="co">## #Links: 37055</span></span>
 <span id="cb5-14"><a href="#cb5-14"></a>pp_g <span class="op">=</span> dgl.bipartite_from_scipy(sp_matrix, utype<span class="op">=</span><span class="st">'paper'</span>, etype<span class="op">=</span><span class="st">'written-by'</span>, vtype<span class="op">=</span><span class="st">'author'</span>)</span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'dgl' is not defined</span></span>
 <span id="cb5-16"><a href="#cb5-16"></a>pp_g.is_homogeneous</span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="co">## False</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-18"><a href="#cb5-18"></a><span class="bu">print</span>(pp_g.number_of_nodes())</span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="co">## 29930</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-20"><a href="#cb5-20"></a><span class="bu">print</span>(pp_g.number_of_edges())</span>
-<span id="cb5-21"><a href="#cb5-21"></a><span class="co">## 37055</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-22"><a href="#cb5-22"></a><span class="bu">print</span>(pp_g.successors(<span class="dv">3</span>))</span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="co">## tensor([ 4295, 13161])</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-24"><a href="#cb5-24"></a><span class="bu">print</span>(<span class="st">'Node types:'</span>, pp_g.ntypes)</span>
-<span id="cb5-25"><a href="#cb5-25"></a><span class="co">## Node types: ['paper', 'author']</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-26"><a href="#cb5-26"></a><span class="bu">print</span>(<span class="st">'Edge types:'</span>, pp_g.etypes)</span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="co">## Edge types: ['written-by']</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span>
 <span id="cb5-28"><a href="#cb5-28"></a><span class="bu">print</span>(<span class="st">'Canonical edge types:'</span>, pp_g.canonical_etypes)</span>
-<span id="cb5-29"><a href="#cb5-29"></a><span class="co">## Canonical edge types: [('paper', 'written-by', 'author')]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>In order to visualize the interactions (edges) between nodes let use following function.</p>
@@ -367,18 +366,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">import</span> pygraphviz <span class="im">as</span> pgv</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">def</span> plot_graph(nxg, plot_name):</span>
-<span id="cb6-3"><a href="#cb6-3"></a>    ag <span class="op">=</span> pgv.AGraph(strict<span class="op">=</span><span class="va">False</span>, directed<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a>    <span class="cf">for</span> u, v, k <span class="kw">in</span> nxg.edges(keys<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb6-5"><a href="#cb6-5"></a>        ag.add_edge(u, v, label<span class="op">=</span>k)</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    ag.layout(<span class="st">'dot'</span>)</span>
-<span id="cb6-7"><a href="#cb6-7"></a>    ag.draw(plot_name<span class="op">+</span><span class="st">'.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): ModuleNotFoundError: No module named 'pygraphviz'</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">def</span> plot_graph(nxg, plot_name):</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    ag <span class="op">=</span> pgv.AGraph(strict<span class="op">=</span><span class="va">False</span>, directed<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    <span class="cf">for</span> u, v, k <span class="kw">in</span> nxg.edges(keys<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb6-6"><a href="#cb6-6"></a>        ag.add_edge(u, v, label<span class="op">=</span>k)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    ag.layout(<span class="st">'dot'</span>)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    ag.draw(plot_name<span class="op">+</span><span class="st">'.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>plot_graph(nxg<span class="op">=</span>pp_g.metagraph(),plot_name<span class="op">=</span><span class="st">'simple_graph'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>plot_graph(nxg<span class="op">=</span>pp_g.metagraph(),plot_name<span class="op">=</span><span class="st">'simple_graph'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'pp_g' is not defined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p><img src="simple_graph.png" class="img-fluid"></p>
@@ -392,33 +393,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">import</span> torch</span>
 <span id="cb8-2"><a href="#cb8-2"></a></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Unfortunately following code no longer works</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>G <span class="op">=</span> dgl.heterograph({</span>
-<span id="cb8-5"><a href="#cb8-5"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : data[<span class="st">'PvsA'</span>],</span>
-<span id="cb8-6"><a href="#cb8-6"></a>        (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsA'</span>].transpose(),</span>
-<span id="cb8-7"><a href="#cb8-7"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>],</span>
-<span id="cb8-8"><a href="#cb8-8"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>].transpose(),</span>
-<span id="cb8-9"><a href="#cb8-9"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : data[<span class="st">'PvsL'</span>],</span>
-<span id="cb8-10"><a href="#cb8-10"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsL'</span>].transpose(),</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    })</span>
-<span id="cb8-12"><a href="#cb8-12"></a></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="co"># we need to a little bit tweak the code the get the same result as above.</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): dgl._ffi.base.DGLError: dgl.heterograph no longer supports graph construction from a SciPy sparse matrix, use dgl.from_scipy instead.</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a>G <span class="op">=</span> dgl.heterograph({</span>
-<span id="cb8-16"><a href="#cb8-16"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : </span>
-<span id="cb8-17"><a href="#cb8-17"></a>          (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row )),</span>
-<span id="cb8-18"><a href="#cb8-18"></a>         (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb8-19"><a href="#cb8-19"></a>           (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col)),</span>
-<span id="cb8-20"><a href="#cb8-20"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb8-21"><a href="#cb8-21"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row )),</span>
-<span id="cb8-22"><a href="#cb8-22"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb8-23"><a href="#cb8-23"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col)),</span>
-<span id="cb8-24"><a href="#cb8-24"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : </span>
-<span id="cb8-25"><a href="#cb8-25"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row )),</span>
-<span id="cb8-26"><a href="#cb8-26"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : </span>
-<span id="cb8-27"><a href="#cb8-27"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col))</span>
-<span id="cb8-28"><a href="#cb8-28"></a>    })</span>
-<span id="cb8-29"><a href="#cb8-29"></a>  </span>
-<span id="cb8-30"><a href="#cb8-30"></a>plot_graph(nxg<span class="op">=</span>G.metagraph(),plot_name<span class="op">=</span><span class="st">'more_complicated_graph'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): ModuleNotFoundError: No module named 'torch'</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>G <span class="op">=</span> dgl.heterograph({</span>
+<span id="cb8-6"><a href="#cb8-6"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : data[<span class="st">'PvsA'</span>],</span>
+<span id="cb8-7"><a href="#cb8-7"></a>        (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsA'</span>].transpose(),</span>
+<span id="cb8-8"><a href="#cb8-8"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>],</span>
+<span id="cb8-9"><a href="#cb8-9"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsP'</span>].transpose(),</span>
+<span id="cb8-10"><a href="#cb8-10"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : data[<span class="st">'PvsL'</span>],</span>
+<span id="cb8-11"><a href="#cb8-11"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : data[<span class="st">'PvsL'</span>].transpose(),</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    })</span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co"># we need to a little bit tweak the code the get the same result as above.</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'dgl' is not defined</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>G <span class="op">=</span> dgl.heterograph({</span>
+<span id="cb8-17"><a href="#cb8-17"></a>        (<span class="st">'paper'</span>, <span class="st">'written-by'</span>, <span class="st">'author'</span>) : </span>
+<span id="cb8-18"><a href="#cb8-18"></a>          (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row )),</span>
+<span id="cb8-19"><a href="#cb8-19"></a>         (<span class="st">'author'</span>, <span class="st">'writing'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb8-20"><a href="#cb8-20"></a>           (torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsA'</span>].tocoo().col)),</span>
+<span id="cb8-21"><a href="#cb8-21"></a>        (<span class="st">'paper'</span>, <span class="st">'citing'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb8-22"><a href="#cb8-22"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row )),</span>
+<span id="cb8-23"><a href="#cb8-23"></a>        (<span class="st">'paper'</span>, <span class="st">'cited'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb8-24"><a href="#cb8-24"></a>          (torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsP'</span>].tocoo().col)),</span>
+<span id="cb8-25"><a href="#cb8-25"></a>        (<span class="st">'paper'</span>, <span class="st">'is-about'</span>, <span class="st">'subject'</span>) : </span>
+<span id="cb8-26"><a href="#cb8-26"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col),torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row )),</span>
+<span id="cb8-27"><a href="#cb8-27"></a>        (<span class="st">'subject'</span>, <span class="st">'has'</span>, <span class="st">'paper'</span>) : </span>
+<span id="cb8-28"><a href="#cb8-28"></a>          (torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().row) ,torch.tensor(data[<span class="st">'PvsL'</span>].tocoo().col))</span>
+<span id="cb8-29"><a href="#cb8-29"></a>    })</span>
+<span id="cb8-30"><a href="#cb8-30"></a>  </span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'dgl' is not defined</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a>plot_graph(nxg<span class="op">=</span>G.metagraph(),plot_name<span class="op">=</span><span class="st">'more_complicated_graph'</span>)</span>
+<span id="cb8-33"><a href="#cb8-33"></a></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">## Error in py_call_impl(callable, dots$args, dots$keywords): NameError: name 'G' is not defined</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p><img src="more_complicated_graph.png" class="img-fluid"></p>

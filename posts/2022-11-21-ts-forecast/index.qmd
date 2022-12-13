@@ -3,6 +3,7 @@ title: "TS - forecast"
 tags: []
 categories: ['Time Series', 'forecast']
 editor: source
+toc: TRUE
 ---
 
 ```{r markdown_parameters, include=FALSE}
@@ -263,7 +264,7 @@ Box.test(ma.est$residuals, lag = 10, type = "Ljung", fitdf = 3)
 
 ### calculating forecast by hand
 
-# this is equasion for proces MA(1), based on this equasation parameters are calculated
+this is equasion for proces MA(1), based on this equasation parameters are calculated
 
 $y_t = μ + θ_1 × e_{t -1} + e_t$ Then if i want to predict future one point forward i am getting following equasation:
 

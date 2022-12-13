@@ -474,12 +474,12 @@ Survived   0   1
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>    proportion_clicks n_visitors
-41          0.1485181         13
-70          0.1623588         13
-96          0.1685506         13
-99          0.1082015         13
-129         0.1490268         13
-147         0.1730567         13</code></pre>
+15         0.11797301         13
+24         0.18091409         13
+25         0.11036002         13
+65         0.08254149         13
+100        0.07936203         13
+106        0.12775402         13</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -595,7 +595,7 @@ Survived   0   1
 <span id="cb21-2"><a href="#cb21-2"></a><span class="fu">median</span>(posterior<span class="sc">$</span>prop_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0662528</code></pre>
+<pre><code>[1] 0.06533234</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -603,7 +603,7 @@ Survived   0   1
 <span id="cb23-2"><a href="#cb23-2"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>prop_diff <span class="sc">&gt;</span> <span class="fl">0.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9485</code></pre>
+<pre><code>[1] 0.9515</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -660,7 +660,7 @@ Survived   0   1
 <span id="cb28-2"><a href="#cb28-2"></a><span class="fu">median</span>(posterior<span class="sc">$</span>profit_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.03238043</code></pre>
+<pre><code>[1] -0.03470917</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -668,7 +668,7 @@ Survived   0   1
 <span id="cb30-2"><a href="#cb30-2"></a><span class="fu">mean</span>(posterior<span class="sc">$</span>profit_diff <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6335</code></pre>
+<pre><code>[1] 0.63425</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -775,12 +775,12 @@ Survived   0   1
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      mu sigma
-699 19.5   4.6
-386 20.5   2.5
-743 19.0   4.9
-427 18.5   2.8
-251 20.5   1.6
-343 21.5   2.2</code></pre>
+613 21.5   4.0
+568 21.5   3.7
+477 21.0   3.1
+790 20.0   5.2
+339 19.5   2.2
+883 21.5   5.8</code></pre>
 </div>
 </div>
 <p>What is probabibility of temperature being 18 or above? Not mean temperature, the actual temperature.</p>
@@ -806,7 +806,7 @@ Survived   0   1
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">mean</span>(pred_temp<span class="sc">&gt;=</span><span class="dv">18</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7378</code></pre>
+<pre><code>[1] 0.7321</code></pre>
 </div>
 </div>
 </section>
@@ -1130,7 +1130,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb49-3"><a href="#cb49-3"></a><span class="an">title:</span><span class="co"> Statistics</span></span>
 <span id="cb49-4"><a href="#cb49-4"></a><span class="an">categories:</span><span class="co"> ["Statistics"]</span></span>
 <span id="cb49-5"><a href="#cb49-5"></a><span class="an">tags:</span><span class="co"> ["R", "Statistics", "Bayes"]</span></span>
-<span id="cb49-6"><a href="#cb49-6"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb49-6"><a href="#cb49-6"></a><span class="an">toc:</span><span class="co"> TRUE</span></span>
 <span id="cb49-7"><a href="#cb49-7"></a><span class="co">---</span></span>
 <span id="cb49-8"><a href="#cb49-8"></a></span>
 <span id="cb49-9"><a href="#cb49-9"></a><span class="fu">## Logistic Regression</span></span>
