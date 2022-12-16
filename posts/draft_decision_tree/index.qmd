@@ -1,0 +1,225 @@
+---
+title: "draft"
+date: "2022-11-20"
+tags: []
+categories: []
+draft: TRUE
+toc: TRUE
+editor: source
+---
+
+```{r}
+1+1
+```
+
+
+
+# decision tree
+
+
+```{r}
+
+library(rpart)
+library(rpart.plot)
+
+diamonds <- ggplot2::diamonds %>%
+  # I am creating binary vairable
+  mutate(success=ifelse(cut %in% c('Premium','Ideal'),1,0)) %>% select(-cut) %>%
+  # forcing one class to be unrepresented
+  mutate(random=runif(nrow(.))) %>% 
+  mutate(exclude=ifelse(success==0 & random<0.9,1,0)) %>% filter(exclude!=1)
+
+table(diamonds$success) %>% prop.table()
+
+ctrl <- list(cp = 0, minbucket = 1, maxdepth = 8)
+fit <- rpart(success ~ .,method  = "class", data = diamonds, control = ctrl)
+rpart.plot(fit, box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits = 4)
+```
+
+Behind the scenes rpart() is automatically applying a range of cost complexity (α values to prune the tree). To compare the error for each α value, rpart() performs a 10-fold CV (by default). 
+
+```{r}
+
+fit <- rpart(success ~ .,method  = "class", data = diamonds)
+fit
+rpart.plot(fit, box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits = 4)
+
+```
+
+In this example we find diminishing returns after 4 terminal nodes as illustrated in Figure
+
+y-axis is the CV error, 
+lower x-axis is the cost complexity (α) value, 
+upper x-axis is the number of terminal nodes (i.e., tree size = |T|)
+
+You may also notice the dashed line which goes through the point |T|=3. Breiman (1984) suggested that in actual practice, it’s common to instead use the smallest tree within 1 standard error (SE) of the minimum CV error (this is called the 1-SE rule). Thus, we could use a tree with 3 terminal nodes and reasonably expect to experience similar results within a small margin of error.
+```{r}
+fit$cptable
+plotcp(fit)
+```
+
+To illustrate the point of selecting a tree with 4 terminal nodes (or 3 if you go by the 1-SE rule), we can force rpart() to generate a full tree by setting cp = 0 (no penalty results in a fully grown tree). Figure below shows that after 4 terminal nodes, we see diminishing returns in error reduction as the tree grows deeper. Thus, we can significantly prune our tree and still achieve minimal expected error.
+
+```{r}
+fit <- rpart(
+    formula = success ~ .,
+    data    = diamonds,
+    method  = "class", 
+    control = list(cp = 0, xval = 10)
+)
+
+
+plotcp(fit)
+abline(v = 11, lty = "dashed")
+```
+
+So, by default, rpart() is performing some automated tuning, with an optimal subtree of 3 total splits, 4 terminal nodes, and a cross-validated SSE of 0.292.
+
+## dealing with imbalance
+
+You can include a loss matrix, changing the relative importance of misclassifying a default as non-default versus a non-default as a default. You want to stress that misclassifying a default as a non-default should be penalized more heavily. 
+
+```{r, eval=FALSE}
+parms = list(loss = matrix(c(0, cost_def_as_nondef, cost_nondef_as_def, 0), ncol=2))
+
+```
+
+Doing this, you are constructing a 2x2-matrix with zeroes on the diagonal and changed loss penalties off-diagonal. The default loss matrix is all ones off-diagonal.
+
+penalization that is 10 times bigger when misclassifying an actual default as a non-default.
+```{r}
+parms = list(loss = matrix(c(0, 10, 1, 0), ncol = 2))
+fit <- rpart(success ~ .,method  = "class", data = diamonds,parms=parms)
+
+
+# jpeg("output/tree_graph.jpg", width =2000, height = 1000)
+# rpart.plot(model_tree, box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits = 4)
+# dev.off()
+```
+
+## weights & costs
+
+https://www.listendata.com/2015/04/ways-to-correct-class-imbalances.html
+
+weights
+
+    optional case weights.
+
+cost
+
+    a vector of non-negative costs, one for each variable in the model. Defaults to one for all variables. These are scalings to be applied when considering splits, so the improvement on splitting on a variable is divided by its cost in deciding which split to choose.
+
+The weights is for rows (e.g. give higher weight to smaller class), the cost is for columns.
+
+## bagging
+
+Bootstrapping  can be used to create an _ensemble_ of predictions. Bootstrap aggregating, also called _bagging_, is one of the first ensemble algorithms machine learning practitioners learn and is designed to improve the stability and accuracy of regression and classification algorithms. 
+By model averaging, bagging helps to reduce variance and minimize overfitting. Although it is usually applied to decision tree methods, it can be used with any type of method.
+
+```{r}
+# Helper packages
+library(dplyr)       # for data wrangling
+library(ggplot2)     # for awesome plotting
+library(doParallel)  # for parallel backend to foreach
+library(foreach)     # for parallel processing with for loops
+
+# Modeling packages
+library(caret)       # for general model fitting
+library(rpart)       # for fitting decision trees
+library(ipred)       # for fitting bagged decision trees
+
+
+# create Ames training data
+set.seed(123)
+split  <- rsample::initial_split(diamonds, prop = 0.7, strata = "success")
+diamonds_train  <- rsample::training(split)
+diamonds_test  <- rsample::testing(split)
+```
+
+
+The bagging() function comes from the ipred package and we use nbagg to control how many iterations to include in the bagged model and coob = TRUE indicates to use the OOB error rate. By default, bagging() uses rpart::rpart() for decision tree base learners but other base learners are available. Since bagging just aggregates a base learner, we can tune the base learner parameters as normal. Here, we pass parameters to rpart() with the control parameter and we build deep trees (no pruning) that require just two observations in a node to split. 
+
+```{r}
+# make bootstrapping reproducible
+set.seed(123)
+
+# train bagged model
+model <- bagging(
+  formula = success ~ .,
+  data = diamonds,
+  nbagg = 100,  
+  coob = TRUE,
+  control = rpart.control(minsplit = 2, cp = 0)
+)
+```
+
+One thing to note is that typically, the more trees the better. As we add more trees we’re averaging over more high variance decision trees. Early on, we see a dramatic reduction in variance (and hence our error) but eventually the error will typically flatline and stabilize signaling that a suitable number of trees has been reached. Often, we need only 50–100 trees to stabilize the error (in other cases we may need 500 or more). For the Ames data we see that the error is stabilizing with just over 100 trees so we’ll likely not gain much improvement by simply bagging more trees.
+
+```{r}
+ntree <- seq(1, 200, by = 2)
+# create empty vector to store OOB RMSE values
+rmse <- vector(mode = "numeric", length = length(ntree))
+
+for (i in seq_along(ntree)) {
+  # reproducibility
+  set.seed(123)
+  # perform bagged model
+  model <- ranger::ranger(
+  formula = success ~ .,
+  data = diamonds,
+  num.trees = ntree[i],
+  mtry = ncol(diamonds) - 1,
+  min.node.size = 1)
+  
+  
+  # get OOB error
+  rmse[i] <- sqrt(model$prediction.error)
+}
+
+bagging_errors <- data.frame(ntree, rmse)
+
+ggplot(bagging_errors, aes(ntree, rmse)) +
+  geom_line() +
+  #geom_hline(yintercept = 41019, lty = "dashed", color = "grey50") +
+  #annotate("text", x = 100, y = 41385, label = "Best individual pruned tree", vjust = 0, hjust = 0, color = "grey50") +
+  #annotate("text", x = 100, y = 26750, label = "Bagged trees", vjust = 0, hjust = 0) +
+  ylab("RMSE") +
+  xlab("Number of trees")
+
+```
+## random Forest
+
+```{r}
+# Helper packages
+library(dplyr)    # for data wrangling
+library(ggplot2)  # for awesome graphics
+
+# Modeling packages
+library(ranger)   # a c++ implementation of random forest 
+library(h2o)      # a java-based implementation of random forest
+```
+
+# CV
+
+perform CV directly within certain ML functions:
+
+```{r}
+library(h2o)
+h2o.init()
+
+ames <- AmesHousing::make_ames()
+ames.h2o <- h2o::as.h2o(ames)
+
+h2o.cv <- h2o.glm(
+  x = 'Lot_Area', 
+  y = 'Lot_Frontage', 
+  training_frame = ames.h2o,
+  nfolds = 10  # perform 10-fold CV
+)
+```
+
+Or externally as in the below chunk5. When applying it externally to an ML algorithm as below, we’ll need a process to apply the ML model to each resample, which we’ll also cover.
+
+```{r}
+rsample::vfold_cv(ames, v = 10)
+```
