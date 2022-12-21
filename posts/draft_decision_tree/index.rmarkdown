@@ -40,9 +40,11 @@ diamonds <- ggplot2::diamonds %>%
 table(diamonds$success) %>% prop.table()
 ```
 
+
 # dataset exploration
 
 # decision tree
+
 
 
 ```{r}
@@ -53,18 +55,22 @@ set.seed(123)
 fit <- rpart(success ~ .,method  = "class", data = diamonds)
 rpart.plot(fit, box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits = 4)
 ```
+
 ```{r}
 summary(fit)
 ```
+
 
 Behind the scenes rpart() is automatically applying a range of cost complexity (α values to prune the tree). To compare the error for each α value, rpart() performs a 10-fold CV (by default). 
 
 
 
 In this example we find diminishing returns after 6 terminal nodes as illustrated in Figure below
+
 ```{r}
 plotcp(fit)
 ```
+
 y-axis is the CV error, 
 lower x-axis is the cost complexity (α) value, 
 upper x-axis is the number of terminal nodes (i.e., tree size = |T|)
@@ -73,6 +79,7 @@ You may also notice the dashed line which goes through the point |T|=4. Breiman 
 
 
 To illustrate the point of selecting a tree with 6 terminal nodes (or 4 if you go by the 1-SE rule), we can force rpart() to generate a full tree by setting cp = 0 (no penalty results in a fully grown tree). Figure below shows that after 4 terminal nodes, we see diminishing returns in error reduction as the tree grows deeper. Thus, we can significantly prune our tree and still achieve minimal expected error.
+
 
 ```{r}
 ctrl <- list(cp = 0, xval = 10#, minbucket = 1, maxdepth = 5
@@ -90,25 +97,31 @@ plotcp(fit_no_limit)
 abline(v = 11, lty = "dashed")
 ```
 
+
 So, by default, rpart() is performing some automated tuning, with an optimal subtree of 6 total splits, 6 terminal nodes, and a cross-validated SSE of 0.553.
+
 
 ```{r}
 set.seed(123)
 fit$cptable
 ```
 
+
 ## dealing with imbalance
 ### loss matrix
 
 You can include a loss matrix, changing the relative importance of misclassifying a default as non-default versus a non-default as a default. You want to stress that misclassifying a default as a non-default should be penalized more heavily. 
 
+
 ```{r, eval=FALSE}
 parms = list(loss = matrix(c(0, cost_def_as_nondef, cost_nondef_as_def, 0), ncol=2))
 ```
 
+
 Doing this, you are constructing a 2x2-matrix with zeroes on the diagonal and changed loss penalties off-diagonal. The default loss matrix is all ones off-diagonal.
 
 penalization that is 20 times bigger when misclassifying an actual default as a non-default.
+
 ```{r}
 parms = list(loss = matrix(c(0, 20, 1, 0), ncol = 2))
 fit_loss_matrix <- rpart(success ~ .,method  = "class", data = diamonds,parms=parms)
@@ -118,7 +131,8 @@ rpart.plot(fit_loss_matrix, box.palette="RdBu", shadow.col="gray", nn=TRUE,  dig
 
 
 
-### weights & costs
+
+## weights & costs
 The weights is for rows (e.g. give higher weight to smaller class), the cost is for columns.
 
 weights
@@ -134,6 +148,7 @@ cost
 
 Bootstrapping  can be used to create an _ensemble_ of predictions. Bootstrap aggregating, also called _bagging_, is one of the first ensemble algorithms machine learning practitioners learn and is designed to improve the stability and accuracy of regression and classification algorithms. 
 By model averaging, bagging helps to reduce variance and minimize overfitting. Although it is usually applied to decision tree methods, it can be used with any type of method.
+
 
 ```{r}
 # Helper packages
@@ -156,7 +171,9 @@ diamonds_test  <- rsample::testing(split)
 ```
 
 
+
 The bagging() function comes from the ipred package and we use nbagg to control how many iterations to include in the bagged model and coob = TRUE indicates to use the OOB error rate. By default, bagging() uses rpart::rpart() for decision tree base learners but other base learners are available. Since bagging just aggregates a base learner, we can tune the base learner parameters as normal. Here, we pass parameters to rpart() with the control parameter and we build deep trees (no pruning) that require just two observations in a node to split. 
+
 
 ```{r}
 # make bootstrapping reproducible
@@ -166,16 +183,18 @@ set.seed(123)
 model <- bagging(
   formula = success ~ .,
   data = diamonds,
-  nbagg = 10,  
+  nbagg = 100,  
   coob = TRUE,
   control = rpart.control(minsplit = 2, cp = 0)
 )
 ```
 
+
 One thing to note is that typically, the more trees the better. As we add more trees we’re averaging over more high variance decision trees. Early on, we see a dramatic reduction in variance (and hence our error) but eventually the error will typically flatline and stabilize signaling that a suitable number of trees has been reached. Often, we need only 50–100 trees to stabilize the error (in other cases we may need 500 or more). For the Ames data we see that the error is stabilizing with just over 100 trees so we’ll likely not gain much improvement by simply bagging more trees.
 
+
 ```{r}
-ntree <- seq(1, 200, by = 20)
+ntree <- seq(1, 200, by = 2)
 # create empty vector to store OOB RMSE values
 rmse <- vector(mode = "numeric", length = length(ntree))
 
@@ -207,12 +226,14 @@ ggplot(bagging_errors, aes(ntree, rmse)) +
 
 ```
 
+
 ## grid search
 
 %% inspiration https://drsimonj.svbtle.com/grid-search-in-the-tidyverse %%
 
 ### Training-Test Split
 To help validate our hyperparameter combinations, we’ll split our data into training and test sets (in an 80/20 split):
+
 ```{r}
 set.seed(245)
 n <- nrow(diamonds)
@@ -221,10 +242,12 @@ train <- diamonds[ train_rows, ]
 test  <- diamonds[-train_rows, ]
 ```
 
+
 ### Create the Grid 
 
 
 Step one for grid search is to define our hyperparameter combinations. Say we want to test a few values for minsplit and maxdepth. I like to setup the grid of their combinations in a tidy data frame with a list and cross_d as follows:
+
 
 ```{r}
 library(tidyverse)
@@ -234,11 +257,13 @@ gs <- list(minsplit = c(2, 5, 10),
   cross_d()
 ```
 
+
 Note that the list names are the names of the hyperparameters that we want to adjust in our model function.
 
 ### Create a model function
 
 We’ll be iterating down the gs data frame to use the hyperparameter values in a rpart model. The easiest way to handle this is to define a function that accepts a row of our data frame values and passes them correctly to our model. Here’s what I’ll use:
+
 
 ```{r}
 mod <- function(...) {
@@ -246,17 +271,21 @@ mod <- function(...) {
 }
 ```
 
+
 ### Fit the models
 Now, to fit our models, use pmap to iterate down the values. The following is iterating through each row of our gs data frame, plugging the hyperparameter values for that row into our model.
+
 
 ```{r}
 gs <- gs %>% mutate(fit = pmap(gs, mod))
 ```
 
+
 ### Obtain accuracy
 
 
 Next, let’s assess the performance of each fit on our test data. To handle this efficiently, let’s write another small function:
+
 ```{r}
 compute_accuracy <- function(fit, test_features, test_labels) {
   predicted <- predict(fit, test_features, type = "class")
@@ -264,7 +293,9 @@ compute_accuracy <- function(fit, test_features, test_labels) {
 }
 
 ```
+
 Now apply this to each fit:
+
 ```{r}
 test_features <- test %>% select(-success)
 test_labels   <- test$success
@@ -280,10 +311,12 @@ rpart.plot(gs$fit[[1]], box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits 
 ```
 
 
+
 ## bootstraping
 
 
-%% inspiration https://rapidsurveys.io/learn/statistics/bootstrap/ %%
+https://rapidsurveys.io/learn/statistics/bootstrap/
+
 ```{r}
 df_bootstraping <- rsample::bootstraps(diamonds, times = 10)
 df_bootstraping$splits[1]
@@ -306,7 +339,9 @@ resample1$splits
 wa_churn[c(1,1,1),]
 ```
 
+
 ## random Forest
+
 
 ```{r}
 # Helper packages
@@ -318,9 +353,11 @@ library(ranger)   # a c++ implementation of random forest
 library(h2o)      # a java-based implementation of random forest
 ```
 
+
 # CV
 
 perform CV directly within certain ML functions:
+
 
 ```{r}
 library(h2o)
@@ -337,8 +374,11 @@ h2o.cv <- h2o.glm(
 )
 ```
 
+
 Or externally as in the below chunk5. When applying it externally to an ML algorithm as below, we’ll need a process to apply the ML model to each resample, which we’ll also cover.
+
 
 ```{r}
 rsample::vfold_cv(ames, v = 10)
 ```
+
