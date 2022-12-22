@@ -54,6 +54,8 @@ library(rpart.plot)
 set.seed(123)
 fit <- rpart(success ~ .,method  = "class", data = diamonds)
 rpart.plot(fit, box.palette="RdBu", shadow.col="gray", nn=TRUE,  digits = 4)
+#saveRDS(model, "output/model.rds")
+
 ```
 
 ```{r}
