@@ -121,12 +121,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
-<script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<link href="../../site_libs/visjs-7.4.9/vis-timeline-graph2d.min.css" rel="stylesheet">
-<script src="../../site_libs/visjs-7.4.9/vis-timeline-graph2d.min.js"></script>
-<link href="../../site_libs/timeline-0.4/timevis.css" rel="stylesheet">
-<script src="../../site_libs/timevis-binding-2.1.0/timevis.js"></script>
-<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
@@ -314,30 +308,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-75"><a href="#cb1-75"></a></span>
 <span id="cb1-76"><a href="#cb1-76"></a><span class="do">## linear interpolation fullfilling NA with linear interpolation between two data points</span></span>
 <span id="cb1-77"><a href="#cb1-77"></a>rand.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE, <span class="at">maxgap=</span><span class="cn">Inf</span>)]</span>
-<span id="cb1-78"><a href="#cb1-78"></a>bias.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE)]</span>
-<span id="cb1-79"><a href="#cb1-79"></a></span>
-<span id="cb1-80"><a href="#cb1-80"></a>zz <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">10</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="dv">0</span>)</span>
-<span id="cb1-81"><a href="#cb1-81"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="dv">2</span>)</span>
-<span id="cb1-82"><a href="#cb1-82"></a><span class="do">##  [1]   NA  9.0  3.0  3.0  3.0  2.0  3.5  5.0  6.0 10.0   NA   NA   NA  0.0</span></span>
-<span id="cb1-83"><a href="#cb1-83"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
-<span id="cb1-84"><a href="#cb1-84"></a><span class="do">##  [1]   NA  9.0  3.0  3.0  3.0  2.0  3.5  5.0  6.0 10.0  7.5  5.0  2.5  0.0</span></span>
-<span id="cb1-85"><a href="#cb1-85"></a><span class="fu">na.approx</span>(zz,<span class="at">xout=</span><span class="dv">11</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
-<span id="cb1-86"><a href="#cb1-86"></a><span class="do">## [1] 7.5</span></span>
-<span id="cb1-87"><a href="#cb1-87"></a></span>
+<span id="cb1-78"><a href="#cb1-78"></a><span class="do">## Error in `[.data.table`(rand.unemp, , `:=`(impute.li, na.approx(UNRATE, : Supplied 897 items to be assigned to 898 items of column 'impute.li'. If you wish to 'recycle' the RHS please use rep() to make this intent clear to readers of your code.</span></span>
+<span id="cb1-79"><a href="#cb1-79"></a>bias.unemp[, impute.li <span class="sc">:</span><span class="er">=</span> <span class="fu">na.approx</span>(UNRATE)]</span>
+<span id="cb1-80"><a href="#cb1-80"></a></span>
+<span id="cb1-81"><a href="#cb1-81"></a>zz <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="cn">NA</span>, <span class="dv">3</span>, <span class="dv">2</span>,<span class="cn">NA</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">10</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="dv">0</span>)</span>
+<span id="cb1-82"><a href="#cb1-82"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="dv">2</span>)</span>
+<span id="cb1-83"><a href="#cb1-83"></a><span class="do">##  [1]   NA  9.0  3.0  3.0  3.0  2.0  3.5  5.0  6.0 10.0   NA   NA   NA  0.0</span></span>
+<span id="cb1-84"><a href="#cb1-84"></a><span class="fu">na.approx</span>(zz, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
+<span id="cb1-85"><a href="#cb1-85"></a><span class="do">##  [1]   NA  9.0  3.0  3.0  3.0  2.0  3.5  5.0  6.0 10.0  7.5  5.0  2.5  0.0</span></span>
+<span id="cb1-86"><a href="#cb1-86"></a><span class="fu">na.approx</span>(zz,<span class="at">xout=</span><span class="dv">11</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">maxgap=</span><span class="cn">Inf</span>)</span>
+<span id="cb1-87"><a href="#cb1-87"></a><span class="do">## [1] 7.5</span></span>
 <span id="cb1-88"><a href="#cb1-88"></a></span>
 <span id="cb1-89"><a href="#cb1-89"></a></span>
 <span id="cb1-90"><a href="#cb1-90"></a></span>
 <span id="cb1-91"><a href="#cb1-91"></a></span>
-<span id="cb1-92"><a href="#cb1-92"></a><span class="do">## Using root mean square error to compare methods</span></span>
-<span id="cb1-93"><a href="#cb1-93"></a><span class="fu">print</span>(rand.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb1-94"><a href="#cb1-94"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="do">##      impute.ff impute.rm.nolookahead impute.rm.lookahead impute.li</span></span>
-<span id="cb1-96"><a href="#cb1-96"></a><span class="do">## 1: 0.006336303           0.007951505           0.1085368 0.0263179</span></span>
+<span id="cb1-92"><a href="#cb1-92"></a></span>
+<span id="cb1-93"><a href="#cb1-93"></a><span class="do">## Using root mean square error to compare methods</span></span>
+<span id="cb1-94"><a href="#cb1-94"></a><span class="fu">print</span>(rand.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb1-95"><a href="#cb1-95"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
+<span id="cb1-96"><a href="#cb1-96"></a><span class="do">## Error in `[.data.table`(rand.unemp, , lapply(.SD, function(x) mean((x - : Some items of .SDcols are not column names: [impute.li]</span></span>
 <span id="cb1-97"><a href="#cb1-97"></a></span>
 <span id="cb1-98"><a href="#cb1-98"></a><span class="fu">print</span>(bias.unemp[ , <span class="fu">lapply</span>(.SD, <span class="cf">function</span>(x) <span class="fu">mean</span>((x <span class="sc">-</span> unemp<span class="sc">$</span>UNRATE)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
 <span id="cb1-99"><a href="#cb1-99"></a>             <span class="at">.SDcols =</span> <span class="fu">c</span>(<span class="st">"impute.ff"</span>, <span class="st">"impute.rm.nolookahead"</span>, <span class="st">"impute.rm.lookahead"</span>, <span class="st">"impute.li"</span>)])</span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="do">##      impute.ff impute.rm.nolookahead impute.rm.lookahead   impute.li</span></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="do">## 1: 0.006982183           0.004494382         0.003303371 0.001120391</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-100"><a href="#cb1-100"></a><span class="do">##     impute.ff impute.rm.nolookahead impute.rm.lookahead   impute.li</span></span>
+<span id="cb1-101"><a href="#cb1-101"></a><span class="do">## 1: 0.04582405            0.02403716         0.009574887 0.003488705</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -389,17 +383,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-4"><a href="#cb5-4"></a>d <span class="ot">&lt;-</span> donations[, .(<span class="fu">min</span>(timestamp), <span class="fu">max</span>(timestamp)), user]</span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="fu">names</span>(d) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"content"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>)</span>
 <span id="cb5-6"><a href="#cb5-6"></a>d <span class="ot">&lt;-</span> d[start <span class="sc">!=</span> end]</span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">timevis</span>(d[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d), <span class="dv">20</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">timevis</span>(d[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d), <span class="dv">20</span>)])</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="do">## Error in timevis(d[sample(1:nrow(d), 20)]): could not find function "timevis"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<div id="htmlwidget-9b16b1134d345b8a652d" class="timevis html-widget" style="width:100%;height:384px;">
-<div class="btn-group zoom-menu">
-<button type="button" class="btn btn-default btn-lg zoom-in" title="Zoom in">+</button>
-<button type="button" class="btn btn-default btn-lg zoom-out" title="Zoom out">-</button>
-</div>
-</div>
-<script type="application/json" data-for="htmlwidget-9b16b1134d345b8a652d">{"x":{"items":[{"content":"887","start":"2017-05-27 13:23:39","end":"2018-02-19 12:06:37"},{"content":"308","start":"2018-05-15 13:15:10","end":"2018-05-19 16:29:51"},{"content":"932","start":"2015-08-09 17:55:18","end":"2018-02-22 16:03:49"},{"content":"545","start":"2017-12-14 13:20:15","end":"2018-01-23 22:59:24"},{"content":"407","start":"2017-08-11 20:11:59","end":"2017-09-28 16:59:38"},{"content":"418","start":"2016-08-18 17:42:42","end":"2018-02-03 17:51:29"},{"content":"949","start":"2017-01-16 21:15:38","end":"2018-04-29 22:50:09"},{"content":"908","start":"2016-04-22 15:44:53","end":"2018-04-25 20:05:41"},{"content":"443","start":"2017-09-24 17:43:08","end":"2018-02-01 22:13:25"},{"content":"821","start":"2017-08-28 19:08:08","end":"2018-03-07 11:14:12"},{"content":"705","start":"2015-08-31 19:14:29","end":"2017-08-01 22:24:31"},{"content":"24","start":"2016-08-19 17:06:20","end":"2018-04-09 12:57:00"},{"content":"467","start":"2018-01-20 12:07:21","end":"2018-04-23 15:29:12"},{"content":"653","start":"2016-07-12 21:09:46","end":"2018-06-03 11:12:41"},{"content":"204","start":"2017-04-22 11:30:18","end":"2018-01-13 16:34:12"},{"content":"920","start":"2017-01-17 18:30:57","end":"2017-06-02 16:51:40"},{"content":"673","start":"2017-10-13 13:21:45","end":"2018-05-28 22:42:27"},{"content":"726","start":"2015-09-13 20:40:56","end":"2017-12-28 18:38:25"},{"content":"75","start":"2015-03-02 18:00:01","end":"2018-01-11 20:18:27"},{"content":"929","start":"2015-08-08 12:34:03","end":"2018-03-14 11:22:06"}],"groups":null,"showZoom":true,"zoomFactor":0.5,"fit":true,"options":[],"height":null,"timezone":null,"api":[]},"evals":[],"jsHooks":[]}</script>
-</div>
 </div>
 <section id="partial-autocorelation" class="level3">
 <h3 class="anchored" data-anchor-id="partial-autocorelation">partial-autocorelation</h3>

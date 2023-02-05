@@ -46,7 +46,7 @@ Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/b
 reticulate::py_config()
 
 myenvs=conda_list()
-envname=myenvs$name[3]
+envname=myenvs$name[4]
 use_condaenv(envname, required = TRUE)
 
 

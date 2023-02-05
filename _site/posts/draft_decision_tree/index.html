@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-11-20">
+
+<title>Lukasz Rabalski blog - draft</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Lukasz Rabalski blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">Łukasz Rąbalski blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Rombix92?tab=repositories"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/%C5%82ukasz-r%C4%85balski-2892b8102/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">draft</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 20, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dataset-exploration" id="toc-dataset-exploration" class="nav-link active" data-scroll-target="#dataset-exploration">dataset exploration</a></li>
+  <li><a href="#decision-tree" id="toc-decision-tree" class="nav-link" data-scroll-target="#decision-tree">decision tree</a>
+  <ul class="collapse">
+  <li><a href="#dealing-with-imbalance" id="toc-dealing-with-imbalance" class="nav-link" data-scroll-target="#dealing-with-imbalance">dealing with imbalance</a>
+  <ul class="collapse">
+  <li><a href="#loss-matrix" id="toc-loss-matrix" class="nav-link" data-scroll-target="#loss-matrix">loss matrix</a></li>
+  <li><a href="#weights-costs" id="toc-weights-costs" class="nav-link" data-scroll-target="#weights-costs">weights &amp; costs</a></li>
+  </ul></li>
+  <li><a href="#bagging" id="toc-bagging" class="nav-link" data-scroll-target="#bagging">bagging</a></li>
+  <li><a href="#grid-search" id="toc-grid-search" class="nav-link" data-scroll-target="#grid-search">grid search</a>
+  <ul class="collapse">
+  <li><a href="#training-test-split" id="toc-training-test-split" class="nav-link" data-scroll-target="#training-test-split">Training-Test Split</a></li>
+  <li><a href="#create-the-grid" id="toc-create-the-grid" class="nav-link" data-scroll-target="#create-the-grid">Create the Grid</a></li>
+  <li><a href="#create-a-model-function" id="toc-create-a-model-function" class="nav-link" data-scroll-target="#create-a-model-function">Create a model function</a></li>
+  <li><a href="#fit-the-models" id="toc-fit-the-models" class="nav-link" data-scroll-target="#fit-the-models">Fit the models</a></li>
+  <li><a href="#obtain-accuracy" id="toc-obtain-accuracy" class="nav-link" data-scroll-target="#obtain-accuracy">Obtain accuracy</a></li>
+  </ul></li>
+  <li><a href="#bootstraping" id="toc-bootstraping" class="nav-link" data-scroll-target="#bootstraping">bootstraping</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest">random Forest</a></li>
+  </ul></li>
+  <li><a href="#cv" id="toc-cv" class="nav-link" data-scroll-target="#cv">CV</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="cell">
+<pre><code>## 
+##          0          1 
+## 0.04969078 0.95030922</code></pre>
+</div>
+<section id="dataset-exploration" class="level1">
+<h1>dataset exploration</h1>
+</section>
+<section id="decision-tree" class="level1">
+<h1>decision tree</h1>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+<div class="cell">
+<pre><code>## Call:
+## rpart(formula = success ~ ., data = diamonds, method = "class")
+##   n= 37190 
+## 
+##           CP nsplit rel error    xerror       xstd
+## 1 0.31818182      0 1.0000000 1.0000000 0.02267679
+## 2 0.04383117      1 0.6818182 0.6661255 0.01866886
+## 3 0.03896104      2 0.6379870 0.6125541 0.01792706
+## 4 0.01000000      4 0.5600649 0.5681818 0.01728517
+## 
+## Variable importance
+##  depth random  table  price 
+##     56     33      9      1 
+## 
+## Node number 1: 37190 observations,    complexity param=0.3181818
+##   predicted class=1  expected loss=0.04969078  P(node) =1
+##     class counts:  1848 35342
+##    probabilities: 0.050 0.950 
+##   left son=2 (776 obs) right son=3 (36414 obs)
+##   Primary splits:
+##       depth  &lt; 63.05     to the right, improve=1089.78800, (0 missing)
+##       random &lt; 0.9000101 to the right, improve=1089.44800, (0 missing)
+##       table  &lt; 62.1      to the right, improve= 230.00870, (0 missing)
+##       x      &lt; 4.265     to the left,  improve=  21.74024, (0 missing)
+##       z      &lt; 2.495     to the left,  improve=  17.51159, (0 missing)
+## 
+## Node number 2: 776 observations,    complexity param=0.04383117
+##   predicted class=0  expected loss=0.121134  P(node) =0.02086582
+##     class counts:   682    94
+##    probabilities: 0.879 0.121 
+##   left son=4 (695 obs) right son=5 (81 obs)
+##   Primary splits:
+##       random &lt; 0.8956954 to the right, improve=139.71310, (0 missing)
+##       price  &lt; 15243.5   to the left,  improve= 17.07875, (0 missing)
+##       y      &lt; 6.405     to the left,  improve= 15.41798, (0 missing)
+##       x      &lt; 6.445     to the left,  improve= 14.28458, (0 missing)
+##       carat  &lt; 1.095     to the left,  improve= 13.63918, (0 missing)
+##   Surrogate splits:
+##       price &lt; 15243.5   to the left,  agree=0.909, adj=0.123, (0 split)
+##       y     &lt; 7.995     to the left,  agree=0.899, adj=0.037, (0 split)
+##       carat &lt; 2.015     to the left,  agree=0.898, adj=0.025, (0 split)
+##       z     &lt; 5.445     to the left,  agree=0.898, adj=0.025, (0 split)
+##       x     &lt; 7.895     to the left,  agree=0.897, adj=0.012, (0 split)
+## 
+## Node number 3: 36414 observations,    complexity param=0.03896104
+##   predicted class=1  expected loss=0.03202065  P(node) =0.9791342
+##     class counts:  1166 35248
+##    probabilities: 0.032 0.968 
+##   left son=6 (4666 obs) right son=7 (31748 obs)
+##   Primary splits:
+##       random &lt; 0.9000937 to the right, improve=508.07790, (0 missing)
+##       table  &lt; 62.1      to the right, improve=221.75170, (0 missing)
+##       depth  &lt; 57.95     to the left,  improve=101.26170, (0 missing)
+##       z      &lt; 2.495     to the left,  improve= 20.45527, (0 missing)
+##       x      &lt; 3.985     to the left,  improve= 18.95512, (0 missing)
+##   Surrogate splits:
+##       table &lt; 62.1      to the right, agree=0.875, adj=0.025, (0 split)
+##       depth &lt; 57.95     to the left,  agree=0.873, adj=0.012, (0 split)
+## 
+## Node number 4: 695 observations
+##   predicted class=0  expected loss=0.01870504  P(node) =0.01868782
+##     class counts:   682    13
+##    probabilities: 0.981 0.019 
+## 
+## Node number 5: 81 observations
+##   predicted class=1  expected loss=0  P(node) =0.002178005
+##     class counts:     0    81
+##    probabilities: 0.000 1.000 
+## 
+## Node number 6: 4666 observations,    complexity param=0.03896104
+##   predicted class=1  expected loss=0.2498928  P(node) =0.1254638
+##     class counts:  1166  3500
+##    probabilities: 0.250 0.750 
+##   left son=12 (406 obs) right son=13 (4260 obs)
+##   Primary splits:
+##       table &lt; 60.1      to the right, improve=162.50090, (0 missing)
+##       depth &lt; 60.25     to the left,  improve= 92.13007, (0 missing)
+##       z     &lt; 2.545     to the left,  improve= 39.25461, (0 missing)
+##       x     &lt; 4.265     to the left,  improve= 38.88219, (0 missing)
+##       carat &lt; 0.295     to the left,  improve= 36.52894, (0 missing)
+##   Surrogate splits:
+##       depth &lt; 58.65     to the left,  agree=0.917, adj=0.052, (0 split)
+##       carat &lt; 2.565     to the right, agree=0.913, adj=0.002, (0 split)
+##       x     &lt; 8.785     to the right, agree=0.913, adj=0.002, (0 split)
+## 
+## Node number 7: 31748 observations
+##   predicted class=1  expected loss=0  P(node) =0.8536703
+##     class counts:     0 31748
+##    probabilities: 0.000 1.000 
+## 
+## Node number 12: 406 observations
+##   predicted class=0  expected loss=0.3226601  P(node) =0.01091691
+##     class counts:   275   131
+##    probabilities: 0.677 0.323 
+## 
+## Node number 13: 4260 observations
+##   predicted class=1  expected loss=0.2091549  P(node) =0.1145469
+##     class counts:   891  3369
+##    probabilities: 0.209 0.791</code></pre>
+</div>
+<p>Behind the scenes rpart() is automatically applying a range of cost complexity (α values to prune the tree). To compare the error for each α value, rpart() performs a 10-fold CV (by default).</p>
+<p>In this example we find diminishing returns after 6 terminal nodes as illustrated in Figure below</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+<p>y-axis is the CV error, lower x-axis is the cost complexity (α) value, upper x-axis is the number of terminal nodes (i.e., tree size = |T|)</p>
+<p>You may also notice the dashed line which goes through the point |T|=4. Breiman (1984) suggested that in actual practice, it’s common to instead use the smallest tree within 1 standard error (SE) of the minimum CV error (this is called the 1-SE rule). Thus, we could use a tree with 3 terminal nodes and reasonably expect to experience similar results within a small margin of error.</p>
+<p>To illustrate the point of selecting a tree with 6 terminal nodes (or 4 if you go by the 1-SE rule), we can force rpart() to generate a full tree by setting cp = 0 (no penalty results in a fully grown tree). Figure below shows that after 4 terminal nodes, we see diminishing returns in error reduction as the tree grows deeper. Thus, we can significantly prune our tree and still achieve minimal expected error.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+<p>So, by default, rpart() is performing some automated tuning, with an optimal subtree of 6 total splits, 6 terminal nodes, and a cross-validated SSE of 0.553.</p>
+<div class="cell">
+<pre><code>##           CP nsplit rel error    xerror       xstd
+## 1 0.31818182      0 1.0000000 1.0000000 0.02267679
+## 2 0.04383117      1 0.6818182 0.6661255 0.01866886
+## 3 0.03896104      2 0.6379870 0.6125541 0.01792706
+## 4 0.01000000      4 0.5600649 0.5681818 0.01728517</code></pre>
+</div>
+<section id="dealing-with-imbalance" class="level2">
+<h2 class="anchored" data-anchor-id="dealing-with-imbalance">dealing with imbalance</h2>
+<section id="loss-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="loss-matrix">loss matrix</h3>
+<p>You can include a loss matrix, changing the relative importance of misclassifying a default as non-default versus a non-default as a default. You want to stress that misclassifying a default as a non-default should be penalized more heavily.</p>
+<div class="cell">
+
+</div>
+<p>Doing this, you are constructing a 2x2-matrix with zeroes on the diagonal and changed loss penalties off-diagonal. The default loss matrix is all ones off-diagonal.</p>
+<p>penalization that is 20 times bigger when misclassifying an actual default as a non-default.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</section>
+<section id="weights-costs" class="level3">
+<h3 class="anchored" data-anchor-id="weights-costs">weights &amp; costs</h3>
+<p>The weights is for rows (e.g.&nbsp;give higher weight to smaller class), the cost is for columns.</p>
+<p>weights</p>
+<pre><code>optional case weights.</code></pre>
+<p>cost</p>
+<pre><code>a vector of non-negative costs, one for each variable in the model. Defaults to one for all variables. These are scalings to be applied when considering splits, so the improvement on splitting on a variable is divided by its cost in deciding which split to choose.</code></pre>
+</section>
+</section>
+<section id="bagging" class="level2">
+<h2 class="anchored" data-anchor-id="bagging">bagging</h2>
+<p>Bootstrapping can be used to create an <em>ensemble</em> of predictions. Bootstrap aggregating, also called <em>bagging</em>, is one of the first ensemble algorithms machine learning practitioners learn and is designed to improve the stability and accuracy of regression and classification algorithms. By model averaging, bagging helps to reduce variance and minimize overfitting. Although it is usually applied to decision tree methods, it can be used with any type of method.</p>
+<div class="cell">
+<pre><code>## Error in library(doParallel): there is no package called 'doParallel'
+## Error in library(caret): there is no package called 'caret'
+## Error in library(ipred): there is no package called 'ipred'
+## Error in loadNamespace(x): there is no package called 'rsample'
+## Error in loadNamespace(x): there is no package called 'rsample'
+## Error in loadNamespace(x): there is no package called 'rsample'</code></pre>
+</div>
+<p>The bagging() function comes from the ipred package and we use nbagg to control how many iterations to include in the bagged model and coob = TRUE indicates to use the OOB error rate. By default, bagging() uses rpart::rpart() for decision tree base learners but other base learners are available. Since bagging just aggregates a base learner, we can tune the base learner parameters as normal. Here, we pass parameters to rpart() with the control parameter and we build deep trees (no pruning) that require just two observations in a node to split.</p>
+<div class="cell">
+<pre><code>## Error in bagging(formula = success ~ ., data = diamonds, nbagg = 10, coob = TRUE, : could not find function "bagging"</code></pre>
+</div>
+<p>One thing to note is that typically, the more trees the better. As we add more trees we’re averaging over more high variance decision trees. Early on, we see a dramatic reduction in variance (and hence our error) but eventually the error will typically flatline and stabilize signaling that a suitable number of trees has been reached. Often, we need only 50–100 trees to stabilize the error (in other cases we may need 500 or more). For the Ames data we see that the error is stabilizing with just over 100 trees so we’ll likely not gain much improvement by simply bagging more trees.</p>
+<div class="cell">
+<pre><code>## Error in loadNamespace(x): there is no package called 'ranger'</code></pre>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</section>
+<section id="grid-search" class="level2">
+<h2 class="anchored" data-anchor-id="grid-search">grid search</h2>
+<p>%% inspiration https://drsimonj.svbtle.com/grid-search-in-the-tidyverse %%</p>
+<section id="training-test-split" class="level3">
+<h3 class="anchored" data-anchor-id="training-test-split">Training-Test Split</h3>
+<p>To help validate our hyperparameter combinations, we’ll split our data into training and test sets (in an 80/20 split):</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="create-the-grid" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-grid">Create the Grid</h3>
+<p>Step one for grid search is to define our hyperparameter combinations. Say we want to test a few values for minsplit and maxdepth. I like to setup the grid of their combinations in a tidy data frame with a list and cross_d as follows:</p>
+<div class="cell">
+<pre><code>## Error:
+## ! `cross_d()` was deprecated in purrr 0.2.3 and is now defunct.</code></pre>
+</div>
+<p>Note that the list names are the names of the hyperparameters that we want to adjust in our model function.</p>
+</section>
+<section id="create-a-model-function" class="level3">
+<h3 class="anchored" data-anchor-id="create-a-model-function">Create a model function</h3>
+<p>We’ll be iterating down the gs data frame to use the hyperparameter values in a rpart model. The easiest way to handle this is to define a function that accepts a row of our data frame values and passes them correctly to our model. Here’s what I’ll use:</p>
+<div class="cell">
+
+</div>
+</section>
+<section id="fit-the-models" class="level3">
+<h3 class="anchored" data-anchor-id="fit-the-models">Fit the models</h3>
+<p>Now, to fit our models, use pmap to iterate down the values. The following is iterating through each row of our gs data frame, plugging the hyperparameter values for that row into our model.</p>
+<div class="cell">
+<pre><code>## Error in mutate(., fit = pmap(gs, mod)): object 'gs' not found</code></pre>
+</div>
+</section>
+<section id="obtain-accuracy" class="level3">
+<h3 class="anchored" data-anchor-id="obtain-accuracy">Obtain accuracy</h3>
+<p>Next, let’s assess the performance of each fit on our test data. To handle this efficiently, let’s write another small function:</p>
+<div class="cell">
+
+</div>
+<p>Now apply this to each fit:</p>
+<div class="cell">
+<pre><code>## Error in mutate(., test_accuracy = map_dbl(fit, compute_accuracy, test_features, : object 'gs' not found
+## Error in eval(expr, envir, enclos): object 'gs_acc' not found
+## Error in rpart.plot(gs$fit[[1]], box.palette = "RdBu", shadow.col = "gray", : object 'gs' not found</code></pre>
+</div>
+</section>
+</section>
+<section id="bootstraping" class="level2">
+<h2 class="anchored" data-anchor-id="bootstraping">bootstraping</h2>
+<p>%% inspiration https://rapidsurveys.io/learn/statistics/bootstrap/ %%</p>
+<div class="cell">
+<pre><code>## Error in loadNamespace(x): there is no package called 'rsample'
+## Error in eval(expr, envir, enclos): object 'df_bootstraping' not found
+## Error in library(modeldata): there is no package called 'modeldata'
+## Error in loadNamespace(x): there is no package called 'rsample'
+## Error in vctrs_vec_compat(.x, .purrr_user_env): object 'resample1' not found
+## Error in eval(expr, envir, enclos): object 'resample1' not found
+## Error in eval(expr, envir, enclos): object 'wa_churn' not found</code></pre>
+</div>
+</section>
+<section id="random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest">random Forest</h2>
+<div class="cell">
+<pre><code>## Error in library(ranger): there is no package called 'ranger'
+## Error in library(h2o): there is no package called 'h2o'</code></pre>
+</div>
+</section>
+</section>
+<section id="cv" class="level1">
+<h1>CV</h1>
+<p>perform CV directly within certain ML functions:</p>
+<div class="cell">
+<pre><code>## Error in library(h2o): there is no package called 'h2o'
+## Error in h2o.init(): could not find function "h2o.init"
+## Error in loadNamespace(x): there is no package called 'AmesHousing'
+## Error in loadNamespace(x): there is no package called 'h2o'
+## Error in h2o.glm(x = "Lot_Area", y = "Lot_Frontage", training_frame = ames.h2o, : could not find function "h2o.glm"</code></pre>
+</div>
+<p>Or externally as in the below chunk5. When applying it externally to an ML algorithm as below, we’ll need a process to apply the ML model to each resample, which we’ll also cover.</p>
+<div class="cell">
+<pre><code>## Error in loadNamespace(x): there is no package called 'rsample'</code></pre>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="an">title:</span><span class="co"> "draft"</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="an">date:</span><span class="co"> "2022-11-20"</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="an">tags:</span><span class="co"> []</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="an">categories:</span><span class="co"> []</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="an">draft:</span><span class="co"> TRUE</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="an">toc:</span><span class="co"> TRUE</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">---</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="in">```{r markdown_parameters, include=FALSE}</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="co">#markdown ----</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="co">#fig.width=12, </span></span>
+<span id="cb16-15"><a href="#cb16-15"></a>                      <span class="at">fig.height=</span><span class="dv">4</span>,</span>
+<span id="cb16-16"><a href="#cb16-16"></a>                       <span class="at">out.width =</span> <span class="st">'100%'</span></span>
+<span id="cb16-17"><a href="#cb16-17"></a>                      ) </span>
+<span id="cb16-18"><a href="#cb16-18"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">include =</span><span class="cn">TRUE</span>, <span class="co">#prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.</span></span>
+<span id="cb16-19"><a href="#cb16-19"></a>                      <span class="at">echo =</span> <span class="cn">FALSE</span>, <span class="co">#echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.</span></span>
+<span id="cb16-20"><a href="#cb16-20"></a>                      <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-21"><a href="#cb16-21"></a>                      <span class="at">message =</span><span class="cn">FALSE</span>,</span>
+<span id="cb16-22"><a href="#cb16-22"></a>                      <span class="at">collapse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb16-23"><a href="#cb16-23"></a>                      <span class="at">error=</span><span class="cn">TRUE</span></span>
+<span id="cb16-24"><a href="#cb16-24"></a>                      )</span>
+<span id="cb16-25"><a href="#cb16-25"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb16-26"><a href="#cb16-26"></a><span class="in">```</span></span>
+<span id="cb16-27"><a href="#cb16-27"></a></span>
+<span id="cb16-28"><a href="#cb16-28"></a><span class="in">```{r, include=FALSE}</span></span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb16-30"><a href="#cb16-30"></a><span class="in">```</span></span>
+<span id="cb16-31"><a href="#cb16-31"></a></span>
+<span id="cb16-34"><a href="#cb16-34"></a><span class="in">```{r}</span></span>
+<span id="cb16-35"><a href="#cb16-35"></a>diamonds <span class="ot">&lt;-</span> ggplot2<span class="sc">::</span>diamonds <span class="sc">%&gt;%</span></span>
+<span id="cb16-36"><a href="#cb16-36"></a>  <span class="co"># I am creating binary vairable</span></span>
+<span id="cb16-37"><a href="#cb16-37"></a>  <span class="fu">mutate</span>(<span class="at">success=</span><span class="fu">ifelse</span>(cut <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Premium'</span>,<span class="st">'Ideal'</span>),<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>cut) <span class="sc">%&gt;%</span></span>
+<span id="cb16-38"><a href="#cb16-38"></a>  <span class="co"># forcing one class to be unrepresented</span></span>
+<span id="cb16-39"><a href="#cb16-39"></a>  <span class="fu">mutate</span>(<span class="at">random=</span><span class="fu">runif</span>(<span class="fu">nrow</span>(.))) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-40"><a href="#cb16-40"></a>  <span class="fu">mutate</span>(<span class="at">exclude=</span><span class="fu">ifelse</span>(success<span class="sc">==</span><span class="dv">0</span> <span class="sc">&amp;</span> random<span class="sc">&lt;</span><span class="fl">0.9</span>,<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(exclude<span class="sc">!=</span><span class="dv">1</span>)</span>
+<span id="cb16-41"><a href="#cb16-41"></a></span>
+<span id="cb16-42"><a href="#cb16-42"></a><span class="fu">table</span>(diamonds<span class="sc">$</span>success) <span class="sc">%&gt;%</span> <span class="fu">prop.table</span>()</span>
+<span id="cb16-43"><a href="#cb16-43"></a><span class="in">```</span></span>
+<span id="cb16-44"><a href="#cb16-44"></a></span>
+<span id="cb16-45"><a href="#cb16-45"></a><span class="fu"># dataset exploration</span></span>
+<span id="cb16-46"><a href="#cb16-46"></a></span>
+<span id="cb16-47"><a href="#cb16-47"></a><span class="fu"># decision tree</span></span>
+<span id="cb16-48"><a href="#cb16-48"></a></span>
+<span id="cb16-49"><a href="#cb16-49"></a></span>
+<span id="cb16-52"><a href="#cb16-52"></a><span class="in">```{r}</span></span>
+<span id="cb16-53"><a href="#cb16-53"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb16-54"><a href="#cb16-54"></a><span class="fu">library</span>(rpart.plot)</span>
+<span id="cb16-55"><a href="#cb16-55"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-56"><a href="#cb16-56"></a>fit <span class="ot">&lt;-</span> <span class="fu">rpart</span>(success <span class="sc">~</span> .,<span class="at">method  =</span> <span class="st">"class"</span>, <span class="at">data =</span> diamonds)</span>
+<span id="cb16-57"><a href="#cb16-57"></a><span class="fu">rpart.plot</span>(fit, <span class="at">box.palette=</span><span class="st">"RdBu"</span>, <span class="at">shadow.col=</span><span class="st">"gray"</span>, <span class="at">nn=</span><span class="cn">TRUE</span>,  <span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb16-58"><a href="#cb16-58"></a><span class="in">```</span></span>
+<span id="cb16-61"><a href="#cb16-61"></a><span class="in">```{r}</span></span>
+<span id="cb16-62"><a href="#cb16-62"></a><span class="fu">summary</span>(fit)</span>
+<span id="cb16-63"><a href="#cb16-63"></a><span class="in">```</span></span>
+<span id="cb16-64"><a href="#cb16-64"></a></span>
+<span id="cb16-65"><a href="#cb16-65"></a>Behind the scenes rpart() is automatically applying a range of cost complexity (α values to prune the tree). To compare the error for each α value, rpart() performs a 10-fold CV (by default). </span>
+<span id="cb16-66"><a href="#cb16-66"></a></span>
+<span id="cb16-67"><a href="#cb16-67"></a></span>
+<span id="cb16-68"><a href="#cb16-68"></a></span>
+<span id="cb16-69"><a href="#cb16-69"></a>In this example we find diminishing returns after 6 terminal nodes as illustrated in Figure below</span>
+<span id="cb16-72"><a href="#cb16-72"></a><span class="in">```{r}</span></span>
+<span id="cb16-73"><a href="#cb16-73"></a><span class="fu">plotcp</span>(fit)</span>
+<span id="cb16-74"><a href="#cb16-74"></a><span class="in">```</span></span>
+<span id="cb16-75"><a href="#cb16-75"></a>y-axis is the CV error, </span>
+<span id="cb16-76"><a href="#cb16-76"></a>lower x-axis is the cost complexity (α) value, </span>
+<span id="cb16-77"><a href="#cb16-77"></a>upper x-axis is the number of terminal nodes (i.e., tree size = |T|)</span>
+<span id="cb16-78"><a href="#cb16-78"></a></span>
+<span id="cb16-79"><a href="#cb16-79"></a>You may also notice the dashed line which goes through the point |T|=4. Breiman (1984) suggested that in actual practice, it’s common to instead use the smallest tree within 1 standard error (SE) of the minimum CV error (this is called the 1-SE rule). Thus, we could use a tree with 3 terminal nodes and reasonably expect to experience similar results within a small margin of error.</span>
+<span id="cb16-80"><a href="#cb16-80"></a></span>
+<span id="cb16-81"><a href="#cb16-81"></a></span>
+<span id="cb16-82"><a href="#cb16-82"></a>To illustrate the point of selecting a tree with 6 terminal nodes (or 4 if you go by the 1-SE rule), we can force rpart() to generate a full tree by setting cp = 0 (no penalty results in a fully grown tree). Figure below shows that after 4 terminal nodes, we see diminishing returns in error reduction as the tree grows deeper. Thus, we can significantly prune our tree and still achieve minimal expected error.</span>
+<span id="cb16-83"><a href="#cb16-83"></a></span>
+<span id="cb16-86"><a href="#cb16-86"></a><span class="in">```{r}</span></span>
+<span id="cb16-87"><a href="#cb16-87"></a>ctrl <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">cp =</span> <span class="dv">0</span>, <span class="at">xval =</span> <span class="dv">10</span><span class="co">#, minbucket = 1, maxdepth = 5</span></span>
+<span id="cb16-88"><a href="#cb16-88"></a>             )</span>
+<span id="cb16-89"><a href="#cb16-89"></a></span>
+<span id="cb16-90"><a href="#cb16-90"></a>fit_no_limit <span class="ot">&lt;-</span> <span class="fu">rpart</span>(</span>
+<span id="cb16-91"><a href="#cb16-91"></a>    <span class="at">formula =</span> success <span class="sc">~</span> .,</span>
+<span id="cb16-92"><a href="#cb16-92"></a>    <span class="at">data    =</span> diamonds,</span>
+<span id="cb16-93"><a href="#cb16-93"></a>    <span class="at">method  =</span> <span class="st">"class"</span>, </span>
+<span id="cb16-94"><a href="#cb16-94"></a>    <span class="at">control =</span> ctrl</span>
+<span id="cb16-95"><a href="#cb16-95"></a>)</span>
+<span id="cb16-96"><a href="#cb16-96"></a></span>
+<span id="cb16-97"><a href="#cb16-97"></a></span>
+<span id="cb16-98"><a href="#cb16-98"></a><span class="fu">plotcp</span>(fit_no_limit)</span>
+<span id="cb16-99"><a href="#cb16-99"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">11</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb16-100"><a href="#cb16-100"></a><span class="in">```</span></span>
+<span id="cb16-101"><a href="#cb16-101"></a></span>
+<span id="cb16-102"><a href="#cb16-102"></a>So, by default, rpart() is performing some automated tuning, with an optimal subtree of 6 total splits, 6 terminal nodes, and a cross-validated SSE of 0.553.</span>
+<span id="cb16-103"><a href="#cb16-103"></a></span>
+<span id="cb16-106"><a href="#cb16-106"></a><span class="in">```{r}</span></span>
+<span id="cb16-107"><a href="#cb16-107"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-108"><a href="#cb16-108"></a>fit<span class="sc">$</span>cptable</span>
+<span id="cb16-109"><a href="#cb16-109"></a><span class="in">```</span></span>
+<span id="cb16-110"><a href="#cb16-110"></a></span>
+<span id="cb16-111"><a href="#cb16-111"></a><span class="fu">## dealing with imbalance</span></span>
+<span id="cb16-112"><a href="#cb16-112"></a><span class="fu">### loss matrix</span></span>
+<span id="cb16-113"><a href="#cb16-113"></a></span>
+<span id="cb16-114"><a href="#cb16-114"></a>You can include a loss matrix, changing the relative importance of misclassifying a default as non-default versus a non-default as a default. You want to stress that misclassifying a default as a non-default should be penalized more heavily. </span>
+<span id="cb16-115"><a href="#cb16-115"></a></span>
+<span id="cb16-116"><a href="#cb16-116"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb16-117"><a href="#cb16-117"></a>parms <span class="ot">=</span> <span class="fu">list</span>(<span class="at">loss =</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, cost_def_as_nondef, cost_nondef_as_def, <span class="dv">0</span>), <span class="at">ncol=</span><span class="dv">2</span>))</span>
+<span id="cb16-118"><a href="#cb16-118"></a><span class="in">```</span></span>
+<span id="cb16-119"><a href="#cb16-119"></a></span>
+<span id="cb16-120"><a href="#cb16-120"></a>Doing this, you are constructing a 2x2-matrix with zeroes on the diagonal and changed loss penalties off-diagonal. The default loss matrix is all ones off-diagonal.</span>
+<span id="cb16-121"><a href="#cb16-121"></a></span>
+<span id="cb16-122"><a href="#cb16-122"></a>penalization that is 20 times bigger when misclassifying an actual default as a non-default.</span>
+<span id="cb16-125"><a href="#cb16-125"></a><span class="in">```{r}</span></span>
+<span id="cb16-126"><a href="#cb16-126"></a>parms <span class="ot">=</span> <span class="fu">list</span>(<span class="at">loss =</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">ncol =</span> <span class="dv">2</span>))</span>
+<span id="cb16-127"><a href="#cb16-127"></a>fit_loss_matrix <span class="ot">&lt;-</span> <span class="fu">rpart</span>(success <span class="sc">~</span> .,<span class="at">method  =</span> <span class="st">"class"</span>, <span class="at">data =</span> diamonds,<span class="at">parms=</span>parms)</span>
+<span id="cb16-128"><a href="#cb16-128"></a></span>
+<span id="cb16-129"><a href="#cb16-129"></a><span class="fu">rpart.plot</span>(fit_loss_matrix, <span class="at">box.palette=</span><span class="st">"RdBu"</span>, <span class="at">shadow.col=</span><span class="st">"gray"</span>, <span class="at">nn=</span><span class="cn">TRUE</span>,  <span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb16-130"><a href="#cb16-130"></a><span class="in">```</span></span>
+<span id="cb16-131"><a href="#cb16-131"></a></span>
+<span id="cb16-132"><a href="#cb16-132"></a></span>
+<span id="cb16-133"><a href="#cb16-133"></a></span>
+<span id="cb16-134"><a href="#cb16-134"></a><span class="fu">### weights &amp; costs</span></span>
+<span id="cb16-135"><a href="#cb16-135"></a>The weights is for rows (e.g. give higher weight to smaller class), the cost is for columns.</span>
+<span id="cb16-136"><a href="#cb16-136"></a></span>
+<span id="cb16-137"><a href="#cb16-137"></a>weights</span>
+<span id="cb16-138"><a href="#cb16-138"></a></span>
+<span id="cb16-139"><a href="#cb16-139"></a><span class="in">    optional case weights.</span></span>
+<span id="cb16-140"><a href="#cb16-140"></a></span>
+<span id="cb16-141"><a href="#cb16-141"></a>cost</span>
+<span id="cb16-142"><a href="#cb16-142"></a></span>
+<span id="cb16-143"><a href="#cb16-143"></a><span class="in">    a vector of non-negative costs, one for each variable in the model. Defaults to one for all variables. These are scalings to be applied when considering splits, so the improvement on splitting on a variable is divided by its cost in deciding which split to choose.</span></span>
+<span id="cb16-144"><a href="#cb16-144"></a></span>
+<span id="cb16-145"><a href="#cb16-145"></a></span>
+<span id="cb16-146"><a href="#cb16-146"></a><span class="fu">## bagging</span></span>
+<span id="cb16-147"><a href="#cb16-147"></a></span>
+<span id="cb16-148"><a href="#cb16-148"></a>Bootstrapping  can be used to create an _ensemble_ of predictions. Bootstrap aggregating, also called _bagging_, is one of the first ensemble algorithms machine learning practitioners learn and is designed to improve the stability and accuracy of regression and classification algorithms. </span>
+<span id="cb16-149"><a href="#cb16-149"></a>By model averaging, bagging helps to reduce variance and minimize overfitting. Although it is usually applied to decision tree methods, it can be used with any type of method.</span>
+<span id="cb16-150"><a href="#cb16-150"></a></span>
+<span id="cb16-153"><a href="#cb16-153"></a><span class="in">```{r}</span></span>
+<span id="cb16-154"><a href="#cb16-154"></a><span class="co"># Helper packages</span></span>
+<span id="cb16-155"><a href="#cb16-155"></a><span class="fu">library</span>(dplyr)       <span class="co"># for data wrangling</span></span>
+<span id="cb16-156"><a href="#cb16-156"></a><span class="fu">library</span>(ggplot2)     <span class="co"># for awesome plotting</span></span>
+<span id="cb16-157"><a href="#cb16-157"></a><span class="fu">library</span>(doParallel)  <span class="co"># for parallel backend to foreach</span></span>
+<span id="cb16-158"><a href="#cb16-158"></a><span class="fu">library</span>(foreach)     <span class="co"># for parallel processing with for loops</span></span>
+<span id="cb16-159"><a href="#cb16-159"></a></span>
+<span id="cb16-160"><a href="#cb16-160"></a><span class="co"># Modeling packages</span></span>
+<span id="cb16-161"><a href="#cb16-161"></a><span class="fu">library</span>(caret)       <span class="co"># for general model fitting</span></span>
+<span id="cb16-162"><a href="#cb16-162"></a><span class="fu">library</span>(rpart)       <span class="co"># for fitting decision trees</span></span>
+<span id="cb16-163"><a href="#cb16-163"></a><span class="fu">library</span>(ipred)       <span class="co"># for fitting bagged decision trees</span></span>
+<span id="cb16-164"><a href="#cb16-164"></a></span>
+<span id="cb16-165"><a href="#cb16-165"></a></span>
+<span id="cb16-166"><a href="#cb16-166"></a><span class="co"># create Ames training data</span></span>
+<span id="cb16-167"><a href="#cb16-167"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-168"><a href="#cb16-168"></a>split  <span class="ot">&lt;-</span> rsample<span class="sc">::</span><span class="fu">initial_split</span>(diamonds, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"success"</span>)</span>
+<span id="cb16-169"><a href="#cb16-169"></a>diamonds_train  <span class="ot">&lt;-</span> rsample<span class="sc">::</span><span class="fu">training</span>(split)</span>
+<span id="cb16-170"><a href="#cb16-170"></a>diamonds_test  <span class="ot">&lt;-</span> rsample<span class="sc">::</span><span class="fu">testing</span>(split)</span>
+<span id="cb16-171"><a href="#cb16-171"></a><span class="in">```</span></span>
+<span id="cb16-172"><a href="#cb16-172"></a></span>
+<span id="cb16-173"><a href="#cb16-173"></a></span>
+<span id="cb16-174"><a href="#cb16-174"></a>The bagging() function comes from the ipred package and we use nbagg to control how many iterations to include in the bagged model and coob = TRUE indicates to use the OOB error rate. By default, bagging() uses rpart::rpart() for decision tree base learners but other base learners are available. Since bagging just aggregates a base learner, we can tune the base learner parameters as normal. Here, we pass parameters to rpart() with the control parameter and we build deep trees (no pruning) that require just two observations in a node to split. </span>
+<span id="cb16-175"><a href="#cb16-175"></a></span>
+<span id="cb16-178"><a href="#cb16-178"></a><span class="in">```{r}</span></span>
+<span id="cb16-179"><a href="#cb16-179"></a><span class="co"># make bootstrapping reproducible</span></span>
+<span id="cb16-180"><a href="#cb16-180"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-181"><a href="#cb16-181"></a></span>
+<span id="cb16-182"><a href="#cb16-182"></a><span class="co"># train bagged model</span></span>
+<span id="cb16-183"><a href="#cb16-183"></a>model <span class="ot">&lt;-</span> <span class="fu">bagging</span>(</span>
+<span id="cb16-184"><a href="#cb16-184"></a>  <span class="at">formula =</span> success <span class="sc">~</span> .,</span>
+<span id="cb16-185"><a href="#cb16-185"></a>  <span class="at">data =</span> diamonds,</span>
+<span id="cb16-186"><a href="#cb16-186"></a>  <span class="at">nbagg =</span> <span class="dv">10</span>,  </span>
+<span id="cb16-187"><a href="#cb16-187"></a>  <span class="at">coob =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-188"><a href="#cb16-188"></a>  <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">minsplit =</span> <span class="dv">2</span>, <span class="at">cp =</span> <span class="dv">0</span>)</span>
+<span id="cb16-189"><a href="#cb16-189"></a>)</span>
+<span id="cb16-190"><a href="#cb16-190"></a><span class="in">```</span></span>
+<span id="cb16-191"><a href="#cb16-191"></a></span>
+<span id="cb16-192"><a href="#cb16-192"></a>One thing to note is that typically, the more trees the better. As we add more trees we’re averaging over more high variance decision trees. Early on, we see a dramatic reduction in variance (and hence our error) but eventually the error will typically flatline and stabilize signaling that a suitable number of trees has been reached. Often, we need only 50–100 trees to stabilize the error (in other cases we may need 500 or more). For the Ames data we see that the error is stabilizing with just over 100 trees so we’ll likely not gain much improvement by simply bagging more trees.</span>
+<span id="cb16-193"><a href="#cb16-193"></a></span>
+<span id="cb16-196"><a href="#cb16-196"></a><span class="in">```{r}</span></span>
+<span id="cb16-197"><a href="#cb16-197"></a>ntree <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="at">by =</span> <span class="dv">20</span>)</span>
+<span id="cb16-198"><a href="#cb16-198"></a><span class="co"># create empty vector to store OOB RMSE values</span></span>
+<span id="cb16-199"><a href="#cb16-199"></a>rmse <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"numeric"</span>, <span class="at">length =</span> <span class="fu">length</span>(ntree))</span>
+<span id="cb16-200"><a href="#cb16-200"></a></span>
+<span id="cb16-201"><a href="#cb16-201"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(ntree)) {</span>
+<span id="cb16-202"><a href="#cb16-202"></a>  <span class="co"># reproducibility</span></span>
+<span id="cb16-203"><a href="#cb16-203"></a>  <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-204"><a href="#cb16-204"></a>  <span class="co"># perform bagged model</span></span>
+<span id="cb16-205"><a href="#cb16-205"></a>  model <span class="ot">&lt;-</span> ranger<span class="sc">::</span><span class="fu">ranger</span>(</span>
+<span id="cb16-206"><a href="#cb16-206"></a>  <span class="at">formula =</span> success <span class="sc">~</span> .,</span>
+<span id="cb16-207"><a href="#cb16-207"></a>  <span class="at">data =</span> diamonds,</span>
+<span id="cb16-208"><a href="#cb16-208"></a>  <span class="at">num.trees =</span> ntree[i],</span>
+<span id="cb16-209"><a href="#cb16-209"></a>  <span class="at">mtry =</span> <span class="fu">ncol</span>(diamonds) <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb16-210"><a href="#cb16-210"></a>  <span class="at">min.node.size =</span> <span class="dv">1</span>)</span>
+<span id="cb16-211"><a href="#cb16-211"></a>  </span>
+<span id="cb16-212"><a href="#cb16-212"></a>  </span>
+<span id="cb16-213"><a href="#cb16-213"></a>  <span class="co"># get OOB error</span></span>
+<span id="cb16-214"><a href="#cb16-214"></a>  rmse[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(model<span class="sc">$</span>prediction.error)</span>
+<span id="cb16-215"><a href="#cb16-215"></a>}</span>
+<span id="cb16-216"><a href="#cb16-216"></a></span>
+<span id="cb16-217"><a href="#cb16-217"></a>bagging_errors <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(ntree, rmse)</span>
+<span id="cb16-218"><a href="#cb16-218"></a></span>
+<span id="cb16-219"><a href="#cb16-219"></a><span class="fu">ggplot</span>(bagging_errors, <span class="fu">aes</span>(ntree, rmse)) <span class="sc">+</span></span>
+<span id="cb16-220"><a href="#cb16-220"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb16-221"><a href="#cb16-221"></a>  <span class="co">#geom_hline(yintercept = 41019, lty = "dashed", color = "grey50") +</span></span>
+<span id="cb16-222"><a href="#cb16-222"></a>  <span class="co">#annotate("text", x = 100, y = 41385, label = "Best individual pruned tree", vjust = 0, hjust = 0, color = "grey50") +</span></span>
+<span id="cb16-223"><a href="#cb16-223"></a>  <span class="co">#annotate("text", x = 100, y = 26750, label = "Bagged trees", vjust = 0, hjust = 0) +</span></span>
+<span id="cb16-224"><a href="#cb16-224"></a>  <span class="fu">ylab</span>(<span class="st">"RMSE"</span>) <span class="sc">+</span></span>
+<span id="cb16-225"><a href="#cb16-225"></a>  <span class="fu">xlab</span>(<span class="st">"Number of trees"</span>)</span>
+<span id="cb16-226"><a href="#cb16-226"></a></span>
+<span id="cb16-227"><a href="#cb16-227"></a><span class="in">```</span></span>
+<span id="cb16-228"><a href="#cb16-228"></a></span>
+<span id="cb16-229"><a href="#cb16-229"></a><span class="fu">## grid search</span></span>
+<span id="cb16-230"><a href="#cb16-230"></a></span>
+<span id="cb16-231"><a href="#cb16-231"></a>%% inspiration https://drsimonj.svbtle.com/grid-search-in-the-tidyverse %%</span>
+<span id="cb16-232"><a href="#cb16-232"></a></span>
+<span id="cb16-233"><a href="#cb16-233"></a><span class="fu">### Training-Test Split</span></span>
+<span id="cb16-234"><a href="#cb16-234"></a>To help validate our hyperparameter combinations, we’ll split our data into training and test sets (in an 80/20 split):</span>
+<span id="cb16-237"><a href="#cb16-237"></a><span class="in">```{r}</span></span>
+<span id="cb16-238"><a href="#cb16-238"></a><span class="fu">set.seed</span>(<span class="dv">245</span>)</span>
+<span id="cb16-239"><a href="#cb16-239"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(diamonds)</span>
+<span id="cb16-240"><a href="#cb16-240"></a>train_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(n), <span class="at">size =</span> .<span class="dv">8</span> <span class="sc">*</span> n)</span>
+<span id="cb16-241"><a href="#cb16-241"></a>train <span class="ot">&lt;-</span> diamonds[ train_rows, ]</span>
+<span id="cb16-242"><a href="#cb16-242"></a>test  <span class="ot">&lt;-</span> diamonds[<span class="sc">-</span>train_rows, ]</span>
+<span id="cb16-243"><a href="#cb16-243"></a><span class="in">```</span></span>
+<span id="cb16-244"><a href="#cb16-244"></a></span>
+<span id="cb16-245"><a href="#cb16-245"></a><span class="fu">### Create the Grid </span></span>
+<span id="cb16-246"><a href="#cb16-246"></a></span>
+<span id="cb16-247"><a href="#cb16-247"></a></span>
+<span id="cb16-248"><a href="#cb16-248"></a>Step one for grid search is to define our hyperparameter combinations. Say we want to test a few values for minsplit and maxdepth. I like to setup the grid of their combinations in a tidy data frame with a list and cross_d as follows:</span>
+<span id="cb16-249"><a href="#cb16-249"></a></span>
+<span id="cb16-252"><a href="#cb16-252"></a><span class="in">```{r}</span></span>
+<span id="cb16-253"><a href="#cb16-253"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-254"><a href="#cb16-254"></a>gs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">minsplit =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>),</span>
+<span id="cb16-255"><a href="#cb16-255"></a>           <span class="at">cp=</span><span class="dv">0</span>,</span>
+<span id="cb16-256"><a href="#cb16-256"></a>           <span class="at">maxdepth =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">8</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-257"><a href="#cb16-257"></a>  <span class="fu">cross_d</span>()</span>
+<span id="cb16-258"><a href="#cb16-258"></a><span class="in">```</span></span>
+<span id="cb16-259"><a href="#cb16-259"></a></span>
+<span id="cb16-260"><a href="#cb16-260"></a>Note that the list names are the names of the hyperparameters that we want to adjust in our model function.</span>
+<span id="cb16-261"><a href="#cb16-261"></a></span>
+<span id="cb16-262"><a href="#cb16-262"></a><span class="fu">### Create a model function</span></span>
+<span id="cb16-263"><a href="#cb16-263"></a></span>
+<span id="cb16-264"><a href="#cb16-264"></a>We’ll be iterating down the gs data frame to use the hyperparameter values in a rpart model. The easiest way to handle this is to define a function that accepts a row of our data frame values and passes them correctly to our model. Here’s what I’ll use:</span>
+<span id="cb16-265"><a href="#cb16-265"></a></span>
+<span id="cb16-268"><a href="#cb16-268"></a><span class="in">```{r}</span></span>
+<span id="cb16-269"><a href="#cb16-269"></a>mod <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb16-270"><a href="#cb16-270"></a>  <span class="fu">rpart</span>(success<span class="sc">~</span>., <span class="at">data =</span> train,<span class="at">method=</span><span class="st">'class'</span>, <span class="at">control =</span> <span class="fu">rpart.control</span>(...))</span>
+<span id="cb16-271"><a href="#cb16-271"></a>}</span>
+<span id="cb16-272"><a href="#cb16-272"></a><span class="in">```</span></span>
+<span id="cb16-273"><a href="#cb16-273"></a></span>
+<span id="cb16-274"><a href="#cb16-274"></a><span class="fu">### Fit the models</span></span>
+<span id="cb16-275"><a href="#cb16-275"></a>Now, to fit our models, use pmap to iterate down the values. The following is iterating through each row of our gs data frame, plugging the hyperparameter values for that row into our model.</span>
+<span id="cb16-276"><a href="#cb16-276"></a></span>
+<span id="cb16-279"><a href="#cb16-279"></a><span class="in">```{r}</span></span>
+<span id="cb16-280"><a href="#cb16-280"></a>gs <span class="ot">&lt;-</span> gs <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">fit =</span> <span class="fu">pmap</span>(gs, mod))</span>
+<span id="cb16-281"><a href="#cb16-281"></a><span class="in">```</span></span>
+<span id="cb16-282"><a href="#cb16-282"></a></span>
+<span id="cb16-283"><a href="#cb16-283"></a><span class="fu">### Obtain accuracy</span></span>
+<span id="cb16-284"><a href="#cb16-284"></a></span>
+<span id="cb16-285"><a href="#cb16-285"></a></span>
+<span id="cb16-286"><a href="#cb16-286"></a>Next, let’s assess the performance of each fit on our test data. To handle this efficiently, let’s write another small function:</span>
+<span id="cb16-289"><a href="#cb16-289"></a><span class="in">```{r}</span></span>
+<span id="cb16-290"><a href="#cb16-290"></a>compute_accuracy <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, test_features, test_labels) {</span>
+<span id="cb16-291"><a href="#cb16-291"></a>  predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, test_features, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb16-292"><a href="#cb16-292"></a>  <span class="fu">mean</span>(predicted <span class="sc">==</span> test_labels)</span>
+<span id="cb16-293"><a href="#cb16-293"></a>}</span>
+<span id="cb16-294"><a href="#cb16-294"></a></span>
+<span id="cb16-295"><a href="#cb16-295"></a><span class="in">```</span></span>
+<span id="cb16-296"><a href="#cb16-296"></a>Now apply this to each fit:</span>
+<span id="cb16-299"><a href="#cb16-299"></a><span class="in">```{r}</span></span>
+<span id="cb16-300"><a href="#cb16-300"></a>test_features <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>success)</span>
+<span id="cb16-301"><a href="#cb16-301"></a>test_labels   <span class="ot">&lt;-</span> test<span class="sc">$</span>success</span>
+<span id="cb16-302"><a href="#cb16-302"></a></span>
+<span id="cb16-303"><a href="#cb16-303"></a>gs_acc <span class="ot">&lt;-</span> gs <span class="sc">%&gt;%</span></span>
+<span id="cb16-304"><a href="#cb16-304"></a>  <span class="fu">mutate</span>(<span class="at">test_accuracy =</span> <span class="fu">map_dbl</span>(fit, compute_accuracy,</span>
+<span id="cb16-305"><a href="#cb16-305"></a>                                 test_features, test_labels))</span>
+<span id="cb16-306"><a href="#cb16-306"></a>gs_acc</span>
+<span id="cb16-307"><a href="#cb16-307"></a></span>
+<span id="cb16-308"><a href="#cb16-308"></a></span>
+<span id="cb16-309"><a href="#cb16-309"></a><span class="fu">rpart.plot</span>(gs<span class="sc">$</span>fit[[<span class="dv">1</span>]], <span class="at">box.palette=</span><span class="st">"RdBu"</span>, <span class="at">shadow.col=</span><span class="st">"gray"</span>, <span class="at">nn=</span><span class="cn">TRUE</span>,  <span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb16-310"><a href="#cb16-310"></a></span>
+<span id="cb16-311"><a href="#cb16-311"></a><span class="in">```</span></span>
+<span id="cb16-312"><a href="#cb16-312"></a></span>
+<span id="cb16-313"><a href="#cb16-313"></a></span>
+<span id="cb16-314"><a href="#cb16-314"></a><span class="fu">## bootstraping</span></span>
+<span id="cb16-315"><a href="#cb16-315"></a></span>
+<span id="cb16-316"><a href="#cb16-316"></a></span>
+<span id="cb16-317"><a href="#cb16-317"></a>%% inspiration https://rapidsurveys.io/learn/statistics/bootstrap/ %%</span>
+<span id="cb16-320"><a href="#cb16-320"></a><span class="in">```{r}</span></span>
+<span id="cb16-321"><a href="#cb16-321"></a>df_bootstraping <span class="ot">&lt;-</span> rsample<span class="sc">::</span><span class="fu">bootstraps</span>(diamonds, <span class="at">times =</span> <span class="dv">10</span>)</span>
+<span id="cb16-322"><a href="#cb16-322"></a>df_bootstraping<span class="sc">$</span>splits[<span class="dv">1</span>]</span>
+<span id="cb16-323"><a href="#cb16-323"></a></span>
+<span id="cb16-324"><a href="#cb16-324"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb16-325"><a href="#cb16-325"></a><span class="fu">library</span>(modeldata)</span>
+<span id="cb16-326"><a href="#cb16-326"></a><span class="fu">data</span>(wa_churn)</span>
+<span id="cb16-327"><a href="#cb16-327"></a></span>
+<span id="cb16-328"><a href="#cb16-328"></a><span class="fu">set.seed</span>(<span class="dv">13</span>)</span>
+<span id="cb16-329"><a href="#cb16-329"></a>resample1 <span class="ot">&lt;-</span> rsample<span class="sc">::</span><span class="fu">bootstraps</span>(wa_churn, <span class="at">times =</span> <span class="dv">3</span>)</span>
+<span id="cb16-330"><a href="#cb16-330"></a><span class="fu">map_dbl</span>(</span>
+<span id="cb16-331"><a href="#cb16-331"></a>  resample1<span class="sc">$</span>splits,</span>
+<span id="cb16-332"><a href="#cb16-332"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb16-333"><a href="#cb16-333"></a>    dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(x)<span class="sc">$</span>churn</span>
+<span id="cb16-334"><a href="#cb16-334"></a>    <span class="fu">mean</span>(dat <span class="sc">==</span> <span class="st">"Yes"</span>)</span>
+<span id="cb16-335"><a href="#cb16-335"></a>  }</span>
+<span id="cb16-336"><a href="#cb16-336"></a>)</span>
+<span id="cb16-337"><a href="#cb16-337"></a>resample1<span class="sc">$</span>splits</span>
+<span id="cb16-338"><a href="#cb16-338"></a></span>
+<span id="cb16-339"><a href="#cb16-339"></a>wa_churn[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),]</span>
+<span id="cb16-340"><a href="#cb16-340"></a><span class="in">```</span></span>
+<span id="cb16-341"><a href="#cb16-341"></a></span>
+<span id="cb16-342"><a href="#cb16-342"></a><span class="fu">## random Forest</span></span>
+<span id="cb16-343"><a href="#cb16-343"></a></span>
+<span id="cb16-346"><a href="#cb16-346"></a><span class="in">```{r}</span></span>
+<span id="cb16-347"><a href="#cb16-347"></a><span class="co"># Helper packages</span></span>
+<span id="cb16-348"><a href="#cb16-348"></a><span class="fu">library</span>(dplyr)    <span class="co"># for data wrangling</span></span>
+<span id="cb16-349"><a href="#cb16-349"></a><span class="fu">library</span>(ggplot2)  <span class="co"># for awesome graphics</span></span>
+<span id="cb16-350"><a href="#cb16-350"></a></span>
+<span id="cb16-351"><a href="#cb16-351"></a><span class="co"># Modeling packages</span></span>
+<span id="cb16-352"><a href="#cb16-352"></a><span class="fu">library</span>(ranger)   <span class="co"># a c++ implementation of random forest </span></span>
+<span id="cb16-353"><a href="#cb16-353"></a><span class="fu">library</span>(h2o)      <span class="co"># a java-based implementation of random forest</span></span>
+<span id="cb16-354"><a href="#cb16-354"></a><span class="in">```</span></span>
+<span id="cb16-355"><a href="#cb16-355"></a></span>
+<span id="cb16-356"><a href="#cb16-356"></a><span class="fu"># CV</span></span>
+<span id="cb16-357"><a href="#cb16-357"></a></span>
+<span id="cb16-358"><a href="#cb16-358"></a>perform CV directly within certain ML functions:</span>
+<span id="cb16-359"><a href="#cb16-359"></a></span>
+<span id="cb16-362"><a href="#cb16-362"></a><span class="in">```{r}</span></span>
+<span id="cb16-363"><a href="#cb16-363"></a><span class="fu">library</span>(h2o)</span>
+<span id="cb16-364"><a href="#cb16-364"></a><span class="fu">h2o.init</span>()</span>
+<span id="cb16-365"><a href="#cb16-365"></a></span>
+<span id="cb16-366"><a href="#cb16-366"></a>ames <span class="ot">&lt;-</span> AmesHousing<span class="sc">::</span><span class="fu">make_ames</span>()</span>
+<span id="cb16-367"><a href="#cb16-367"></a>ames.h2o <span class="ot">&lt;-</span> h2o<span class="sc">::</span><span class="fu">as.h2o</span>(ames)</span>
+<span id="cb16-368"><a href="#cb16-368"></a></span>
+<span id="cb16-369"><a href="#cb16-369"></a>h2o.cv <span class="ot">&lt;-</span> <span class="fu">h2o.glm</span>(</span>
+<span id="cb16-370"><a href="#cb16-370"></a>  <span class="at">x =</span> <span class="st">'Lot_Area'</span>, </span>
+<span id="cb16-371"><a href="#cb16-371"></a>  <span class="at">y =</span> <span class="st">'Lot_Frontage'</span>, </span>
+<span id="cb16-372"><a href="#cb16-372"></a>  <span class="at">training_frame =</span> ames.h2o,</span>
+<span id="cb16-373"><a href="#cb16-373"></a>  <span class="at">nfolds =</span> <span class="dv">10</span>  <span class="co"># perform 10-fold CV</span></span>
+<span id="cb16-374"><a href="#cb16-374"></a>)</span>
+<span id="cb16-375"><a href="#cb16-375"></a><span class="in">```</span></span>
+<span id="cb16-376"><a href="#cb16-376"></a></span>
+<span id="cb16-377"><a href="#cb16-377"></a>Or externally as in the below chunk5. When applying it externally to an ML algorithm as below, we’ll need a process to apply the ML model to each resample, which we’ll also cover.</span>
+<span id="cb16-378"><a href="#cb16-378"></a></span>
+<span id="cb16-381"><a href="#cb16-381"></a><span class="in">```{r}</span></span>
+<span id="cb16-382"><a href="#cb16-382"></a>rsample<span class="sc">::</span><span class="fu">vfold_cv</span>(ames, <span class="at">v =</span> <span class="dv">10</span>)</span>
+<span id="cb16-383"><a href="#cb16-383"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>

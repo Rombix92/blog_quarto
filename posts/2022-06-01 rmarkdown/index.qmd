@@ -1,6 +1,6 @@
 ---
-description: Presentation of R Markdown functionality
 title: R_Markdown
+description: Presentation of R Markdown functionality
 categories: ["Rmarkdown"]
 toc: TRUE
 ---

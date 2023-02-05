@@ -1,0 +1,903 @@
+---
+title-block-banner: true
+author: Łukasz Rąbalski
+title: Water sensors 
+description: Presentation of Time Series exploration, anomaly detection, and predictions techniques
+format:
+  html:
+    toc: true
+    toc-location: left
+    number-sections: true
+    toc-depth: 3
+    embed-resources: true
+categories: ['Python','Time Series','anomaly detection']
+tags: []
+editor: source
+fig.height: 4
+out.width: '100%'
+include: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+echo: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+warning: FALSE
+message: FALSE
+error: FALSE
+---
+
+```{=html}
+<style type="text/css">
+.main-container {
+  max-width: 100% !important;
+  margin: auto;
+}
+</style>
+```
+```{r markdown_parameters, include=FALSE}
+
+#markdown ----
+knitr::opts_chunk$set(#fig.width=12, 
+                      fig.height=4,
+                       out.width = '100%'
+                      ) 
+knitr::opts_chunk$set(include =TRUE, 
+                      warning = FALSE,
+                      message =FALSE,
+                      collapse=TRUE
+                      
+                      )
+options(scipen=999)
+
+
+
+```
+
+```{r, eval=TRUE, include=FALSE}
+# functions ----
+
+tabela<- function(df, caption='',zero_index_hide_column=NA){
+  DT::datatable(data = df,
+                filter = 'top', 
+                extensions = 'Buttons',
+                caption = caption,
+                options = list(dom = "Blfrtip",pageLength = 10, lengthMenu = c(10, 25, 200),scrollX=TRUE, buttons = c('copy', 'csv', 'excel')
+                               ,columnDefs = list(
+                                 list(targets = {{zero_index_hide_column}},visible = FALSE),
+                                 list(className = 'dt-center', targets="_all")
+                               )
+                ), 
+                rownames = FALSE,
+                class = "display")  
+}
+```
+
+<white> \##### libraries
+
+```{r biblioteki, include=FALSE}
+library(DBI)
+library(stringr)
+library(stringi)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(RPostgreSQL)
+library(readr)
+library(data.table)
+library(scales)
+library(lubridate)
+library(plotly)
+
+
+
+#dla celow markdowna
+library(kableExtra)
+library(knitr)
+library(DT)
+```
+
+```{r include=FALSE}
+#devtools::install_github("rstudio/reticulate")
+
+
+library(reticulate)
+Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python")
+reticulate::py_config()
+
+myenvs=conda_list()
+envname=myenvs$name[4]
+use_condaenv(envname, required = TRUE)
+```
+
+In the attached file you will find data containing two water sensors:
+water level and water velocity.
+
+Column named "level" refers to raw level data and column named
+"velocity" refers to raw velocity data. Columns "final_level" and
+"final_velocity" refer to data that was manually corrected or removed
+because of malfunctions of sensors or other reasons. You have three
+tasks here:
+
+1.  Analyze the level and velocity data, find patterns, state own
+    observations and conclusions.
+
+2.  Having the knowledge of what was corrected and statistical methods
+    prepare simple solution to automatically find suspicious or
+    corrupted
+    data. (without using final columns to get the results, use them only
+    as a
+    reference).
+
+3.  Prepare a simple prediction model for both channels.
+
+# data exploration
+
+> Analyze the level and velocity data, find patterns, state own
+> observations and conclusions.
+
+## missing data
+
+```{python,}
+import numpy as np
+import pandas as pd
+import math 
+df = pd.read_csv('/Users/lrabalski1/Desktop/prv/data/water_sensors.csv', parse_dates=["time"])
+print('min time value: ',df.time.min(),'\n max time value: ',df.time.max())
+df=pd.DataFrame(
+  pd.date_range('2019-01-01 00:00:00','2021-05-31 23:55:00',freq='5T'),
+  columns=['time']
+  ).merge(df, how='left', on=['time'])
+df.index=df.time
+
+
+print('NA within level_final: ',sum(df.level_final.isna()),'\nNA within velocity_final: ', sum(df.velocity_final.isna()))
+
+
+
+df['level_data_malfunction']=(df.level.isna()) | (df.level!=df.level_final)
+df['velocity_data_malfunction']=(df.velocity.isna()) | (df.velocity!=df.velocity_final)
+
+
+# create a list of our conditions
+conditions_level = [
+    (df['level_data_malfunction'] ==False),
+    (df['level_data_malfunction'] ==True) & ( df['level_final'].isna()),
+    (df['level_data_malfunction'] ==True) & ( ~df['level_final'].isna())
+    ]
+values_level = [np.nan,'sensors_malfunction','manual_correction']
+conditions_velocity = [
+    (df['velocity_data_malfunction'] ==False),
+    (df['velocity_data_malfunction'] ==True) & ( df['velocity_final'].isna()),
+    (df['velocity_data_malfunction'] ==True) & ( ~df['velocity_final'].isna())
+    ]
+values_velocity = [np.nan,'sensors_malfunction','manual_correction']
+df['velocity_reason_of_correction'] = np.select(conditions_velocity, values_velocity)
+df['level_reason_of_correction'] = np.select(conditions_level, values_level)
+print('\n\n')
+```
+
+Missing data in both variable (velocity and level), which can be
+explained as sensors malfunction, is observed in 13725 data points. For
+both variable missing data appears in the same datapoint. Probably
+sensors are responsible for measuring both measures.
+
+Additionally in case of level measure we can observe 204 datapoint where
+data were manually corrected.
+
+```{python}
+print(pd.crosstab(df['velocity_reason_of_correction'],df['level_reason_of_correction']))
+```
+
+## patterns
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns 
+
+df['time'] = pd.to_datetime(df['time'])
+df_t=df.copy()
+df_t.index = df_t['time']
+df_t=df_t.drop(['time','level_data_malfunction', 'velocity_data_malfunction','velocity_reason_of_correction', 'level_reason_of_correction'], axis=1)
+
+check=df_t.sort_values('level_final', ascending=False)
+
+```
+
+From the chart it can bee seen that:
+
+-   there is rather no trend within each timeseries
+
+-   in level data one big anomaly can be observed in the middle of a
+    period
+
+```{python}
+
+# downsampling
+df_M = df_t.resample("D").mean()
+
+styles1 = ['b-','r-']
+plt.clf()
+fig, axes = plt.subplots(nrows=2, ncols=1, sharex=True)
+df_M[['level_final']].plot(ax=axes[0],style=styles1)
+df_M[['velocity_final']].plot(ax=axes[1],style=styles1)
+plt.show()
+
+check=df_M.sort_values('level_final', ascending=False)
+```
+
+### stationarity
+
+As it can be seen on the both plots out time series seeme to be
+stationary, rolling mean and SD is stable within time.
+
+```{python}
+
+rolling_mean = df_M.rolling(7).mean()
+rolling_std = df_M.rolling(7).std()
+
+
+#f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+plt.clf()
+fig = plt.figure()
+fig.add_subplot(2, 1, 1) 
+
+plt.plot(df_M['level_final'], color="blue",label="Original Data")
+plt.plot(rolling_mean['level_final'], color="red", label="Rolling Mean 7 days")
+plt.plot(rolling_std['level_final'], color="black", label = "Rolling SD 7 days")
+plt.title("Level Data")
+plt.xticks([])
+plt.legend(loc="best")
+
+fig.add_subplot(2, 1, 2) 
+plt.plot(df_M['velocity_final'], color="blue",label="Original Data")
+plt.plot(rolling_mean['velocity_final'], color="red", label="Rolling Mean 7 days")
+plt.plot(rolling_std['velocity_final'], color="black", label = "Rolling SD 7 days")
+plt.title("Velocity Data")
+plt.legend(loc="best")
+plt.xticks([])
+plt.show()
+```
+
+Stiationarity of a data is support by the fact that p-value of
+Dickey--Fuller test is lower than 5 percent (null hypothesis it claiming
+that time series is non-stationary) and the test statistic is lower than
+the critical value. We can also draw these conclusions from inspecting
+the data.
+
+```{python}
+from statsmodels.tsa.stattools import adfuller
+adft_velocity = adfuller(df_M.dropna(subset=['velocity_final'])['velocity_final'],autolag="AIC")
+adft_level = adfuller(df_M.dropna(subset=['level_final'])['level_final'],autolag="AIC")
+
+adft=adft_level
+output_level = pd.DataFrame({"Values":[adft[0],adft[1],adft[2],adft[3], adft[4]['1%'], adft[4]['5%'], adft[4]['10%']]  , "Metric":["Test Statistics","p-value","No. of lags used","Number of observations used", 
+                                                        "critical value (1%)", "critical value (5%)", "critical value (10%)"]})
+
+adft=adft_velocity
+output_velocity = pd.DataFrame({"Values":[adft[0],adft[1],adft[2],adft[3], adft[4]['1%'], adft[4]['5%'], adft[4]['10%']]  , "Metric":["Test Statistics","p-value","No. of lags used","Number of observations used", 
+                                                        "critical value (1%)", "critical value (5%)", "critical value (10%)"]})
+
+results = pd.DataFrame(output_velocity.join(output_level, lsuffix='_velocity', rsuffix='_level'))
+results
+```
+
+```{r}
+tabela(py$results)
+```
+
+### autocorelation
+
+We can see that both variable are weakly autocorelated, however velocity
+data better. Reason for bad autocorelation in level data measured this
+way, may have fact of big anomaly within dataset.
+
+```{python}
+def my_function(df,col, array):
+  dicts = {}
+  for idx, x in enumerate(array):
+    dicts[x] = df[col].autocorr(x)
+  return dicts
+print('autocorelation of level data :')
+my_function(df_M,'level_final',array=[1,7,14,30,365])
+print('\n autocorelation of velocity data :')
+my_function(df_M,'velocity_final',array=[1,7,14,30,365])
+
+```
+
+### data imputation
+
+I will choose best method based on longest period upon which I have full
+data.
+
+Missing data is spread along all time range.
+
+```{python}
+
+df_na = df_t.copy()
+df_na['time']=df_na.index
+df_na = df_na.reset_index(drop=True)
+df_na['date']=df_na['time'].dt.date
+df_na['na_velocity_final'] = df_na.velocity_final.isna()
+df_na['na_level_final'] = df_na.level_final.isna()
+dates_with_na = df_na.groupby('date')[['na_level_final','na_velocity_final']].sum().reset_index()
+dates_with_na['any_na'] = dates_with_na.sum(axis=1)
+dates_with_na[dates_with_na.any_na > 0]
+
+plt.clf()
+fig = plt.figure()
+plt.plot(dates_with_na.date, dates_with_na.any_na)
+
+plt.show()
+```
+
+The longest chain of missing data is of 5476 consecutive data points (5
+seconds \* 5476 = 7.6 hours) .
+
+```{python}
+longest_consecutive_na_chain = (~df_na['na_level_final']).cumsum().value_counts()
+longest_consecutive_na_chain = longest_consecutive_na_chain[longest_consecutive_na_chain!=1]-1
+
+
+df_na.index = df_na['time']
+longest_concecutive_full_data_chain  = (df_na['na_level_final']).cumsum()
+longest_concecutive_full_data_chain_counts = longest_concecutive_full_data_chain.value_counts()
+
+longest_concecutive_full_data_chain_counts=longest_concecutive_full_data_chain_counts[longest_concecutive_full_data_chain_counts!=1]-1
+
+selected_chain = longest_concecutive_full_data_chain[longest_concecutive_full_data_chain==longest_concecutive_full_data_chain_counts.index[0]]
+
+
+```
+
+Any automatic technic od missing data imputation like:
+
+-   Mean, median and mode imputation
+
+-   Forward and backward filling
+
+-   linear / nearest imputation
+
+could behave bad in such a kind o missing pattern (5476 consecutive data
+points is missing)
+
+Thats why I will prepare two different imputation schema, check their
+accuracy for given dataset and choose better one:
+
+-   **Method 1**: fill the missing data with the averaged value of given
+    second of year. For seconds from january to may i will have maximum
+    3 data points (2019;2020;2021); for rest maximum of 2 data points.
+
+-   **Method 2**:fill data with previous day data point with similar
+    daytime
+
+```{python}
+
+
+# preparing dataset for Method 1
+df_fill = df_t.copy()
+df_fill['time']=df_fill.index
+#df_fill = df_fill.reset_index(drop=True)
+df_fill['time_agg'] = pd.DatetimeIndex(df_fill.time).strftime("%m-%d %H:%M:%S")
+df_time_agg = df_fill.groupby('time_agg').agg(
+  velocity_final_mean=('velocity_final','mean'),
+  level_final_mean=('level_final','mean'),
+  velocity_mean=('velocity','mean'),
+  level_mean=('level','mean')
+).reset_index()
+
+
+#'after agregation to day of year I still have 54 missing value, which mostly come from one chain of missing data. I will replace them with data from previous day.')
+#df_time_agg.isna().sum()
+
+df_time_agg = df_time_agg.join(df_time_agg.shift(24*12), rsuffix='_lag_1_day')
+df_time_agg.velocity_final_mean = df_time_agg.velocity_final_mean.fillna(df_time_agg.velocity_final_mean_lag_1_day)
+df_time_agg.velocity_mean = df_time_agg.velocity_mean.fillna(df_time_agg.velocity_mean_lag_1_day)
+df_time_agg.level_final_mean = df_time_agg.level_final_mean.fillna(df_time_agg.level_final_mean_lag_1_day)
+df_time_agg.level_mean = df_time_agg.level_mean.fillna(df_time_agg.level_mean_lag_1_day)
+df_time_agg = df_time_agg[df_time_agg.columns.drop(list(df_time_agg.filter(regex='_lag_1_day')))]
+
+
+# testing two method
+## preparing test data
+
+df_test = df_fill.loc[selected_chain.index].copy()
+df_test['velocity_final_missing'] = df_test.velocity_final
+df_test['level_final_missing'] = df_test.level_final
+rng = np.random.RandomState(42)
+random_indices = rng.choice(range(len(df_test)), size=round(len(df_test)/50))
+df_test = df_test.reset_index(drop=True)
+df_test.loc[random_indices, ['velocity_final_missing','level_final_missing']] = np.nan
+
+
+## fillig missing data
+### time_agg method - Method 1
+df_test = df_test.merge(df_time_agg, how='left', on =['time_agg'])
+df_test.index = df_test['time']
+df_test['velocity_final_fill_method_1'] = df_test.velocity_final_missing.fillna(df_test.velocity_final_mean)
+df_test['level_final_fill_method_1'] = df_test.level_final_missing.fillna(df_test.level_final_mean)
+
+### laged value - Method 2
+cols= ['velocity_final_fill_method_2','level_final_fill_method_2']
+time_shifts = np.array([-24*12,-24*12+1,-24*12-1,-24*12+2,-24*12-2,-24*12+3,-24*12-3,-24*12*2,-24*12*2+1,-24*12*2-1,-24*12*2+2,-24*12*2+2,-24*12*2+3,-24*12*2-3])
+
+df_test['velocity_final_fill_method_2'] = df_test.velocity_final_missing
+df_test['level_final_fill_method_2'] = df_test.level_final_missing
+
+i=-1
+while df_test[['velocity_final_fill_method_2','level_final_fill_method_2']].isna().sum().sum() >0:
+  i=+1
+  time_shifts = [x+1 for x in time_shifts]
+  for col,time_shift in  ((x, y) for x in cols for y in time_shifts):
+    #print (col,time_shift)
+    df_test[col] = df_test[col].fillna(df_test[col].shift(time_shift))
+
+
+
+
+
+
+# testing difference
+level_dist_1 = abs(df_test.level_final_fill_method_2-df_test.level_final)
+level_dist_2 = abs(df_test.level_final_fill_method_1-df_test.level_final)
+
+velocity_dist_1 = abs(df_test.velocity_final_fill_method_2-df_test.velocity_final)
+velocity_dist_2 = abs(df_test.velocity_final_fill_method_1-df_test.velocity_final)
+
+
+plt.clf()
+fig = plt.figure()
+fig.add_subplot(2, 2, 1)
+
+plt.plot(level_dist_1, color="red", label="Level - Method 1")
+plt.plot(level_dist_2, color="black", label = "Level - Method 2")
+#plt.title("Absolute Error for level missing data imputation")
+plt.legend(loc="best")
+plt.xticks(rotation=45)
+
+fig.add_subplot(2, 2, 2)
+plt.bar(['Level - method 1','Level - method 2'], [level_dist_1.sum(),level_dist_2.sum()])
+#plt.title("Absolute Error for level missing data imputation")
+plt.xticks(rotation=30)
+
+fig.add_subplot(2, 2, 3)
+plt.plot(velocity_dist_1, color="red", label="Velocity - Method 1")
+plt.plot(velocity_dist_2, color="black", label = "Velocity - Method 2")
+#plt.title("Absolute Error for velocity missing data imputation")
+plt.legend(loc="best")
+plt.xticks(rotation=45)
+
+fig.add_subplot(2, 2, 4)
+plt.bar(['Velocity - method 1','Velocity - method 2'], [velocity_dist_1.sum(),velocity_dist_2.sum()])
+#plt.title("Absolute Error for level missing data imputation")
+plt.xticks(rotation=30)
+fig.tight_layout()
+plt.show()
+
+
+```
+
+```{python, include=FALSE}
+df_fill_final= df_fill.copy()
+df_fill_final = df_fill_final.merge(df_time_agg, how='left', on =['time_agg'])
+df_fill_final.index = df_fill_final['time']
+df_fill_final['velocity_final_fill'] = df_fill_final.velocity_final.fillna(df_fill_final.velocity_final_mean)
+df_fill_final['level_final_fill'] = df_fill_final.level_final.fillna(df_fill_final.level_final_mean)
+df_fill_final['velocity_fill'] = df_fill_final.velocity.fillna(df_fill_final.velocity_mean)
+df_fill_final['level_fill'] = df_fill_final.level.fillna(df_fill_final.level_mean)
+df_fill_final=df_fill_final.drop(df_time_agg.columns,axis=1)
+
+```
+
+### periodic decomposition
+
+Both dataset show quite strong daily seasonality (level higher then
+velocity) Both dataset show weak weekly seasonality (again level higher
+then velocity) There is no observable trend in both variables.
+
+```{python}
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+
+
+
+# daily seasonality
+df_D = df_fill_final
+decompose = seasonal_decompose(df_D.loc[df_D.index > '2021-04-01','velocity_final_fill'],model='additive', period = 12*24)
+decompose.plot()
+plt.show()
+
+decompose = seasonal_decompose(df_D.loc[df_D.index > '2021-04-01','level_final_fill'],model='additive', period = 12*24)
+decompose.plot()
+plt.show()
+
+# weakly seasonality
+df_D = df_fill_final.resample("D").mean()
+decompose = seasonal_decompose(df_D.loc[df_D.index >= '2020-05-12','velocity_final_fill'],model='additive', period = 7)
+decompose.plot()
+plt.show()
+
+decompose = seasonal_decompose(df_D.loc[df_D.index >= '2020-05-12','level_final_fill'],model='additive', period = 7)
+decompose.plot()
+plt.show()
+
+
+
+
+
+
+```
+
+# automatically detect suspicious data
+
+## simple solution
+
+> Having the knowledge of what was corrected ... prepare simple solution
+> to automatically find suspicious or corrupted data
+
+```{python, include=FALSE}
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.covariance import EllipticEnvelope
+from sklearn.ensemble import IsolationForest
+```
+
+Below I present two periods within which data correction of level
+variable took place. It shows that there is no more then 600 level
+value, while manuall correction reported that there were higher values
+to observe. Probably sensors are not able to make measurement above this
+level.
+
+According to this my suggestion would be:
+
+> **🚨** **when the measurement of level will hit 600 sound the alarm
+> 🚨**
+
+The data correction process which took place within 2019-06-13 was
+substle in size. Hard to be understooded without any extra information.
+
+```{python, include=TRUE, eval=TRUE}
+a = df.loc[df['level_reason_of_correction'] == 'manual_correction', ['level']] #anomaly
+
+
+sel_dates = (df.index>a.index.min()) & (df.index < a.index.max())
+sel_dates_1 = np.isin(df.index.date,list(set(a.index.date))[0:2])
+sel_dates_2 = np.isin(df.index.date,list(set(a.index.date))[2:])
+
+a_1 = df.loc[(df['level_reason_of_correction'] == 'manual_correction') & (sel_dates_1==True), ['level']] #anomaly
+
+
+a_2 = df.loc[(df['level_reason_of_correction'] == 'manual_correction') & (sel_dates_2==True), ['level']] #anomaly
+
+check = df.loc[sel_dates_2,['level','level_final']]
+
+plt.clf()
+fig = plt.figure()
+
+fig.add_subplot(2, 1, 1) 
+plt.plot( df.loc[sel_dates_1,['level_final']], color='green', label = 'corrected',linestyle='dashed')
+plt.plot( df.loc[sel_dates_1,['level']], color='black', label = 'Uncorrected')
+plt.scatter(a_1.index,a_1['level'], color='red', label = 'bad data',alpha=0.5, marker='*')
+plt.xticks(rotation=30)
+plt.legend()
+
+fig.add_subplot(2, 1, 2) 
+plt.plot( df.loc[sel_dates_2,['level_final']], color='green', label = 'corrected',linestyle='dashed')
+plt.plot( df.loc[sel_dates_2,['level']], color='black', label = 'Uncorrected')
+plt.scatter(a_2.index,a_2['level'], color='red', label = 'bad data',alpha=0.5, marker='*')
+plt.xticks(rotation=30)
+plt.legend()
+fig.tight_layout()
+plt.show();
+
+```
+
+## Statistical method
+
+> Having the knowledge of statistical methods prepare simple solution to
+> automatically find suspicious or corrupted data.
+
+In order to detect anomalies in dataset I used IsolationForest algorithm
+which identifies anomalies by isolating outliers in the data.
+
+The `contamination` parameter defines a rough estimate of the percentage
+of the outliers in our dataset. Based on what i know about size of
+manual correction within my dataset I assigned contamination to be 0.1%
+in our case.
+
+```{python}
+random_state = np.random.RandomState(42)
+outliers_fraction = float(round(np.mean(df['level_reason_of_correction']=='manual_correction'),ndigits=3))
+
+
+scaler = StandardScaler()
+np_scaled_velocity = scaler.fit_transform(df_fill_final.velocity_fill.values.reshape(-1, 1))
+np_scaled_level = scaler.fit_transform(df_fill_final.level_fill.values.reshape(-1, 1))
+
+data_velocity = pd.DataFrame(np_scaled_velocity)
+data_level = pd.DataFrame(np_scaled_level)
+
+#train isolation forest
+model_velocity =  IsolationForest(contamination=outliers_fraction+0.01,random_state=random_state)
+model_level =  IsolationForest(contamination=outliers_fraction,random_state=random_state)
+
+model_velocity.fit(data_velocity)
+model_level.fit(data_level)
+
+df_fill_final['velocity_anomaly'] = model_velocity.predict(data_velocity)
+df_fill_final['level_anomaly'] = model_level.predict(data_level)
+
+
+# checking correctness
+df.index = df['time']
+df_fill_final = df_fill_final.join(df['level_reason_of_correction'])
+
+
+# visualization
+
+a = df_fill_final.loc[df_fill_final['velocity_anomaly'] == -1, ['velocity_fill']] #anomaly
+
+plt.clf()
+fig = plt.figure()
+plt.scatter(a.index,a['velocity_fill'], color='red', label = 'Anomaly')
+plt.scatter(df_fill_final.index, df_fill_final['velocity_fill'], color='black', label = 'Normal',s=1, alpha=0.3)
+plt.legend()
+plt.show();
+
+
+
+a = df_fill_final.loc[(df_fill_final['level_anomaly'] == -1), ['level_fill']] #anomaly
+a_true = df_fill_final.loc[(df_fill_final['level_reason_of_correction'] == 'manual_correction') , ['level_fill']] #anomaly
+
+
+plt.clf()
+fig = plt.figure()
+plt.scatter(df_fill_final.index, df_fill_final['level_fill'], color='black', label = 'Normal',s=1, alpha=0.3)
+plt.scatter(a.index,a['level_fill'], color='red', label = 'Anomaly_IsolationForest',alpha=0.5, marker='*')
+plt.scatter(a_true.index,a_true['level_fill'], color='blue', label = 'bad data',alpha=0.5,marker='o',s=20)
+plt.legend()
+plt.show();
+
+
+
+df_fill_final['anomaly_detected'] = (df_fill_final['level_anomaly'] == -1)
+df_fill_final['anomaly_true'] = df_fill_final['level_reason_of_correction'] == 'manual_correction'
+
+```
+
+IsolationForest managed to detect all manually coreccted data and
+additionally assign this label to 50 extra data points.
+
+```{python}
+print(pd.crosstab(df_fill_final['anomaly_detected'] ,df_fill_final['anomaly_true'] ))
+```
+
+# prediction model
+
+> > Prepare a simple prediction model for both channels.
+
+I prepare models which are trying to predict magnitude of level and
+velocity simply on the base of previous 5 day history of given measure.
+
+Architecture of model is fully connected Neural Network that starts by
+flattening the data and then runs it through two Dense layers. I used
+mean squared error as the loss, rather than MAE, because unlike MAE,
+it's smooth around zero, which is a useful property for gradient
+descent.
+
+There are much better architectures designed for Time Series, like LSTM,
+however due to efficiency reason i chose this one (it tooks 20 seconds
+to learn this model on Macbook Pro M1, and additionally I faced some
+problem with running more LSTM model from keras on MacOS architecture).
+
+Results of models were compared to Commons sense baseline. In case of
+predicting magnitude of measure 24 h from time point I assume that a
+common-sense approach is to always predict that the temperature 24 hours
+from now will be equal to the temperature right now.
+
+For both channels models wasn't able to beat Common sense baseline. I
+assume that basing on my past experience LSTM would be able.
+
+Velocity: Test MAE: 0.40 Commons sense baseline MAE: 0.04
+
+Level: Test MAE: 0.23 Commons sense baseline MAE: Validation MAE: 0.08
+
+```{r, eval=FALSE, include=FALSE}
+library(reticulate)
+#Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/tensorflow_mac/bin/python")
+use_condaenv("tensorflow_mac")
+#envname=myenvs$name[5]
+#use_condaenv(envname, required = TRUE)
+```
+
+```{python, include=FALSE, eval=FALSE}
+import pandas as pd
+import numpy as np 
+from tensorflow import keras
+from tensorflow.keras import layers
+  
+#df_fill_final.filter(regex='final_fill', axis=1).to_csv('df_fill_final.csv')
+df_fill_final=pd.read_csv('df_fill_final.csv', parse_dates=["time"], index_col='time')
+
+```
+
+```{python,include=TRUE, eval=FALSE}
+df_NN =  df_fill_final.copy()
+
+analysed_variable='level'
+column_name= analysed_variable + '_final_fill'
+model_name = analysed_variable + '_model_recurrent.keras'
+
+
+
+num_train_samples = int(0.5 * len(df_NN))
+num_val_samples = int(0.25 * len(df_NN))
+num_test_samples = len(df_NN) - num_train_samples - num_val_samples
+print("num_train_samples:", num_train_samples)
+print("num_val_samples:", num_val_samples)
+print("num_test_samples:", num_test_samples)
+
+# We’re going to use the first 127008 timesteps as training data, so we’ll compute the mean and standard deviation only on this fraction of the data.
+mean = df_NN[:num_train_samples].mean(axis=0)
+df_NN -= mean
+std = df_NN[:num_train_samples].std(axis=0)
+df_NN /= std
+
+#Next, let’s create a Dataset object that yields batches of data from the past five days along with a target temperature 24 hours in the future.
+
+
+import numpy as np 
+from tensorflow import keras
+
+
+
+sampling_rate = 6 # 1 data point is 5 minut, setting sampling_rate = 6 means that i will take one data point for 30 minutes
+sequence_length = 240 # 5 days =  5 * 24 * 2 = 1440
+delay = sampling_rate * (sequence_length + 48 - 1)  # usefull equation allowing for calculating required delay ; 288 is one day, it means that I will predict measure 1 day later
+batch_size = 256 
+
+
+# checking is it working ok
+
+int_sequence = np.arange(288*24*24)
+dummy_dataset = keras.utils.timeseries_dataset_from_array(
+    data=int_sequence[:-delay],                                 
+    targets=int_sequence[delay:], 
+    sampling_rate= sampling_rate,                             
+    sequence_length=sequence_length,  
+    #shuffle=True,                                    
+    batch_size=batch_size
+)
+
+for inputs, targets in dummy_dataset:
+  break
+df_NN.index[keras.backend.get_value(inputs[20][-1])]
+df_NN.index[keras.backend.get_value(targets[20])]
+
+
+# preparing dataset to learning, validating, testing and predicting
+
+
+df_NN=df_NN.[column_name]
+
+train_dataset = keras.utils.timeseries_dataset_from_array(
+    df_NN[:-delay],
+    targets=df_NN[column_name][delay:],
+    sampling_rate=sampling_rate,
+    sequence_length=sequence_length,
+    shuffle=True,
+    batch_size=batch_size,
+    start_index=0,
+    end_index=num_train_samples)
+  
+val_dataset = keras.utils.timeseries_dataset_from_array(
+    df_NN[:-delay],
+    targets=df_NN[column_name][delay:],
+    sampling_rate=sampling_rate,
+    sequence_length=sequence_length,
+    shuffle=True,
+    batch_size=batch_size,
+    start_index=num_train_samples,
+    end_index=num_train_samples + num_val_samples)
+  
+test_dataset = keras.utils.timeseries_dataset_from_array(
+    df_NN[:-delay],
+    targets=df_NN[column_name][delay:],
+    sampling_rate=sampling_rate,
+    sequence_length=sequence_length,
+    shuffle=True,
+    batch_size=batch_size,
+    start_index=num_train_samples + num_val_samples)
+
+predict_dataset = keras.utils.timeseries_dataset_from_array(
+    df_NN[:-delay],
+    targets=df_NN[column_name][delay:],
+    sampling_rate=sampling_rate,
+    sequence_length=sequence_length,
+    shuffle=False,
+    batch_size=batch_size
+    )
+
+#Each dataset yields a tuple (samples, targets), where samples is a batch of 256 samples, each containing 5 consecutive days of input data, and targets is the corresponding array of 256 target temperatures. Note that the samples are randomly shuffled, so two consecutive sequences in a batch (like samples[0] and samples[1]) aren’t necessarily temporally close.
+for samples, targets in train_dataset:
+     print("samples shape:", samples.shape)
+     print("targets shape:", targets.shape)
+     samples=samples
+     targets=targets
+     break
+
+
+samples.shape
+preds = samples[:, -1, 0] * std[0] + mean[0] 
+targets.shape
+def evaluate_naive_method(dataset):
+    total_abs_err = 0. 
+    samples_seen = 0 
+    for samples, targets_std in dataset:
+        preds = samples[:, -1, 0] * std[0] + mean[0]
+        targets = targets_std * std[0] + mean[0]
+        total_abs_err += np.sum(np.abs(preds - targets))
+        samples_seen += samples.shape[0]
+    return total_abs_err / samples_seen
+  
+print(f"Validation MAE: {evaluate_naive_method(val_dataset):.2f}") 
+print(f"Test MAE: {evaluate_naive_method(test_dataset):.2f}")
+
+from tensorflow.keras import layers
+  
+inputs = keras.Input(shape=(sequence_length, df_NN.shape[-1]))
+x = layers.Flatten()(inputs)
+x = layers.Dense(16, activation="relu")(x)
+outputs = layers.Dense(1)(x)
+
+# inputs = keras.Input(shape=(None,  df_NN.shape[-1]))
+# outputs = layers.SimpleRNN(16)(inputs)
+
+
+model = keras.Model(inputs, outputs)
+
+callbacks = [
+    keras.callbacks.ModelCheckpoint(model_name,          
+                                    save_best_only=True)
+] 
+model.compile(optimizer="rmsprop", loss="mse", metrics=["mae"])
+history = model.fit(train_dataset,
+                    epochs=10,
+                    validation_data=val_dataset,
+                    callbacks=callbacks)
+  
+model = keras.models.load_model(model_name)              
+print(f"Test MAE: {model.evaluate(test_dataset)[1]:.2f}")
+
+
+import matplotlib.pyplot as plt
+loss = history.history["mae"]
+val_loss = history.history["val_mae"]
+epochs = range(1, len(loss) + 1)
+plt.figure()
+plt.plot(epochs, loss, "bo", label="Training MAE")
+plt.plot(epochs, val_loss, "b", label="Validation MAE")
+plt.title("Training and validation MAE")
+plt.legend()
+plt.show()
+
+
+df_NN_final = df_NN.copy()
+y_pred_array = model.predict(predict_dataset)* std[0] + mean[0]
+y_pred = pd.Series(np.ravel(y_pred_array), name='predict')
+y_pred.index += delay
+df_NN_final['time'] = df_NN_final.index
+df_NN_final[column_name] = df_NN_final[column_name] * std[0] + mean[0]
+df_NN_final = df_NN_final.reset_index(drop=True)
+df_NN_final = df_NN_final.join(y_pred)
+
+
+
+import matplotlib.pyplot as plt
+df_NN_final[[column_name,'predict']].plot()
+df_NN_final.index=df_NN_final.time
+
+
+plt.clf()
+fig = plt.figure()
+plt.scatter(df_NN_final.index[-10000:-1],df_NN_final[column_name][-10000:-1], color='green', label = 'Anomaly_2',alpha=0.02, marker='*')
+plt.scatter(df_NN_final.index[-10000:-1],df_NN_final['predict'][-10000:-1], color='blue', label = 'Anomaly_2',alpha=0.02, marker='*')
+plt.ylim((0.4,0.8))
+plt.show();
+```
