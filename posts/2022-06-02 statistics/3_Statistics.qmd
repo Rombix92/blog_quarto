@@ -8,7 +8,9 @@ toc: TRUE
 
 ## Logistic Regression
 
-[*Markdown Tutorial*](https://bookdown.org/yihui/rmarkdown/html-document.html)
+inspirations:
+[url](https://quantifyinghealth.com/interpret-logistic-regression-intercept/)
+[url](https://quantifyinghealth.com/interpret-logistic-regression-coefficients/)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.align='left', echo=TRUE, error=FALSE)
@@ -25,33 +27,62 @@ library(ggplot2)
 
 ```{r data, include=FALSE}
 df_titanic<- read.csv('https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv') %>%
-  mutate(Fare_log=round(log(Fare+0.001)))
+  mutate(Fare=round(Fare),
+         independent=Siblings.Spouses.Aboard) #Fare to opłata za bilet
+```
+
+```{r echo=FALSE}
+df_titanic %>% select(Survived,independent) %>% head() %>% kable()
+# Wyliczanie modelu logistycznego.
+model <- glm(data=df_titanic, Survived ~ independent, family = 'binomial')
+
+tidy(model)  %>% kable(caption='Table 1. Summary statistics for logistic regression model')
+#coef(model)
 ```
 
 ### Matematyczna interpretacja modelu
 
-Quiz correct answers: d. Hint: `Remember`, the coefficient in a logistic regression model is the expected increase in the log odds given a one unit increase in the explanatory variable.
+### equation
 
-```{r echo=FALSE}
-df_titanic %>% select(Survived,Fare,Fare_log) %>% head() %>% kable()
+Here's the equation of a logistic regression model with 1 predictor X:
+
+$log(\frac{P}{1-P})=\beta_0 + \beta_1X$
+
+Where: ***P*** is the probability of having the outcome $\frac{P}{1-P}$ is the odds of the outcome. Left side called ***log odds*** or ***logit*** and P / (1-P) is the odds of the outcome. $\beta_0$ called intercept
+
+### From log odds to probability
+
+To solve for the probability P, we exponentiate both sides of the equation above to get:
+
+`Equation 1`.: $\frac{P}{1-P}= e^{\beta_0 + \beta_1X}$
+
+With this equation, we can calculate the probability P for any given value of X
+
+### intercept interpretation
+
+When X = 0 the interpretation of intercept become simple using `Equation 1.` $P=\frac{e^{\beta_0}}{(1 + e^{\beta_0})}$ :
+
+-   If the intercept has a negative sign: then the probability of having the outcome will be \< 0.5.
+
+-   If the intercept has a positive sign: then the probability of having the outcome will be \> 0.5.
+
+-   If the intercept is equal to zero: then the probability of having the outcome will be exactly 0.5.
+
+So in case of my log model
+```{r}
+print(coef(model)[1])
+prob_of_survival<-round(exp(coef(model)[1])/(1+exp(coef(model)[1])),2)
+print(paste0('according to model probability of surving the trip if the independent  variable was = 0 is: ',prob_of_survival))
 ```
 
-Wyliczanie modelu logistycznego.
+### estimate interpretation
+
+`Remember`, the coefficient in a logistic regression model is the expected increase in the log odds given a one unit increase in the explanatory variable.
 
 ```{r}
-model <- glm(data=df_titanic, Survived ~ Fare_log, family = 'binomial')
-
-tidy(model)  %>% kable(caption='Table 1. Summary statistics for logistic regression model')
-```
-
-```{r}
-coef(model)
-
 #Tak przemnozone wspolczynniki interpretujemy nastepujaco:
 #  o ile % wzrosnie odds wystapienia zdarzenia jezeli wzrosnie nam wartosc predyktora o 1
-
 exp(coef(model))
-
 ```
 
 Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzrostu parametra stajacego przy predyktorze.
@@ -60,19 +91,19 @@ Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzros
 
 df_aug <- augment(model, type.predict = "response") # without response argument, the fitted value will be on log-odds scale
 
-p3 = df_aug$.fitted[df_aug$Fare_log==3][1]
-p2 = df_aug$.fitted[df_aug$Fare_log==2][1]
+p1 = df_aug$.fitted[df_aug$independent==1][1]
+p2 = df_aug$.fitted[df_aug$independent==2][1]
 
-x <- round(p3/(1-p3)/(p2/(1-p2)),5)
+x <- round(p2/(1-p2)/(p1/(1-p1)),5)
 
 # i sprawdzenie czy dobrze rozumiem zależnosc
-x1<-round(exp(coef(model))['Fare_log'],5)
+x1<-round(exp(coef(model))['independent'],5)
 x1==x
 ```
 
-Prob for Fare_log = 2 was equal to `r p2` while for Fare_log = 3 was equal to `r p3`. The odds increase by `r x`. The same what model results suggests -\> `r x1`.
+Prob for independent= 1 was equal to `r p1` while for independent = 2 was equal to `r p2`. The odds increase by `r x`. The same what model results suggests -\> `r x1`.
 
-Quiz
+**`Quiz`**
 
 The fitted coefficient from the medical school logistic regression model is 5.45. The exponential of this is 233.73.
 
@@ -85,11 +116,13 @@ b)  His expected probability of getting into medical school improves to 88.7%.
 c)  His expected log-odds of getting into medical school improve by 5.45.
 d)  His expected probability of getting into medical school improves to 7.9%.
 
-Correct answers on the top of the page
+Correct answers on the bottom of the page.
 
 ### Graficzna interpretacja modelu
 
 ```{r, collapse = TRUE, echo=FALSE, warning=FALSE}
+
+# ten wykres najsilniej daje pokaz na zmiennej zlogarytmowany Fare = log(Fare)
 
 #While the odds scale is more useful than the probability scale for certain things, it isn't entirely satisfying. Statisticians also think about logistic regression models on the log-odds scale, which is formed by taking the natural log of the odds. 
 
@@ -99,9 +132,9 @@ df_aug <- df_aug %>% mutate(odds=(.fitted/(1-.fitted)), log_odds=log(odds))
 
 df_aug %>% 
   ggplot()+
-  geom_line(aes(x=Fare_log,y=.fitted), color='green')+
-  geom_line(aes(x=Fare_log,y=odds ), color='red')+
-  geom_line(aes(x=Fare_log,y=log_odds ), color='blue', label='log_odds')
+  geom_line(aes(x=independent,y=.fitted), color='green')+
+  geom_line(aes(x=independent,y=odds ), color='red')+
+  geom_line(aes(x=independent,y=log_odds ), color='blue', label='log_odds')
 ```
 
 ```{r evaluating model quality}
@@ -471,3 +504,5 @@ vote_sim <- coda.samples(model = vote_jags, variable.names = c("p"), n.iter = 10
 # PLOT the posterior
 plot(vote_sim, trace = FALSE)
 ```
+
+Quiz correct answers: d. Hint: \`Remember\`, the coefficient in a logistic regression model is the expected increase in the log odds given a one unit increase in the explanatory variable.

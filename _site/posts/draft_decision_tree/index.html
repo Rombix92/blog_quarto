@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <pre><code>## 
 ##          0          1 
-## 0.04969078 0.95030922</code></pre>
+## 0.04940961 0.95059039</code></pre>
 </div>
 <section id="dataset-exploration" class="level1">
 <h1>dataset exploration</h1>
@@ -242,103 +242,131 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <pre><code>## Call:
 ## rpart(formula = success ~ ., data = diamonds, method = "class")
-##   n= 37190 
+##   n= 37179 
 ## 
 ##           CP nsplit rel error    xerror       xstd
-## 1 0.31818182      0 1.0000000 1.0000000 0.02267679
-## 2 0.04383117      1 0.6818182 0.6661255 0.01866886
-## 3 0.03896104      2 0.6379870 0.6125541 0.01792706
-## 4 0.01000000      4 0.5600649 0.5681818 0.01728517
+## 1 0.17583016      0 1.0000000 1.0000000 0.02274794
+## 2 0.05988024      2 0.6483397 0.6483397 0.01848318
+## 3 0.01061513      3 0.5884594 0.5900925 0.01765957
+## 4 0.01000000      5 0.5672292 0.5819271 0.01754061
 ## 
 ## Variable importance
-##  depth random  table  price 
-##     56     33      9      1 
+## random  depth  table      x      z  carat      y 
+##     50     35     10      2      1      1      1 
 ## 
-## Node number 1: 37190 observations,    complexity param=0.3181818
-##   predicted class=1  expected loss=0.04969078  P(node) =1
-##     class counts:  1848 35342
-##    probabilities: 0.050 0.950 
-##   left son=2 (776 obs) right son=3 (36414 obs)
+## Node number 1: 37179 observations,    complexity param=0.1758302
+##   predicted class=1  expected loss=0.04940961  P(node) =1
+##     class counts:  1837 35342
+##    probabilities: 0.049 0.951 
+##   left son=2 (5318 obs) right son=3 (31861 obs)
 ##   Primary splits:
-##       depth  &lt; 63.05     to the right, improve=1089.78800, (0 missing)
-##       random &lt; 0.9000101 to the right, improve=1089.44800, (0 missing)
-##       table  &lt; 62.1      to the right, improve= 230.00870, (0 missing)
-##       x      &lt; 4.265     to the left,  improve=  21.74024, (0 missing)
-##       z      &lt; 2.495     to the left,  improve=  17.51159, (0 missing)
-## 
-## Node number 2: 776 observations,    complexity param=0.04383117
-##   predicted class=0  expected loss=0.121134  P(node) =0.02086582
-##     class counts:   682    94
-##    probabilities: 0.879 0.121 
-##   left son=4 (695 obs) right son=5 (81 obs)
-##   Primary splits:
-##       random &lt; 0.8956954 to the right, improve=139.71310, (0 missing)
-##       price  &lt; 15243.5   to the left,  improve= 17.07875, (0 missing)
-##       y      &lt; 6.405     to the left,  improve= 15.41798, (0 missing)
-##       x      &lt; 6.445     to the left,  improve= 14.28458, (0 missing)
-##       carat  &lt; 1.095     to the left,  improve= 13.63918, (0 missing)
+##       random &lt; 0.9000108 to the right, improve=1087.58100, (0 missing)
+##       depth  &lt; 63.05     to the right, improve=1035.24300, (0 missing)
+##       table  &lt; 62.2      to the right, improve= 182.86980, (0 missing)
+##       x      &lt; 4.275     to the left,  improve=  16.17553, (0 missing)
+##       y      &lt; 5.405     to the right, improve=  10.90541, (0 missing)
 ##   Surrogate splits:
-##       price &lt; 15243.5   to the left,  agree=0.909, adj=0.123, (0 split)
-##       y     &lt; 7.995     to the left,  agree=0.899, adj=0.037, (0 split)
-##       carat &lt; 2.015     to the left,  agree=0.898, adj=0.025, (0 split)
-##       z     &lt; 5.445     to the left,  agree=0.898, adj=0.025, (0 split)
-##       x     &lt; 7.895     to the left,  agree=0.897, adj=0.012, (0 split)
+##       depth &lt; 63.05     to the right, agree=0.872, adj=0.107, (0 split)
+##       table &lt; 62.2      to the right, agree=0.860, adj=0.019, (0 split)
+##       z     &lt; 6.255     to the right, agree=0.857, adj=0.000, (0 split)
+##       price &lt; 338.5     to the left,  agree=0.857, adj=0.000, (0 split)
 ## 
-## Node number 3: 36414 observations,    complexity param=0.03896104
-##   predicted class=1  expected loss=0.03202065  P(node) =0.9791342
-##     class counts:  1166 35248
-##    probabilities: 0.032 0.968 
-##   left son=6 (4666 obs) right son=7 (31748 obs)
+## Node number 2: 5318 observations,    complexity param=0.1758302
+##   predicted class=1  expected loss=0.3454306  P(node) =0.1430377
+##     class counts:  1837  3481
+##    probabilities: 0.345 0.655 
+##   left son=4 (658 obs) right son=5 (4660 obs)
 ##   Primary splits:
-##       random &lt; 0.9000937 to the right, improve=508.07790, (0 missing)
-##       table  &lt; 62.1      to the right, improve=221.75170, (0 missing)
-##       depth  &lt; 57.95     to the left,  improve=101.26170, (0 missing)
-##       z      &lt; 2.495     to the left,  improve= 20.45527, (0 missing)
-##       x      &lt; 3.985     to the left,  improve= 18.95512, (0 missing)
+##       depth &lt; 63.05     to the right, improve=625.66900, (0 missing)
+##       table &lt; 60.1      to the right, improve=115.30470, (0 missing)
+##       x     &lt; 4.275     to the left,  improve= 43.85720, (0 missing)
+##       y     &lt; 4.295     to the left,  improve= 32.64826, (0 missing)
+##       carat &lt; 0.625     to the right, improve= 26.28056, (0 missing)
 ##   Surrogate splits:
-##       table &lt; 62.1      to the right, agree=0.875, adj=0.025, (0 split)
-##       depth &lt; 57.95     to the left,  agree=0.873, adj=0.012, (0 split)
+##       z      &lt; 5.345     to the right, agree=0.878, adj=0.012, (0 split)
+##       carat  &lt; 2.475     to the right, agree=0.877, adj=0.003, (0 split)
+##       table  &lt; 51.5      to the left,  agree=0.877, adj=0.003, (0 split)
+##       x      &lt; 3.885     to the left,  agree=0.877, adj=0.003, (0 split)
+##       random &lt; 0.9000166 to the left,  agree=0.877, adj=0.003, (0 split)
 ## 
-## Node number 4: 695 observations
-##   predicted class=0  expected loss=0.01870504  P(node) =0.01868782
-##     class counts:   682    13
-##    probabilities: 0.981 0.019 
-## 
-## Node number 5: 81 observations
-##   predicted class=1  expected loss=0  P(node) =0.002178005
-##     class counts:     0    81
+## Node number 3: 31861 observations
+##   predicted class=1  expected loss=0  P(node) =0.8569623
+##     class counts:     0 31861
 ##    probabilities: 0.000 1.000 
 ## 
-## Node number 6: 4666 observations,    complexity param=0.03896104
-##   predicted class=1  expected loss=0.2498928  P(node) =0.1254638
-##     class counts:  1166  3500
-##    probabilities: 0.250 0.750 
-##   left son=12 (406 obs) right son=13 (4260 obs)
+## Node number 4: 658 observations
+##   predicted class=0  expected loss=0.009118541  P(node) =0.01769816
+##     class counts:   652     6
+##    probabilities: 0.991 0.009 
+## 
+## Node number 5: 4660 observations,    complexity param=0.05988024
+##   predicted class=1  expected loss=0.2542918  P(node) =0.1253396
+##     class counts:  1185  3475
+##    probabilities: 0.254 0.746 
+##   left son=10 (416 obs) right son=11 (4244 obs)
 ##   Primary splits:
-##       table &lt; 60.1      to the right, improve=162.50090, (0 missing)
-##       depth &lt; 60.25     to the left,  improve= 92.13007, (0 missing)
-##       z     &lt; 2.545     to the left,  improve= 39.25461, (0 missing)
-##       x     &lt; 4.265     to the left,  improve= 38.88219, (0 missing)
-##       carat &lt; 0.295     to the left,  improve= 36.52894, (0 missing)
+##       table &lt; 60.1      to the right, improve=130.47670, (0 missing)
+##       depth &lt; 60.15     to the left,  improve= 87.16630, (0 missing)
+##       x     &lt; 4.275     to the left,  improve= 44.03174, (0 missing)
+##       z     &lt; 2.595     to the left,  improve= 34.05343, (0 missing)
+##       carat &lt; 0.295     to the left,  improve= 28.86042, (0 missing)
 ##   Surrogate splits:
-##       depth &lt; 58.65     to the left,  agree=0.917, adj=0.052, (0 split)
-##       carat &lt; 2.565     to the right, agree=0.913, adj=0.002, (0 split)
-##       x     &lt; 8.785     to the right, agree=0.913, adj=0.002, (0 split)
+##       depth &lt; 58.15     to the left,  agree=0.914, adj=0.034, (0 split)
 ## 
-## Node number 7: 31748 observations
-##   predicted class=1  expected loss=0  P(node) =0.8536703
-##     class counts:     0 31748
-##    probabilities: 0.000 1.000 
+## Node number 10: 416 observations
+##   predicted class=0  expected loss=0.3677885  P(node) =0.01118911
+##     class counts:   263   153
+##    probabilities: 0.632 0.368 
 ## 
-## Node number 12: 406 observations
-##   predicted class=0  expected loss=0.3226601  P(node) =0.01091691
-##     class counts:   275   131
-##    probabilities: 0.677 0.323 
+## Node number 11: 4244 observations,    complexity param=0.01061513
+##   predicted class=1  expected loss=0.2172479  P(node) =0.1141505
+##     class counts:   922  3322
+##    probabilities: 0.217 0.783 
+##   left son=22 (1731 obs) right son=23 (2513 obs)
+##   Primary splits:
+##       table &lt; 57.05     to the right, improve=59.71914, (0 missing)
+##       depth &lt; 62.75     to the right, improve=53.42411, (0 missing)
+##       x     &lt; 4.275     to the left,  improve=43.09707, (0 missing)
+##       y     &lt; 4.295     to the left,  improve=28.88683, (0 missing)
+##       z     &lt; 2.575     to the left,  improve=28.47218, (0 missing)
+##   Surrogate splits:
+##       depth &lt; 60.65     to the left,  agree=0.660, adj=0.167, (0 split)
+##       y     &lt; 7.085     to the right, agree=0.609, adj=0.040, (0 split)
+##       x     &lt; 6.935     to the right, agree=0.608, adj=0.039, (0 split)
+##       carat &lt; 1.345     to the right, agree=0.607, adj=0.037, (0 split)
+##       z     &lt; 4.355     to the right, agree=0.604, adj=0.030, (0 split)
 ## 
-## Node number 13: 4260 observations
-##   predicted class=1  expected loss=0.2091549  P(node) =0.1145469
-##     class counts:   891  3369
-##    probabilities: 0.209 0.791</code></pre>
+## Node number 22: 1731 observations,    complexity param=0.01061513
+##   predicted class=1  expected loss=0.3183131  P(node) =0.04655854
+##     class counts:   551  1180
+##    probabilities: 0.318 0.682 
+##   left son=44 (71 obs) right son=45 (1660 obs)
+##   Primary splits:
+##       x     &lt; 4.275     to the left,  improve=30.83504, (0 missing)
+##       depth &lt; 62.75     to the right, improve=21.23691, (0 missing)
+##       carat &lt; 0.295     to the left,  improve=18.51068, (0 missing)
+##       y     &lt; 4.295     to the left,  improve=18.39160, (0 missing)
+##       z     &lt; 2.595     to the left,  improve=16.82683, (0 missing)
+##   Surrogate splits:
+##       y     &lt; 4.305     to the left,  agree=0.985, adj=0.634, (0 split)
+##       carat &lt; 0.295     to the left,  agree=0.984, adj=0.620, (0 split)
+##       z     &lt; 2.595     to the left,  agree=0.982, adj=0.563, (0 split)
+##       price &lt; 383.5     to the left,  agree=0.961, adj=0.042, (0 split)
+## 
+## Node number 23: 2513 observations
+##   predicted class=1  expected loss=0.1476323  P(node) =0.06759192
+##     class counts:   371  2142
+##    probabilities: 0.148 0.852 
+## 
+## Node number 44: 71 observations
+##   predicted class=0  expected loss=0.2253521  P(node) =0.00190968
+##     class counts:    55    16
+##    probabilities: 0.775 0.225 
+## 
+## Node number 45: 1660 observations
+##   predicted class=1  expected loss=0.2987952  P(node) =0.04464886
+##     class counts:   496  1164
+##    probabilities: 0.299 0.701</code></pre>
 </div>
 <p>Behind the scenes rpart() is automatically applying a range of cost complexity (α values to prune the tree). To compare the error for each α value, rpart() performs a 10-fold CV (by default).</p>
 <p>In this example we find diminishing returns after 6 terminal nodes as illustrated in Figure below</p>
@@ -358,10 +386,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>So, by default, rpart() is performing some automated tuning, with an optimal subtree of 6 total splits, 6 terminal nodes, and a cross-validated SSE of 0.553.</p>
 <div class="cell">
 <pre><code>##           CP nsplit rel error    xerror       xstd
-## 1 0.31818182      0 1.0000000 1.0000000 0.02267679
-## 2 0.04383117      1 0.6818182 0.6661255 0.01866886
-## 3 0.03896104      2 0.6379870 0.6125541 0.01792706
-## 4 0.01000000      4 0.5600649 0.5681818 0.01728517</code></pre>
+## 1 0.17583016      0 1.0000000 1.0000000 0.02274794
+## 2 0.05988024      2 0.6483397 0.6483397 0.01848318
+## 3 0.01061513      3 0.5884594 0.5900925 0.01765957
+## 4 0.01000000      5 0.5672292 0.5819271 0.01754061</code></pre>
 </div>
 <section id="dealing-with-imbalance" class="level2">
 <h2 class="anchored" data-anchor-id="dealing-with-imbalance">dealing with imbalance</h2>
