@@ -1,8 +1,10 @@
 {
-  "hash": "0f1dd9c7dc9501d7eb59f8d02060040f",
+  "hash": "88e0465984e090ba7c879b376814cb5b",
   "result": {
-    "markdown": "---\ntitle: \"draft\"\ndate: \"2022-11-20\"\ntags: []\ncategories: []\ndraft: TRUE\ntoc: TRUE\neditor: source\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
-    "supporting": [],
+    "markdown": "---\ntitle-block-banner: true\nauthor: Łukasz Rąbalski\ntitle: Water sensors \ndescription: Presentation of Time Series exploration, anomaly detection, and predictions techniques\nformat:\n  html:\n    toc: true\n    toc-location: left\n    number-sections: true\n    toc-depth: 3\n    embed-resources: true\ncategories: ['Python','Time Series','anomaly detection']\ntags: []\neditor: source\nfig.height: 4\nout.width: '100%'\ninclude: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.\necho: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.\nwarning: FALSE\nmessage: FALSE\nerror: FALSE\ndraft: TRUE\n\n---\n\n::: {.cell}\n\n```{.r .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],

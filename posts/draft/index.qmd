@@ -1,11 +1,27 @@
 ---
-title: "draft"
-date: "2022-11-20"
+title-block-banner: true
+author: Łukasz Rąbalski
+title: Water sensors 
+description: Presentation of Time Series exploration, anomaly detection, and predictions techniques
+format:
+  html:
+    toc: true
+    toc-location: left
+    number-sections: true
+    toc-depth: 3
+    embed-resources: true
+categories: ['Python','Time Series','anomaly detection']
 tags: []
-categories: []
-draft: TRUE
-toc: TRUE
 editor: source
+fig.height: 4
+out.width: '100%'
+include: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+echo: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+warning: FALSE
+message: FALSE
+error: FALSE
+draft: TRUE
+
 ---
 
 ```{r}
