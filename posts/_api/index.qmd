@@ -1,0 +1,187 @@
+---
+title-block-banner: true
+author: Łukasz Rąbalski
+title: API connections  
+description: Presentation how to connect to API with token authenthification using R and Python
+format:
+  html:
+    toc: true
+    toc-location: left
+    number-sections: true
+    toc-depth: 3
+    embed-resources: true
+categories: ['Python','R','API']
+tags: ['http']
+editor: source
+fig.height: 4
+out.width: '100%'
+include: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+echo: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+warning: FALSE
+message: FALSE
+error: FALSE
+draft: FALSE
+
+---
+
+::: white
+# TOC {.unnumbered}
+
+##### python {.unnumbered}
+
+```{r eval=FALSE}
+library(reticulate)
+myenvs=conda_list()
+envname=myenvs$name[4]
+use_condaenv(envname, required = TRUE)
+
+Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python")
+reticulate::py_config()
+```
+
+##### authentification {.unnumbered}
+
+```{r, include=FALSE}
+#quarto render /Users/lrabalski1/Desktop/prv/blog_quarto/posts/_api/index.qmd
+url = 'http://machinelearningbox-nginx-ext.nginx.services.dc-2.lb.dcwp.pl/api/v1/content/prepare'
+auth='09d584a3b228c8e11b5efb6fb7885653'
+```
+:::
+
+# R
+
+
+## POST method
+
+Knowledge based on
+
+[documentation of httr](https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html)
+
+[tutorial how to authorized connections with token](https://developers.refinitiv.com/en/article-catalog/article/tick-history-in-r-language-part-1)
+
+[HTTP statuses](https://www.flickr.com/photos/girliemac/sets/72157628409467125)
+
+Below I present how to validly connect to API and receive output using POST method. I am showing different ways of how json could be prepared out of which only 1 is valid and allows for receiving expected results.
+
+```{r datagrapling}
+library("httr")
+library("jsonlite")
+
+
+
+b_json_not_valid<-paste0("{'model':'agent','content':'/\r\n//\r\n//\r\n/putin/\r\n/dsfdfds pozdrawiam Janusz','sender': 'januszeky'}")
+
+b_list=list(model= "agent",content = "/\r\n//\r\n//\r\n/putin/\r\n/dsfdfds pozdrawiam Janusz",sender= "januszeky")
+b_temp <- unbox(data.frame(b_list))
+b_jons <- toJSON(b_temp, pretty = TRUE)
+
+
+r<- httr::POST(url,
+                add_headers(Authorization = auth),
+                #content_type_json(),
+                content_type("application/json"),
+                body = b_json_not_valid,
+                encode = "json"
+               )
+print('json like below will result with "Internal Server Error"')
+print(class(b_json_not_valid))
+print(b_json_not_valid)
+httr::content(r) # to extract content from the response
+
+
+r<- httr::POST(url,
+                add_headers(Authorization = auth),
+                #content_type_json(),
+                content_type("application/json"),
+                body = toJSON(b_list),
+                encode = "json"
+               )
+
+print('json like below will more informative error, suggesting that argument should be string not list"')
+print(class(toJSON(b_list)))
+print(toJSON(b_list))
+httr::content(r)
+
+
+
+
+
+tictoc::tic()
+r <- httr::POST(url,
+           add_headers(Authorization = auth),
+           content_type("application/json"),
+           body = b_jons,
+           content_type_json()
+           #encode = "json"
+           )
+tictoc::toc()
+
+print('json like below will finally give positive result')
+print(class(b_jons))
+print(b_jons)
+httr::content(r)
+
+
+stop_for_status(r) #stop_for_status so that the function stops when there is an error.
+
+```
+
+ABOVE last working methods is substitute for following HTTP request form:
+
+```{http, eval=FALSE}
+POST url
+Content-Type: application/json
+Authorization: token_code
+
+{
+"model": "agent",
+"content" : "/\r\n//\r\n//\r\n/putin/\r\n/dsfdfds pozdrawiam Janusz",
+"sender": "januszeky"
+}
+>> path_to_save_file
+```
+
+
+## Free API to play with
+
+If someone wants
+
+[url](https://api.stackexchange.com/docs)
+
+```{r}
+
+
+r <- GET(
+  "http://api.stackexchange.com",
+  path = "questions",
+  query = list(
+    site = "stackoverflow.com",
+    tagged = "r"
+  )
+)
+
+
+stop_for_status(r)
+
+# Automatically parse the json output
+questions <- content(r)
+# questions$items[[1]]$title
+# questions$items[[1]]$link
+
+```
+
+# Python
+
+The same case solved in Python. Here it is less deceptive because json has json object in it's repertoire.
+
+```{python}
+import requests
+import json
+json_file =  {"model": "agent","content" : "/\r\n//\r\n//\r\n/putin/\r\n/dsfdfds pozdrawiam Janusz","sender": "januszeky"}
+
+url=r.url
+auth=r.auth
+
+x = requests.post(url, json = json_file, headers={'Authorization': auth})
+print(x.text)
+```

@@ -57,5 +57,8 @@
   },
   "posts/draft_multiprocessing/index.qmd": {
     "index.html": "6df3bc1c"
+  },
+  "posts/draft_api/index.qmd": {
+    "index.html": "c23cf740"
   }
 }

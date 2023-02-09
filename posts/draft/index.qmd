@@ -1,8 +1,8 @@
 ---
 title-block-banner: true
 author: Łukasz Rąbalski
-title: Water sensors 
-description: Presentation of Time Series exploration, anomaly detection, and predictions techniques
+title: aaa 
+description: aaa
 format:
   html:
     toc: true
@@ -23,6 +23,14 @@ error: FALSE
 draft: TRUE
 
 ---
+
+::: white
+# TOC {.unnumbered}
+##### something
+
+```{r, include=FALSE}
+```
+:::
 
 ```{r}
 1+1
