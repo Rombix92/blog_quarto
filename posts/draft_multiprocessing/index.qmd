@@ -42,8 +42,6 @@ import multiprocessing
 from multiprocessing import Pool
 from itertools import repeat
 import numpy as np
-
-
 import pandas as pd
 from datetime import datetime
 
@@ -67,6 +65,7 @@ See https://bugs.python.org/issue25053. For some reason Pool does not always wor
 # map vs imap
 
 ```{python}
+from analiza import map_function
 
 array_with_args = np.array([1,1], ndmin=2)
 array_with_args = np.append(array_with_args,np.array([2,1], ndmin=2), axis=0)
@@ -75,16 +74,21 @@ array_with_args = np.append(array_with_args,array_with_args, axis=0)
 array_with_args = np.append(array_with_args,array_with_args, axis=0)
 
 
-pd_results=pd.DataFrame(columns=['a','b','c','started'])
-print(combo)
-print(combo.shape)
+pd_results=pd.DataFrame(columns=['a','b','started'])
+print(array_with_args)
 if __name__ == '__main__':
     with Pool(processes=2) as pool:
         # call the same function with different data in parallel
-        for result in pool.imap(map_function, combo):
+        for result in pool.imap(map_function, array_with_args):
             print(1)
             # report the value to show progress
             pd_results = pd_results.append(result)
 
 print(pd_results.sort_values('started', ascending=True))
+
+array_with_args
+```
+
+```{python}
+array_with_args.shape
 ```
