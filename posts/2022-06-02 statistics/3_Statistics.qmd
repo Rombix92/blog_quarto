@@ -8,9 +8,8 @@ toc: TRUE
 
 ## Logistic Regression
 
-inspirations:
-[url](https://quantifyinghealth.com/interpret-logistic-regression-intercept/)
-[url](https://quantifyinghealth.com/interpret-logistic-regression-coefficients/)
+inspirations: 
+[url](https://quantifyinghealth.com/interpret-logistic-regression-intercept/) [url](https://quantifyinghealth.com/interpret-logistic-regression-coefficients/)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.align='left', echo=TRUE, error=FALSE)
@@ -28,7 +27,9 @@ library(ggplot2)
 ```{r data, include=FALSE}
 df_titanic<- read.csv('https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv') %>%
   mutate(Fare=round(Fare),
-         independent=Siblings.Spouses.Aboard) #Fare to opłata za bilet
+         independent=log(Fare),#Fare to opłata za bilet, tak przekształcona zmienna lepiej uwydatni transformacje na zaleznosc liniowa
+         independent=ifelse(independent==-Inf,0,independent)) 
+
 ```
 
 ```{r echo=FALSE}
@@ -69,6 +70,7 @@ When X = 0 the interpretation of intercept become simple using `Equation 1.` $P=
 -   If the intercept is equal to zero: then the probability of having the outcome will be exactly 0.5.
 
 So in case of my log model
+
 ```{r}
 print(coef(model)[1])
 prob_of_survival<-round(exp(coef(model)[1])/(1+exp(coef(model)[1])),2)
@@ -136,16 +138,44 @@ df_aug %>%
   geom_line(aes(x=independent,y=odds ), color='red')+
   geom_line(aes(x=independent,y=log_odds ), color='blue', label='log_odds')
 ```
-
-```{r evaluating model quality}
+```{r evaluating_model_quality}
 df_aug %>% mutate(Survived_hat=round(.fitted)) %>%
   select(Survived, Survived_hat) %>% table
 
 #Out of sample predictions
-DiCaprio<-data.frame(Fare_log=1)
+DiCaprio<-data.frame(independent=1)
 augment(model, newdata = DiCaprio, type.predict = 'response')
 
 ```
+
+### stepwise
+In order to run stepwise regression you should use library SignifReg.
+
+SignifReg selects only significant predictors according to a designated criterion. More to be find [url](https://cran.r-project.org/web/packages/SignifReg/SignifReg.pdf)
+
+Method based on AIC criterion not basing on significance of predictors to be found here [url](https://quantifyinghealth.com/stepwise-regression-in-r/)
+
+```{r}
+library(SignifReg)
+dep_var_temp = 'Survived'
+
+fullmodel = glm(paste0(dep_var_temp," ~ ."), family = 'binomial', data = df_titanic %>% select(-Name)) # model with all variables
+nullmodel = glm(paste0(dep_var_temp," ~ 1"), family = 'binomial', data = df_titanic) # model with the intercept only
+  
+scope = list(lower=formula(nullmodel),upper=formula(fullmodel))
+fit1 <- nullmodel
+select.fit = SignifReg(fit1, scope = scope, direction = "forward", trace = FALSE)
+
+
+broom::tidy(select.fit) %>% 
+  mutate(dep_var=dep_var_temp) %>% rename(indep_var=term) %>%  dplyr::select(dep_var,indep_var, everything()) %>%
+  mutate_if(is.numeric, round, digits=2) %>% rename(t.statistic=statistic) %>%
+  mutate(`exp_(estimate)`=ifelse(indep_var!='(Intercept)',exp(estimate),NA)) %>%
+  relocate(`exp_(estimate)`,.after=estimate)
+```
+
+
+
 
 ## Bayesian Statistics - Introduction
 
