@@ -1,9 +1,25 @@
 ---
-description: Describing statistical methods
+title-block-banner: true
+author: Łukasz Rąbalski
 title: Statistics
+description: Describing statistical methods
+format:
+  html:
+    toc: true
+    toc-location: left
+    number-sections: true
+    toc-depth: 5
+    embed-resources: true
 categories: ["Statistics"]
 tags: ["R", "Statistics", "Bayes"]
-toc: TRUE
+editor: source
+fig.height: 4
+out.width: '100%'
+include: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+echo: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+warning: FALSE
+message: FALSE
+error: FALSE
 ---
 
 ## Logistic Regression

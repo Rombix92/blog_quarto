@@ -1,0 +1,1395 @@
+---
+title-block-banner: true
+author: Łukasz Rąbalski
+title: NLP - multiple methods and concepts
+description: "Notebook presenting several concept denoting to NLP like: \n tockenization, \n creating and saving embeddings, \n using pretrained embeding, \n visualizing embedding, \n sequncial and bag of words approach to NLP models."
+format:
+  html:
+    code-fold: false
+    toc: true
+    toc-location: left
+    number-sections: true
+    toc-depth: 5
+    embed-resources: true
+categories: ["Python","NLP", "Tensorflow"]
+tags: ["Python", "NLP", "Neural Network", "Tensorflow", "embeddings", "tockenization"]
+editor: source
+fig.height: 4
+out.width: '100%'
+eval: FALSE
+include: TRUE  #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+echo: TRUE  #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+warning: FALSE
+message: FALSE
+error: FALSE
+---
+
+
+
+```{r markdown_parameters, include=FALSE}
+
+#markdown ----
+knitr::opts_chunk$set(#fig.width=12, 
+                      fig.height=4,
+                       out.width = '100%'
+                      ) 
+knitr::opts_chunk$set(eval=FALSE,
+                      include =TRUE, #prevents code and results from appearing in the finished file. R Markdown still runs the code in the chunk, and the results can be used by other chunks.
+                      echo = FALSE, #echo = FALSE prevents code, but not the results from appearing in the finished file. This is a useful way to embed figures.
+                      warning = FALSE,
+                      message =FALSE,
+                      collapse=TRUE,
+                      error=TRUE
+                      )
+options(scipen=999)
+```
+
+```{r eval=FALSE, include=FALSE}
+library(reticulate)
+myenvs=conda_list()
+envname=myenvs$name[4]
+use_condaenv(envname, required = TRUE)
+
+Sys.setenv(RETICULATE_PYTHON = "/Users/lrabalski1/miniforge3/envs/everyday_use/bin/python")
+reticulate::py_config()
+```
+
+
+## Importing libraries
+
+```{python}
+#| tags: []
+import pandas as pd
+import re #regular expression
+#pod maile
+import datetime
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+#import tensorflow_hub as hub
+#import tensorflow_text
+import numpy as np
+import pandas as pd
+```
+
+```{python}
+#| tags: []
+# !pip install matplotlib==3.6.0
+!pip install scikit-learn==1.2.1
+# !pip install tensorflow_text
+```
+
+```{python}
+#| tags: []
+import tensorflow as tf
+print("TensorFlow version:", tf.__version__)
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+tf.config.list_physical_devices('GPU')
+```
+
+
+## Preparing data
+
+### preparing functions
+
+```{python}
+##| tags: []
+def df_to_dataset_maszyna(dataframe, shuffle=True, batch_size=32):
+    sentencex = dataframe.filter(regex=("tresc_maila_cutted_clean")).tresc_maila_cutted_clean.values
+    categories = dataframe.filter(regex=("_KATEGOR$")).values
+    ds = (
+    tf.data.Dataset.from_tensor_slices(
+        (
+            tf.cast(sentencex, tf.string),
+            tf.cast(categories, tf.int32)
+        )
+    ).batch(batch_size)
+    )
+    if shuffle:
+        ds = ds.shuffle(buffer_size=len(dataframe))
+    ds = ds.prefetch(batch_size)
+    return ds  
+
+
+## funkcja czyszczaca maile
+def preprocess_text(sen):
+
+    # transorm  telephone number into password
+    sentence = re.sub('(?<=\D[4-9])\d{8}(?=\D)', ' dziewiec cyfr ', sen) #zamieniam 9 cyfr na haslo, za wyjatkiem numerow zaczynajaych sie od 1 bo to id_rezer + zastanwiam jedną cyfrę by jak wyrzucam duplikatu kilka powieleniem zostało w bazie (max 6 (4-9))
+    sentence = re.sub('\d{3} \d{3} \d{3}', 'dziewiec cyfr ', sentence)
+    sentence = re.sub('\d{3}[\s-]\d{3}[\s-]\d{3}', 'dziewiec cyfr ', sentence)
+    sentence = re.sub('\d{2} \d{3} \d{2} \d{2}', 'dziewiec cyfr ', sentence)
+    #numer konta
+    sentence = re.sub('\d{26}', 'dwadziescia szesc cyfr', sentence)
+    #transform date into password
+    sentence = re.sub('\s\d{2}[.-]\d{2}\s', 'data', sentence)
+    sentence = re.sub('\d{1,4}[.-]\d{1,2}[.-]\d{1,4}', 'data', sentence)
+    # Remove numbers
+    sentence = re.sub('\d', ' ', sentence)
+    # Remove punctuations 
+    sentence = re.sub('[-!_#"*?:;,.><+=\\\)(\/]', " ", sentence)
+    sentence = re.sub('&nbsp', ' ', sentence)
+    # Single character removal
+    sentence = re.sub(r"\s+[a-zA-Z](?=(\s+)|($))", ' ', sentence)
+    sentence = re.sub(r"^[a-zA-Z](?=(\s+)|($))", ' ', sentence)
+    # Removing specific week ending sentence
+    sentence = re.sub(r" użytkownik ", ' ', sentence)
+    # Removing specific week ending sentence
+    sentence = re.sub(r"( pon )|( wt )|( śr )|( czw )|( czwartek )|( pt )|(fri)|( sob )|( niedz )", ' ', sentence)
+    # Removing specific month ending sentence
+    sentence = re.sub(r"( st )|( lut )|( mar )|( kw )|( cze )|( lip )| (lipca)|( sierp )|( wrz )|( paź )|( lis )|( gru )", ' ', sentence)
+    # Removing multiple spaces
+    sentence = re.sub(r'\s+', ' ', sentence)
+    return sentence
+
+
+
+##funkcja tworzaca kolumne z maile do uczenia
+### tabele musi zawierac nastepujace kolumny
+#### tresc_maila_cutted
+#### client_email
+def przetworzenie_kolumny_z_mailem(df_start):
+  #wczytuje plik z r
+  df_start = pd.DataFrame(df_start)
+  X = []
+  sentences = list(df_start["tresc_maila_cutted"])
+  for i in range(len(sentences)):
+    #print(i)
+    X.append(preprocess_text(sentences[i]))
+  #przetworzanie info o mailu
+  X_email = []
+  #emaile_do = list(df_start["email_do"])
+  if typ=='agent':
+    client_email = list(df_start["client_email"])
+    print('x')
+    for i in range(len(client_email)):
+      #print(i)
+      #' od ' + re.sub('@.*', '', client_email[i]) + 
+      #+ ' mail do ' + re.sub('@.*', '', emaile_do[i]) + ' do domeny ' + re.sub('.*@', '', emaile_do[i])
+      email_text = ' mail od ' + re.sub('.*@', '', client_email[i])
+      X_email.append(email_text)
+  
+  df_start_clean = df_start
+  #wstawiam nowa kolumne na drugim miejscu
+  df_start_clean.insert(1, "tresc_maila_cutted_clean", X, True)
+  print('x2')
+  if typ=='agent':
+      df_start_clean.insert(2, "email_tekst", X_email, True)
+  print('x3')
+  #usuwanie zduplikowanych wartosci
+  #df_start_clean = df_start_clean.drop_duplicates(subset=['tresc_maila_cutted_clean'])
+  
+  
+  df_start_clean['tresc_maila_cutted_clean'].replace('', np.nan, inplace=True)
+  df_start_clean['tresc_maila_cutted_clean'].replace(' ', np.nan, inplace=True)
+  df_start_clean.dropna(subset=['tresc_maila_cutted_clean'], inplace=True)
+  df_start_clean=pd.DataFrame(df_start_clean)
+  if typ=='agent':
+      df_start_clean['tresc_maila_cutted_clean'] = df_start_clean['tresc_maila_cutted_clean'] + df_start_clean['email_tekst']
+  df_start_clean=pd.DataFrame(df_start_clean)
+  #df_start_clean['tresc_maila_cutted_clean'][0]
+  #df_start_clean.info()
+  #df_start_clean.nunique()
+  #print(df_start_clean.head(4))
+  return df_start_clean
+
+
+
+def predykcja(typ,nr_modelu, df):
+  EXPORT_PATH = "/home/lrabalski/Text Classification/USE/model_"+typ+"/"+str(nr_modelu)
+  print(EXPORT_PATH)
+  model = tf.keras.models.load_model(EXPORT_PATH)
+  # df_maile_do_predykcji=df_maile_do_predykcji.reset_index()
+  # df_maile_do_predykcji.head
+  df.reset_index(drop=True,inplace=True)
+  df_maile_pred=pd.DataFrame(model.predict(
+    df[['tresc_maila_cutted_clean']].values
+    ))
+  df_maile_pred_all=pd.concat([df,df_maile_pred], axis=1#,ignore_index=True
+  )
+  return df_maile_pred_all
+
+```
+
+```{python}
+##| tags: []
+typ=  'client' #   'agent' #  
+save_dir ='/data/lrabalski/DOP/call_back_models/'
+```
+
+### preparing dataframe
+
+```{python}
+##| tags: []
+df=pd.read_csv('https://raw.githubusercontent.com/NavePnow/Google-BERT-on-fake_or_real-news-dataset/master/data/fake_or_real_news.csv',
+              skiprows=1,
+              names=['title','text','label','title_vectors']).drop('title_vectors',axis=1).reset_index()
+```
+
+```{python}
+##| tags: []
+#### convert label into binary text
+```
+
+```{python}
+##| tags: []
+df.head()
+for i in range(len(df)):
+    if df.loc[i, 'label'] == "REAL": #REAL equal 0
+        df.loc[i, 'label'] = 0
+    elif df.loc[i, 'label'] == "FAKE": #FAKE equal 1
+        df.loc[i, 'label'] = 1
+    if df.loc[i, 'text'] == "":
+        df = df.drop([i])
+
+df['label'] = pd.Categorical(df['label'])
+df['label'] = df.label.cat.codes
+df['client_email']='xxx@xx.pl'
+```
+
+```{python}
+##| tags: []
+df = df.rename(columns={"text":"tresc_maila_cutted", "label": "final__KATEGOR"})
+```
+
+```{python}
+##| tags: []
+df_maile = df
+```
+
+### preparing datasets
+
+```{python}
+##| tags: []
+df_start_clean = przetworzenie_kolumny_z_mailem(df_maile)
+
+
+train_df, test_df = train_test_split(df_start_clean, test_size=0.15,random_state=42)
+train_df, val_df = train_test_split(train_df, test_size=0.2,random_state=42) 
+
+print("Rozmiary datasetów")
+print(f"Zbiór uczący {len(train_df)}")
+print(f"Zbiór walidacyjny {len(val_df)}")
+print(f"Zbiór testowy {len(test_df)}")
+
+
+train_ds = df_to_dataset_maszyna(train_df, shuffle=True)
+val_ds = df_to_dataset_maszyna(val_df, shuffle=True)
+test_ds = df_to_dataset_maszyna(test_df, shuffle=True)
+```
+
+```{python}
+##| tags: []
+tmp_ds = df_to_dataset_maszyna(train_df, shuffle=True, batch_size=1)
+for i in tmp_ds.shuffle(len(train_df)).take(2):
+    print(list(i))
+```
+
+### general parametrization
+
+```{python}
+##| tags: []
+max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
+max_tokens = 20000
+
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+text_only_train_ds = tf.data.Dataset.from_tensor_slices(train_df['tresc_maila_cutted_clean'])
+
+text_vectorization = layers.TextVectorization(
+    max_tokens=max_tokens,
+    output_mode="int",
+    output_sequence_length=max_length,
+)
+text_vectorization.adapt(text_only_train_ds)
+
+vocab = text_vectorization.get_vocabulary()
+
+int_train_ds = train_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_val_ds = val_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_test_ds = test_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+
+```
+
+### assesing models
+
+#### learning rate
+
+```{python}
+##| tags: []
+history_lists[0]
+```
+
+```{python}
+##| tags: []
+history_lists=list()
+files_list=list()
+for (dir_path, dir_names, file_names) in os.walk(save_dir):
+    dir_names = [dir_path + '/' + x for x in  file_names if bool(re.match(r'history.pkl', x))]
+    history_lists = history_lists + dir_names   
+```
+
+```{python}
+##| tags: []
+import pickle
+df_model_accuracy = pd.DataFrame(columns=['model','val_accuracy'])
+
+for i in range(len(history_lists)):
+    with open(history_lists[i], 'rb') as f:
+        data = pickle.load(f)
+    model=re.search(r'(?<=call_back_models/)[A-Za-z|_]+', history_lists[i]).group()
+    acc=max(data['val_accuracy'])
+    df_model_accuracy = df_model_accuracy.append(pd.DataFrame({'model':model, 'val_accuracy':acc} , index=[0]))
+
+df_model_accuracy
+```
+
+#### visualizing learning rate
+
+```{python}
+## visualization of loss
+import matplotlib.pyplot as plt 
+
+plt.clf()
+history_dict = history.history 
+loss_values = history_dict["loss"] 
+val_loss_values = history_dict["val_loss"] 
+epochs = range(1, len(loss_values) + 1) 
+plt.plot(epochs, loss_values, "bo", label="Training loss") 
+plt.plot(epochs, val_loss_values, "b", label="Validation loss") 
+plt.title("Training and validation loss") 
+plt.xlabel("Epochs") 
+plt.ylabel("Loss") 
+plt.legend() 
+plt.show() 
+```
+
+#### accuracy on test data
+
+```{python}
+## accuracy on test data
+
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+##model = keras.models.load_model("embeddings_bidir_gru.keras") 
+print(f"Test acc: {model.evaluate(int_test_ds)[1]:.3f}")
+model.summary()
+```
+
+## Models
+
+### Encoding
+
+Word embeddings are vector representations of words thatmap human language into a structured geometric space.
+Word embeddings are low-dimensional floating-point vectors (that is, dense vectors, as opposed to sparse vectors)
+
+the vectors obtained through 
+ * one-hot encoding are binary, sparse (mostly made of zeros), and very high-dimensional (the same dimensionality as the number of words in the vocabulary), 
+ * word embeddings are low-dimensional floating-point vectors (that is, dense vectors, as opposed to sparse vectors)
+
+#### learned word embedding
+
+##### parameters
+
+```{python}
+##| tags: []
+model_name = 'learned_embeddings_bidir_lstm'
+max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
+max_tokens = 20000
+import os
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+
+save_dir+model_name
+```
+
+##### learning
+
+```{python}
+##| tags: []
+
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+text_only_train_ds = tf.data.Dataset.from_tensor_slices(train_df['tresc_maila_cutted_clean'])
+
+text_vectorization = layers.TextVectorization(
+    max_tokens=max_tokens,
+    output_mode="int",
+    output_sequence_length=max_length,
+)
+text_vectorization.adapt(text_only_train_ds)
+
+vocab = text_vectorization.get_vocabulary()
+
+int_train_ds = train_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_val_ds = val_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_test_ds = test_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+
+```
+
+```{python}
+##| tags: []
+inputs = keras.Input(shape=(None,), dtype="int64")
+embedded = layers.Embedding(input_dim=max_tokens, output_dim=256, name="embedding")(inputs)
+x = layers.Bidirectional(layers.LSTM(32))(embedded)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+model.summary()
+  
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/"+model_name+".keras",
+                                     save_best_only=True)
+ ]
+history = model.fit(int_train_ds, validation_data=int_val_ds, epochs=20
+                   , callbacks=callbacks
+                   )
+
+```
+
+##### saving history
+
+```{python}
+import pickle
+
+with open(save_dir+model_name +'/history.pkl', 'wb') as f:
+            pickle.dump(history.history, f)
+            
+## with open(save_dir+model_name +'/history.pkl', 'rb') as f:
+##     data = pickle.load(f)
+```
+
+##### saving embeddings 
+https://www.tensorflow.org/text/guide/word_embeddings
+
+```{python}
+##| tags: []
+
+## savings for visualisation
+import io
+
+weights = model.get_layer('embedding').get_weights()[0]
+vocab = text_vectorization.get_vocabulary()
+
+print(weights.shape)
+print(len(vocab))
+
+out_v = io.open(save_dir+model_name +'/vectors.tsv', 'w', encoding='utf-8')
+out_m = io.open(save_dir+model_name +'/metadata.tsv', 'w', encoding='utf-8')
+
+for index, word in enumerate(vocab):
+  if index == 0 or not bool(re.match(r'[a-zA-z]', word)):
+    continue  # skip 0, it's padding.
+  vec = weights[index]
+  out_v.write('\t'.join([str(x) for x in vec]) + "\n")
+  out_m.write(word + "\n")
+out_v.close()
+out_m.close()
+
+
+##len(pd.read_csv(save_dir+model_name +'/vectors.tsv',encoding='UTF-8')) == len(pd.read_csv(save_dir+model_name +'/metadata.tsv',encoding='UTF-8'))
+
+## to observe 
+##http://projector.tensorflow.org/
+```
+
+```{python}
+##| tags: []
+vocab[4]
+weights[4]
+```
+
+##### visualizing embeddings
+https://www.tensorflow.org/tensorboard/tensorboard_projector_plugin
+https://projector.tensorflow.org/
+
+#### fine tunning
+
+```{python}
+##| tags: []
+model_name = 'learned_embeddings_bidir_lstm'
+model = tf.keras.models.load_model(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras")
+```
+
+```{python}
+##| tags: []
+try:
+    initial_epochs = history.epoch[-1]
+except NameError:
+    initial_epochs = 0
+initial_epochs=0
+
+
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+fine_tune_epochs = 20
+total_epochs =  initial_epochs + fine_tune_epochs
+
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+
+history_fine = model.fit(int_train_ds,
+                         epochs=total_epochs,
+                         initial_epoch=initial_epochs,
+                         validation_data=int_val_ds, 
+                         callbacks=callbacks
+                        )
+
+```
+
+```{python}
+##| tags: []
+x = model.get_layer('embedding').get_weights()[0:2]
+```
+
+```{python}
+##| tags: []
+import io
+
+weights = model.get_layer('embedding').get_weights()[0]
+vocab = text_vectorization.get_vocabulary()
+
+print(weights.shape)
+print(len(vocab))
+
+out_v = io.open(save_dir+model_name +'/vectors.tsv', 'w', encoding='utf-8')
+out_m = io.open(save_dir+model_name +'/metadata.tsv', 'w', encoding='utf-8')
+
+for index, word in enumerate(vocab):
+  if index == 0 or not bool(re.match(r'[a-zA-z]', word)):
+    continue  # skip 0, it's padding.
+  vec = weights[index]
+  out_v.write('\t'.join([str(x) for x in vec]) + "\n")
+  out_m.write(word + "\n")
+out_v.close()
+out_m.close()
+```
+
+#### PRETRAINED WORD EMBEDDINGS
+
+The rationale behind using pretrained word embeddings in natural language processing is much the same as for using pretrained convnets in image classification: you don’t have enough data available to learn truly powerful features on your own, but you expect that the features you need are fairly generic
+
+##### my_embeddings
+
+```{python}
+##| tags: []
+model_name = 'learned_embeddings_bidir_lstm'
+metadata = pd.read_csv(save_dir+model_name+'/metadata.tsv',encoding='UTF-8', header=0,names=['word'])
+vectors = pd.read_csv(save_dir+model_name+'/vectors.tsv',encoding='UTF-8', header=0,names=['vector'])
+```
+
+```{python}
+##| tags: []
+import numpy
+embeddings_index = {} 
+for index, word in enumerate(metadata.word):
+    coefs = numpy.fromstring(vectors.vector[index], "f", sep="\t")
+    embeddings_index[word] = coefs
+
+embedding_dim = coefs.shape[0]
+embedding_dim
+
+##embeddings_index
+```
+
+```{python}
+##| tags: []
+## Next, let’s build an embedding matrix that you can load into an Embedding layer. 
+##It must be a matrix of shape (max_words, embedding_dim), where each entry i contains 
+##the embedding_dim-dimensional vector for the word of index i in the reference word index 
+##(built during tokenization).
+```
+
+```{python}
+##| tags: []
+vocabulary = text_vectorization.get_vocabulary()             
+word_index = dict(zip(vocabulary, range(len(vocabulary))))   
+ 
+embedding_matrix = np.zeros((max_tokens, embedding_dim))     
+for word, i in word_index.items():
+    if i < max_tokens:
+        embedding_vector = embeddings_index.get(word)
+    if embedding_vector is not None:                         
+        embedding_matrix[i] = embedding_vector   
+
+embedding_layer = layers.Embedding(
+    max_tokens,
+    embedding_dim,
+    embeddings_initializer=keras.initializers.Constant(embedding_matrix),
+    trainable=True
+)
+```
+
+
+```{python}
+##| tags: []
+inputs = keras.Input(shape=(None,), dtype="int64")
+embedded = embedding_layer(inputs)
+x = layers.Bidirectional(layers.LSTM(32))(embedded)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+model.summary()
+  
+
+model.fit(int_train_ds, validation_data=int_val_ds, epochs=3)
+print(f"Test acc: {model.evaluate(int_test_ds)[1]:.3f}")
+```
+
+```{python}
+##| tags: []
+list(int_val_ds)
+```
+
+##### USE
+
+###### DENSE
+
+```{python}
+##| tags: []
+model_name = 'USE_dense'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+```{python}
+##| tags: []
+text_input = tf.keras.Input(shape=(), name="sentence", dtype=tf.string)
+text_embed = tfh.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
+                            name="text_embedding")(text_input)
+dense_relu_64 = tf.keras.layers.Dense(256, activation="relu")(text_embed)    
+dense_relu_64_2 = tf.keras.layers.Dense(256, activation="relu")(dense_relu_64)  
+out  =  tf.keras.layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(dense_relu_64_2)
+model = tf.keras.Model(inputs=text_input, outputs=out)
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+model.summary()
+```
+
+```{python}
+##| tags: []
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+history = model.fit(train_ds, 
+                    validation_data=val_ds, 
+                    epochs=20
+                   , callbacks=callbacks
+                   )
+```
+
+```{python}
+##| tags: []
+model_name = 'USE_embeddings_bidir_lstm'
+import pickle
+
+## with open(save_dir+model_name +'/history.pkl', 'wb') as f:
+##             pickle.dump(history.history, f)
+            
+with open(save_dir+model_name +'/history.pkl', 'rb') as f:
+    data = pickle.load(f)
+```
+
+###### LSTM
+
+```{python}
+##| tags: []
+model_name = 'USE_LSTM'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+```{python}
+##| tags: []
+text_input = tf.keras.Input(shape=(), name="sentence", dtype=tf.string)
+text_embed = tfh.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
+                            name="text_embedding")(text_input)
+x = layers.Bidirectional(layers.LSTM(32))(text_embed)   
+x = layers.Dropout(0.5)(x) 
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)    
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+
+model.summary()
+```
+
+```{python}
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+history = model.fit(train_ds, 
+                    validation_data=val_ds, 
+                    epochs=20
+                   , callbacks=callbacks
+                   )
+```
+
+### Sequence
+What if, instead of manually crafting order-based features, we exposed the model to raw word sequences and let it figure out such features on its own? This is what sequence models are about.
+
+#### LSTM
+
+```{python}
+model_name = 'raw_sequence_bidir_lstm'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+```{python}
+##| tags: []
+##Preparing integer sequence datasets
+from tensorflow.keras import layers
+
+max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
+max_tokens = 20000
+text_vectorization = layers.TextVectorization(
+    max_tokens=max_tokens,
+    output_mode="int",
+    output_sequence_length=max_length,
+)
+text_vectorization.adapt(text_only_train_ds)
+
+int_train_ds = train_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_val_ds = val_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+int_test_ds = test_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+##**A sequence model built on one-hot encoded vector sequences**
+
+```
+
+```{python}
+##| tags: []
+list(int_train_ds.take(1))[0][0][0]
+##The simplest way to convert our integer sequences to vector sequences is to one-hot encode the integers (each dimension would represent one possible term in the vocabulary).
+
+```
+
+```{python}
+##| tags: []
+from tensorflow.keras import layers
+
+max_length = 20
+max_tokens = 50
+text_vectorization = layers.TextVectorization(
+    max_tokens=max_tokens,
+    output_mode="int",
+    output_sequence_length=max_length,
+)
+sentence = [ "I write, erase, rewrite, Erase again, and then,A poppy blooms." ]
+
+text_vectorization.adapt(sentence)
+vocabulary=text_vectorization.get_vocabulary()
+sentence = text_vectorization(sentence)
+
+import tensorflow as tf
+inputs = keras.Input(shape=(None,), dtype="int64")
+embedded = tf.one_hot(inputs, depth=max_tokens)
+model = keras.Model(inputs, embedded)
+
+predict=model.predict(sentence)
+predict.shape
+```
+
+```{python}
+##| tags: []
+import tensorflow as tf
+inputs = keras.Input(shape=(None,), dtype="int64")    
+embedded = tf.one_hot(inputs, depth=max_tokens)       
+x = layers.Bidirectional(layers.LSTM(32))(embedded)   
+x = layers.Dropout(0.5)(x) 
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)    
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+model.summary()
+```
+
+```{python}
+##| tags: []
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+model.fit(int_train_ds, 
+          validation_data=int_val_ds, 
+          epochs=2,
+          callbacks=callbacks)
+```
+
+##### Wnioski
+
+A first observation: this model trains very slowly, especially compared to the lightweight model of the previous section. This is because our inputs are quite large: each input sample is encoded as a matrix of size (600, 20000) (600 words per sample, 20,000 possible words). That’s 12,000,000 floats for a single movie review.
+
+#### Transformers
+
+```{python}
+##| tags: []
+import os
+model_name = "full_transformer_encoder"
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+
+```{python}
+##| tags: []
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
+class PositionalEmbedding(layers.Layer):
+    def __init__(self, sequence_length, input_dim, output_dim, **kwargs):  
+        super().__init__(**kwargs)
+        self.token_embeddings = layers.Embedding(                          
+            input_dim=input_dim, output_dim=output_dim)
+        self.position_embeddings = layers.Embedding(
+            input_dim=sequence_length, output_dim=output_dim)              
+        self.sequence_length = sequence_length
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+  
+    def call(self, inputs):
+        length = tf.shape(inputs)[-1]
+        positions = tf.range(start=0, limit=length, delta=1)
+        embedded_tokens = self.token_embeddings(inputs)
+        embedded_positions = self.position_embeddings(positions)
+        return embedded_tokens + embedded_positions                        
+ 
+    def compute_mask(self, inputs, mask=None):                             
+        return tf.math.not_equal(inputs, 0)                                
+ 
+    def get_config(self):                                                  
+        config = super().get_config()
+        config.update({
+            "output_dim": self.output_dim,
+            "sequence_length": self.sequence_length,
+            "input_dim": self.input_dim,
+        })
+        return config
+    
+
+  
+class TransformerEncoder(layers.Layer):
+    def __init__(self, embed_dim, dense_dim, num_heads, **kwargs):
+        super().__init__(**kwargs)
+        self.embed_dim = embed_dim                         
+        self.dense_dim = dense_dim                         
+        self.num_heads = num_heads                         
+        self.attention = layers.MultiHeadAttention(
+            num_heads=num_heads, key_dim=embed_dim)
+        self.dense_proj = keras.Sequential(
+            [layers.Dense(dense_dim, activation="relu"),
+             layers.Dense(embed_dim),]
+        )
+        self.layernorm_1 = layers.LayerNormalization()
+        self.layernorm_2 = layers.LayerNormalization()
+    def call(self, inputs, mask=None):                    
+        if mask is not None:                              
+            mask = mask[:, tf.newaxis, :]                 
+        attention_output = self.attention(
+            inputs, inputs, attention_mask=mask)
+        proj_input = self.layernorm_1(inputs + attention_output)
+        proj_output = self.dense_proj(proj_input)
+        return self.layernorm_2(proj_input + proj_output)
+  
+    def get_config(self):                                 
+        config = super().get_config()
+        config.update({
+            "embed_dim": self.embed_dim,
+            "num_heads": self.num_heads,
+            "dense_dim": self.dense_dim,
+        })
+        return config
+```
+
+```{python}
+##| tags: []
+vocab_size = 20000 
+sequence_length = 600 
+embed_dim = 256 
+num_heads = 2 
+dense_dim = 32 
+  
+inputs = keras.Input(shape=(None,), dtype="int64")
+x = PositionalEmbedding(sequence_length, vocab_size, embed_dim)(inputs)   
+x = TransformerEncoder(embed_dim, dense_dim, num_heads)(x)
+x = layers.GlobalMaxPooling1D()(x)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=["accuracy"])
+model.summary()
+  
+```
+
+```{python}
+##| tags: []
+callbacks = [
+    keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                    save_best_only=True)
+] 
+model.fit(int_train_ds, validation_data=int_val_ds, epochs=2, callbacks=callbacks)
+```
+
+```{python}
+##| tags: []
+model_name = 'full_transformer_encoder'
+model = tf.keras.models.load_model(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                  custom_objects={"TransformerEncoder": TransformerEncoder,
+                    "PositionalEmbedding": PositionalEmbedding})
+```
+
+```{python}
+##| tags: []
+try:
+    initial_epochs = history.epoch[-1]
+except NameError:
+    initial_epochs = 0
+initial_epochs=0
+
+
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+fine_tune_epochs = 2
+total_epochs =  initial_epochs + fine_tune_epochs
+
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+
+history_fine = model.fit(int_train_ds,
+                         epochs=total_epochs,
+                         initial_epoch=initial_epochs,
+                         validation_data=int_val_ds, 
+                         callbacks=callbacks
+                        )
+
+```
+
+```{python}
+##| tags: []
+history_fine.history
+```
+
+#### BERT
+
+```{python}
+##| tags: []
+bert_model_name = 'small_bert/bert_en_uncased_L-4_H-512_A-8' 
+
+map_name_to_handle = {
+    'bert_en_uncased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/3',
+    'bert_en_cased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_cased_L-12_H-768_A-12/3',
+    'bert_multi_cased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_multi_cased_L-12_H-768_A-12/3',
+    'small_bert/bert_en_uncased_L-2_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-2_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-2_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-2_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-768_A-12/1',
+    'small_bert/bert_en_uncased_L-4_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-4_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-4_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-4_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-4_H-768_A-12/1',
+    'small_bert/bert_en_uncased_L-6_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-6_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-6_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-6_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-6_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-6_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-6_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-6_H-768_A-12/1',
+    'small_bert/bert_en_uncased_L-8_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-8_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-8_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-8_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-8_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-8_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-8_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-8_H-768_A-12/1',
+    'small_bert/bert_en_uncased_L-10_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-10_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-10_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-10_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-10_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-10_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-10_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-10_H-768_A-12/1',
+    'small_bert/bert_en_uncased_L-12_H-128_A-2':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-12_H-128_A-2/1',
+    'small_bert/bert_en_uncased_L-12_H-256_A-4':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-12_H-256_A-4/1',
+    'small_bert/bert_en_uncased_L-12_H-512_A-8':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-12_H-512_A-8/1',
+    'small_bert/bert_en_uncased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-12_H-768_A-12/1',
+    'albert_en_base':
+        'https://tfhub.dev/tensorflow/albert_en_base/2',
+    'electra_small':
+        'https://tfhub.dev/google/electra_small/2',
+    'electra_base':
+        'https://tfhub.dev/google/electra_base/2',
+    'experts_pubmed':
+        'https://tfhub.dev/google/experts/bert/pubmed/2',
+    'experts_wiki_books':
+        'https://tfhub.dev/google/experts/bert/wiki_books/2',
+    'talking-heads_base':
+        'https://tfhub.dev/tensorflow/talkheads_ggelu_bert_en_base/1',
+}
+
+map_model_to_preprocess = {
+    'bert_en_uncased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'bert_en_cased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_cased_preprocess/3',
+    'small_bert/bert_en_uncased_L-2_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-2_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-2_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-2_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-4_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-4_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-4_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-4_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-6_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-6_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-6_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-6_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-8_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-8_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-8_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-8_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-10_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-10_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-10_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-10_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-12_H-128_A-2':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-12_H-256_A-4':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-12_H-512_A-8':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'small_bert/bert_en_uncased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'bert_multi_cased_L-12_H-768_A-12':
+        'https://tfhub.dev/tensorflow/bert_multi_cased_preprocess/3',
+    'albert_en_base':
+        'https://tfhub.dev/tensorflow/albert_en_preprocess/3',
+    'electra_small':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'electra_base':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'experts_pubmed':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'experts_wiki_books':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+    'talking-heads_base':
+        'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3',
+}
+
+tfhub_handle_encoder = map_name_to_handle[bert_model_name]
+tfhub_handle_preprocess = map_model_to_preprocess[bert_model_name]
+
+print(f'BERT model selected           : {tfhub_handle_encoder}')
+print(f'Preprocess model auto-selected: {tfhub_handle_preprocess}')
+```
+
+```{python}
+##| tags: []
+bert_preprocess_model = hub.KerasLayer(tfhub_handle_preprocess)
+```
+
+```{python}
+##| tags: []
+text_test = ['this is such an amazing movie!']
+text_preprocessed = bert_preprocess_model(text_test)
+
+print(f'Keys       : {list(text_preprocessed.keys())}')
+print(f'Shape      : {text_preprocessed["input_word_ids"].shape}')
+print(f'Word Ids   : {text_preprocessed["input_word_ids"][0, :12]}')
+print(f'Input Mask : {text_preprocessed["input_mask"][0, :12]}')
+print(f'Type Ids   : {text_preprocessed["input_type_ids"][0, :12]}')
+```
+
+```{python}
+##| tags: []
+bert_model = hub.KerasLayer(tfhub_handle_encoder)
+```
+
+```{python}
+##| tags: []
+bert_results = bert_model(text_preprocessed)
+
+print(f'Loaded BERT: {tfhub_handle_encoder}')
+print(f'Pooled Outputs Shape:{bert_results["pooled_output"].shape}')
+print(f'Pooled Outputs Values:{bert_results["pooled_output"][0, :12]}')
+print(f'Sequence Outputs Shape:{bert_results["sequence_output"].shape}')
+print(f'Sequence Outputs Values:{bert_results["sequence_output"][0, :12]}')
+```
+
+
+### Bag of words
+
+#### Unigram
+
+```{python}
+##| tags: []
+import os
+model_name = 'Unigram_dense'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+##### text vectorization
+
+```{python}
+##| tags: []
+from tensorflow.keras.layers import TextVectorization
+
+text_vectorization = TextVectorization(
+    max_tokens=20000,  #Limit the vocabulary to the 20,000 most frequent words                    
+    output_mode="multi_hot",   #Encode the output tokens as multi-hot binary vectors.                     
+)
+text_vectorization.adapt(text_only_train_ds)
+
+##Prepare processed versions of our training, validation, and test dataset. Make sure to specify num_parallel_calls to leverage multiple CPU cores
+
+binary_1gram_train_ds = train_ds.map(               
+    lambda x, y: (text_vectorization(x), y),        
+    num_parallel_calls=4)                                                   
+binary_1gram_val_ds = val_ds.map(                   
+    lambda x, y: (text_vectorization(x), y),        
+    num_parallel_calls=4)                           
+binary_1gram_test_ds = test_ds.map(                 
+    lambda x, y: (text_vectorization(x), y),        
+    num_parallel_calls=4)
+
+
+for inputs, targets in binary_1gram_train_ds:
+    print("inputs.shape:", inputs.shape)
+    print("inputs.dtype:", inputs.dtype)
+    print("targets.shape:", targets.shape)
+    print("targets.dtype:", targets.dtype)
+    print("inputs[0]:", inputs[0])
+    print("targets[0]:", targets[0])
+    break
+```
+
+###### playground
+
+```{python}
+##| tags: []
+text_only_train_ds = tf.data.Dataset.from_tensor_slices(train_df['tresc_maila_cutted_clean'])
+text_vectorization.adapt(text_only_train_ds)
+
+vocabulary = text_vectorization.get_vocabulary()
+```
+
+```{python}
+##| tags: []
+vocabulary[0:5]
+```
+
+```{python}
+##| tags: []
+test_sentence = "do do na na nie proszę proszę" 
+encoded_sentence = text_vectorization(test_sentence)
+encoded_sentence[0:100]
+```
+
+
+```{python}
+##| tags: []
+inverse_vocab = dict(enumerate(vocabulary))
+inverse_vocab[1]
+```
+
+```{python}
+##| tags: []
+decoded_sentence = " ".join(inverse_vocab[int(i)] for i, check in enumerate(encoded_sentence.numpy()) if check==1)
+decoded_sentence
+```
+
+##### building model
+
+```{python}
+##| tags: []
+from tensorflow import keras 
+from tensorflow.keras import layers
+  
+def get_model(max_tokens=20000, hidden_dim=16):
+    inputs = keras.Input(shape=(max_tokens,))
+    x = layers.Dense(hidden_dim, activation="relu")(inputs)
+    x = layers.Dropout(0.5)(x)
+    outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
+    model = keras.Model(inputs, outputs)
+    model.compile(optimizer="rmsprop",
+                  loss="binary_crossentropy",
+                  metrics=["accuracy"])
+    return model
+```
+
+```{python}
+##| tags: []
+model = get_model()
+model.summary()
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+
+##We call cache() on the datasets to cache them in memory: this way, we will only do the preprocessing once, during the first epoch, and we’ll reuse the preprocessed texts for the following epochs. This can only be done if the data is small enough to fit in memory.                  
+history=model.fit(binary_1gram_train_ds.cache(), 
+          validation_data=binary_1gram_val_ds.cache(),     
+          epochs=100,
+          callbacks=callbacks)
+```
+
+```{python}
+##| tags: []
+import pickle
+
+with open(save_dir+model_name +'/history.pkl', 'wb') as f:
+            pickle.dump(history.history, f)
+```
+
+#### BIGRAMS WITH TF-IDF ENCODING 
+
+```{python}
+##TF-IDF stands for “term frequency, inverse document frequency.”
+```
+
+```{python}
+##| tags: []
+model_name = 'bigram_dense'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+##### text vectorization
+
+```{python}
+##| tags: []
+text_vectorization = TextVectorization(
+    ngrams=3,
+    max_tokens=20000, 
+    #output_mode="count" #counting how many times each word or N-gram occurs
+    output_mode="tf_idf"
+)
+
+text_vectorization.adapt(text_only_train_ds)   
+ 
+```
+
+```{python}
+##| tags: []
+vocabulary = text_vectorization.get_vocabulary()
+vocabulary
+```
+
+```{python}
+##| tags: []
+train_ds
+```
+
+```{python}
+##| tags: []
+tfidf_2gram_train_ds = train_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+tfidf_2gram_val_ds = val_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+tfidf_2gram_test_ds = test_ds.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
+```
+
+```{python}
+##| tags: []
+model_name = 'bigram_dense'
+model = get_model()
+model.summary()
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+                                     save_best_only=True)
+ ]
+model.fit(tfidf_2gram_train_ds.cache(),
+          validation_data=tfidf_2gram_val_ds.cache(),
+          epochs=100,
+          callbacks=callbacks)
+```
+
+```{python}
+##| tags: []
+import pickle
+
+with open(save_dir+model_name +'/history.pkl', 'wb') as f:
+            pickle.dump(history.history, f)
+```
+

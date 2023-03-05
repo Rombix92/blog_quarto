@@ -8,7 +8,7 @@ format:
     toc: true
     toc-location: left
     number-sections: true
-    toc-depth: 3
+    toc-depth: 5
     embed-resources: true
 categories: ['Python','Time Series','anomaly detection']
 tags: []
