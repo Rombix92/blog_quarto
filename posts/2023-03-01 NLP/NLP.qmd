@@ -5,7 +5,11 @@ title: NLP - multiple methods and concepts
 description: "Notebook presenting several concept denoting to NLP like: \n tockenization, \n creating and saving embeddings, \n using pretrained embeding, \n visualizing embedding, \n sequncial and bag of words approach to NLP models."
 format:
   html:
+    code-copy: true
+    code-line-numbers: true
     code-fold: false
+    code-tools: true
+    code-summary: "Show the code"
     toc: true
     toc-location: left
     number-sections: true
