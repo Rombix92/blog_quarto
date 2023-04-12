@@ -108,9 +108,9 @@ Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzros
 ```{r}
 
 df_aug <- augment(model, type.predict = "response") # without response argument, the fitted value will be on log-odds scale
-
-p1 = df_aug$.fitted[df_aug$independent==1][1]
-p2 = df_aug$.fitted[df_aug$independent==2][1]
+p <-predict(model,data.frame(list('independent'=c(1,2))), type = "response",se.fit=TRUE)
+p1 = p[1]
+p2 = p[2]
 
 x <- round(p2/(1-p2)/(p1/(1-p1)),5)
 
