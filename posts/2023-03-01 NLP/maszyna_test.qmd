@@ -59,7 +59,7 @@ reticulate::py_config()
 ```
 
 
-## Importing libraries
+# Importing libraries
 
 ```{python}
 #| tags: []
@@ -70,8 +70,9 @@ import datetime
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
-#import tensorflow_hub as hub
-#import tensorflow_text
+import tensorflow.keras as keras
+import tensorflow_hub as hub
+import tensorflow_text
 import numpy as np
 import pandas as pd
 ```
@@ -79,8 +80,17 @@ import pandas as pd
 ```{python}
 #| tags: []
 # !pip install matplotlib==3.6.0
-!pip install scikit-learn==1.2.1
-# !pip install tensorflow_text
+# !pip install scikit-learn==1.2.1
+# !pip install tensorflow_text==2.10
+
+# for bert model
+# !pip install tf-models-official==2.10.1
+```
+
+```{python}
+#| tags: []
+#!pip install tensorflow_hub==0.12.0
+print("TensorFlow version:", hub.__version__)
 ```
 
 ```{python}
@@ -89,15 +99,33 @@ import tensorflow as tf
 print("TensorFlow version:", tf.__version__)
 print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 tf.config.list_physical_devices('GPU')
+tf.config.list_physical_devices('GPU')
+
 ```
 
+# Preparing data
 
-## Preparing data
-
-### preparing functions
+## preparing functions
 
 ```{python}
-##| tags: []
+#| tags: []
+from keras import backend as K
+
+def specificity(y_true, y_pred):
+    """
+    param:
+    y_pred - Predicted labels
+    y_true - True labels 
+    Returns:
+    Specificity score
+    """
+    neg_y_true = 1 - y_true
+    neg_y_pred = 1 - y_pred
+    fp = K.sum(neg_y_true * y_pred)
+    tn = K.sum(neg_y_true * neg_y_pred)
+    specificity = tn / (tn + fp + K.epsilon())
+    return specificity
+
 def df_to_dataset_maszyna(dataframe, shuffle=True, batch_size=32):
     sentencex = dataframe.filter(regex=("tresc_maila_cutted_clean")).tresc_maila_cutted_clean.values
     categories = dataframe.filter(regex=("_KATEGOR$")).values
@@ -115,7 +143,7 @@ def df_to_dataset_maszyna(dataframe, shuffle=True, batch_size=32):
     return ds  
 
 
-## funkcja czyszczaca maile
+# funkcja czyszczaca maile
 def preprocess_text(sen):
 
     # transorm  telephone number into password
@@ -148,10 +176,10 @@ def preprocess_text(sen):
 
 
 
-##funkcja tworzaca kolumne z maile do uczenia
-### tabele musi zawierac nastepujace kolumny
-#### tresc_maila_cutted
-#### client_email
+#funkcja tworzaca kolumne z maile do uczenia
+## tabele musi zawierac nastepujace kolumny
+### tresc_maila_cutted
+### client_email
 def przetworzenie_kolumny_z_mailem(df_start):
   #wczytuje plik z r
   df_start = pd.DataFrame(df_start)
@@ -213,30 +241,106 @@ def predykcja(typ,nr_modelu, df):
   )
   return df_maile_pred_all
 
+if typ ==  'agent' :
+    columns_count_to_select = [
+        'reservationChangeCalculation_KATEGOR',
+        'urgent_KATEGOR',
+        'reservationCancellation_KATEGOR',
+        'offerDetailsQuestion_KATEGOR',
+        'reservationConfirmation_KATEGOR',
+        'cancellationCosts_KATEGOR',
+        'payments_KATEGOR',
+        'tourDocuments_KATEGOR',
+        'noReply_KATEGOR',
+        'luggageCalculation_KATEGOR',
+        'urgentOnRequestReservationMessage_KATEGOR',
+        'additionalServicesChangeConfirmation_KATEGOR',
+        'luggageConfirmation_KATEGOR',
+        'additionalServices_KATEGOR',
+        'entryConditions_KATEGOR',
+        'checkInData_KATEGOR',
+        'urgentFixedReservationMessage_KATEGOR',
+        'contractDataCorrection_KATEGOR',
+        'issueNumber_KATEGOR',
+        'noShow_KATEGOR',
+        'invoice_KATEGOR',
+        'insurance_KATEGOR',
+        'departureHoursUpdate_KATEGOR',
+        'nonBindingRequests_KATEGOR',
+        'paymentDemandAndInvoice_KATEGOR',
+        'parking_KATEGOR']
+if typ == 'client' :
+    columns_count_to_select =[
+        'change_KATEGOR',
+        'urgentContact_KATEGOR',
+        'luggageQuestion_KATEGOR',
+        'payments_KATEGOR',
+        'offerQuestion_KATEGOR',
+        'entryConditionsAndTestAndVaccinationsQuestions_KATEGOR',
+        'howMuchLuggageIsIncludedInPriceQuestion_KATEGOR',
+        'reservationCancellation_KATEGOR',
+        'tourDocumentsQuestion_KATEGOR',
+        'flightNumberQuestion_KATEGOR',
+        'complaint_KATEGOR',
+        'contractChanges_KATEGOR',
+        'invoiceQuestion_KATEGOR',
+        'returnRequest_KATEGOR',
+        'luggagePriceQuestion_KATEGOR',
+        'changeDateQuestion_KATEGOR',
+        'checkInData_KATEGOR',
+        'crossSellInsuranceQuestion_KATEGOR',
+        'changeParticipants_KATEGOR',
+        'crossSellParkingQuestion_KATEGOR',
+        'changeHotel_KATEGOR',
+        'customerPanelQuestion_KATEGOR',
+        'changeRoom_KATEGOR',
+        'changeDestination_KATEGOR']
+
+def preparing_df(df_maile):
+    if typ ==  'client' :
+        df_maile=df_maile.drop(['klient_napisal_dluga_wiadomsoc_KATEGOR'], axis=1)
+    #ile wystapien maja kategorie
+        #columns_count = df_maile.filter(regex=("_KATEGOR$")).sum(axis=0).sort_values(ascending=False)
+        #columns_count_to_select = list(columns_count[columns_count >50].index)
+    columns_to_select = ['task_id','source','tresc_maila_cutted','client_email','email_do'] 
+    #wylacznie kategorie z wystarczajaca ilosci maili
+    df_maile = df_maile.loc[:,df_maile.columns.isin(columns_to_select)].join(df_maile[columns_count_to_select])
+    #odrzucamy bledy
+    df_maile = df_maile.loc[(~(df_maile['tresc_maila_cutted']=='')) & (~(df_maile['tresc_maila_cutted'].isna())),:]
+    df_maile = df_maile.loc[df_maile.tresc_maila_cutted.str.len()<2200,:]
+    if (typ=='client'):
+        df_maile = df_maile.loc[~df_maile.task_id.isin([6014406,6161374,5914601,5861554]),:]
+
+    df_clean = przetworzenie_kolumny_z_mailem(df_maile)
+    return df_clean
+
 ```
 
+## loading parameters
+
+
 ```{python}
-##| tags: []
-typ=  'client' #   'agent' #  
+#| tags: []
+typ=   'client' #  'agent' #  
+arg_dane =  'new' #''   #
 save_dir ='/data/lrabalski/DOP/call_back_models/'
+batch_size_input=32
+
+metrics_arg = [keras.metrics.Precision(), 
+     specificity,
+     keras.metrics.Recall(), 
+    "binary_accuracy"]
 ```
 
-### preparing dataframe
+## preparing dataframe
+
+### blogissimo
 
 ```{python}
-##| tags: []
 df=pd.read_csv('https://raw.githubusercontent.com/NavePnow/Google-BERT-on-fake_or_real-news-dataset/master/data/fake_or_real_news.csv',
               skiprows=1,
               names=['title','text','label','title_vectors']).drop('title_vectors',axis=1).reset_index()
-```
-
-```{python}
-##| tags: []
-#### convert label into binary text
-```
-
-```{python}
-##| tags: []
+### convert label into binary text
 df.head()
 for i in range(len(df)):
     if df.loc[i, 'label'] == "REAL": #REAL equal 0
@@ -249,50 +353,88 @@ for i in range(len(df)):
 df['label'] = pd.Categorical(df['label'])
 df['label'] = df.label.cat.codes
 df['client_email']='xxx@xx.pl'
-```
-
-```{python}
-##| tags: []
 df = df.rename(columns={"text":"tresc_maila_cutted", "label": "final__KATEGOR"})
-```
-
-```{python}
-##| tags: []
 df_maile = df
 ```
 
-### preparing datasets
+### true
 
 ```{python}
-##| tags: []
-df_start_clean = przetworzenie_kolumny_z_mailem(df_maile)
+#| tags: []
+# df_maile_out = pd.read_csv('/data/lrabalski/DOP/files/input/'+typ+'_uczenie_maszynowe_out.csv',sep=';',encoding='UTF-8')
+# test_df_out = df_maile_out[df_maile_out['type']=='test'].filter(regex=('task_id|tresc_maila_cutted_clean|_KATEGOR$'))
+
+df_maile_raw = pd.read_csv('/data/lrabalski/DOP/files/input/'+typ+'_uczenie_maszynowe.csv',encoding='UTF-8')
+df_maile_new_raw = pd.read_csv('/data/lrabalski/DOP/files/input/'+typ+'_uczenie_maszynowe_'+arg_dane+'.csv',encoding='UTF-8')
+df_maile_new = df_maile_new_raw.loc[~df_maile_new_raw.task_id.isin(df_maile_raw.task_id.values)]
 
 
-train_df, test_df = train_test_split(df_start_clean, test_size=0.15,random_state=42)
-train_df, val_df = train_test_split(train_df, test_size=0.2,random_state=42) 
+print(len(df_maile_raw))
+print(len(df_maile_new_raw))
+print(len(df_maile_new))
+```
+
+```{python}
+#| tags: []
+# wybierze typ danych df_maile vs df_maile_new
+if arg_dane == 'new':
+    check=len(df_maile_new_raw)
+    df_maile = df_maile_new_raw
+else:
+    check=len(df_maile_raw)
+    df_maile = df_maile_raw
+    
+df_clean = preparing_df(df_maile)
+df_clean_only_new_observations = preparing_df(df_maile_new)
+
+print(check)
+print(df_clean.shape)
+print(df_clean_only_new_observations.shape)
+```
+
+```{python}
+#| tags: []
+df_clean_only_new_observations
+```
+
+## preparing datasets
+
+```{python}
+#| tags: []
+train_df, test_df = train_test_split(df_clean, test_size=0.1,random_state=42)
+train_df, val_df = train_test_split(train_df, test_size=0.15,random_state=42) 
 
 print("Rozmiary datasetów")
 print(f"Zbiór uczący {len(train_df)}")
 print(f"Zbiór walidacyjny {len(val_df)}")
 print(f"Zbiór testowy {len(test_df)}")
+print(f"nowe dane {len(df_clean_only_new_observations)}")
 
 
-train_ds = df_to_dataset_maszyna(train_df, shuffle=True)
-val_ds = df_to_dataset_maszyna(val_df, shuffle=True)
-test_ds = df_to_dataset_maszyna(test_df, shuffle=True)
+train_ds = df_to_dataset_maszyna(train_df, shuffle=True, batch_size=batch_size_input)
+val_ds = df_to_dataset_maszyna(val_df, shuffle=True, batch_size=batch_size_input)
+test_ds = df_to_dataset_maszyna(test_df, shuffle=True, batch_size=batch_size_input)
+test_ds_new_observations = df_to_dataset_maszyna(df_clean_only_new_observations, shuffle=True, batch_size=batch_size_input)
 ```
 
 ```{python}
-##| tags: []
-tmp_ds = df_to_dataset_maszyna(train_df, shuffle=True, batch_size=1)
-for i in tmp_ds.shuffle(len(train_df)).take(2):
-    print(list(i))
+#| tags: []
+# tmp_ds = df_to_dataset_maszyna(train_df, shuffle=True, batch_size=1)
+# for i in tmp_ds.shuffle(len(train_df)).take(2):
+#     print(list(i))
 ```
 
-### general parametrization
+## checking Chollet golden rules
 
 ```{python}
-##| tags: []
+#| tags: []
+train_df.shape[0]/np.mean(train_df.tresc_maila_cutted_clean.str.len())
+```
+
+## general parametrization
+
+```{python}
+#| tags: []
 max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
 max_tokens = 20000
 
@@ -319,20 +461,109 @@ int_val_ds = val_ds.map(
 int_test_ds = test_ds.map(
     lambda x, y: (text_vectorization(x), y),
     num_parallel_calls=4)
+int_test_ds_new_observation = test_ds_new_observations.map(
+    lambda x, y: (text_vectorization(x), y),
+    num_parallel_calls=4)
 
 ```
 
-### assesing models
+```{python}
+#| tags: []
+list(int_test_ds_new_observation.take(1))
+```
 
-#### learning rate
+## assesing models
+
+### loading models
 
 ```{python}
-##| tags: []
-history_lists[0]
+#| tags: []
+typ
+```
+
+##### old
+
+```{python}
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/files/models/agent/'
+#model_old = tf.saved_model.load(EXPORT_PATH)
+model_agent_old = tf.keras.models.load_model(EXPORT_PATH)
+model_agent_old.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+
+EXPORT_PATH='/data/lrabalski/DOP/files/models/client/'
+#model_old = tf.saved_model.load(EXPORT_PATH)
+model_client_old = tf.keras.models.load_model(EXPORT_PATH)
+model_client_old.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+```
+
+##### new_production_models
+
+```{python}
+#| tags: []
+EXPORT_PATH="/data/lrabalski/DOP/files/models/new_agent/"
+#model_agent_new = tf.saved_model.load(EXPORT_PATH)
+model_agent_new = tf.keras.models.load_model(EXPORT_PATH, compile=False)
+model_agent_new.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+
+EXPORT_PATH="/data/lrabalski/DOP/files/models/new_client/"
+#model_agent_new = tf.saved_model.load(EXPORT_PATH)
+model_client_new = tf.keras.models.load_model(EXPORT_PATH, compile=False)
+model_client_new.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+```
+
+##### call_back_model
+
+```{python}
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/call_back_models/bigram_dense/model_'+typ+'_bigram_dense.keras'
+model_agent_bigram_dense = tf.keras.models.load_model(EXPORT_PATH,
+                                   compile=False)
+model_agent_bigram_dense.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+model_agent_bigram_dense.summary()
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/call_back_models/USE_dense/model_'+typ+'_USE_dense.keras'
+model_USE_dense = tf.keras.models.load_model(EXPORT_PATH,
+                                  custom_objects={
+                                      "KerasLayer": hub.KerasLayer},
+                                   compile=False)
+model_USE_dense.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+model_USE_dense.summary()
+```
+
+```{python}
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/call_back_models/raw_sequence_bidir_lstm/model_'+typ+'_raw_sequence_bidir_lstm.keras'
+model_raw_sequence_bidir_lstm = tf.keras.models.load_model(EXPORT_PATH,
+                                   compile=False)
+model_raw_sequence_bidir_lstm.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+model_raw_sequence_bidir_lstm.summary()
+```
+
+```{python}
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/call_back_models/learned_embeddings_bidir_lstm/model_'+typ+'_learned_embeddings_bidir_lstm.keras'
+model_learned_embeddings_bidir_lstm = tf.keras.models.load_model(EXPORT_PATH,
+                                   compile=False)
+model_learned_embeddings_bidir_lstm.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+model_learned_embeddings_bidir_lstm.summary()
+```
+
+```{python}
+#| tags: []
+EXPORT_PATH='/data/lrabalski/DOP/call_back_models/learned_embeddings_bidir_lstm/model_'+typ+'_learned_embeddings_bidir_lstm_new.keras'
+model_learned_embeddings_bidir_lstm_new = tf.keras.models.load_model(EXPORT_PATH,
+                                   compile=False)
+model_learned_embeddings_bidir_lstm_new.compile(loss="binary_crossentropy", optimizer="adam", metrics=metrics_arg)
+model_learned_embeddings_bidir_lstm_new.summary()
+```
+
+### learning rate
+
+```{python}
+#| tags: []
 history_lists=list()
 files_list=list()
 for (dir_path, dir_names, file_names) in os.walk(save_dir):
@@ -341,7 +572,14 @@ for (dir_path, dir_names, file_names) in os.walk(save_dir):
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+history_lists = history_lists[3]
+history_lists= [history_lists]
+history_lists
+```
+
+```{python}
+#| tags: []
 import pickle
 df_model_accuracy = pd.DataFrame(columns=['model','val_accuracy'])
 
@@ -349,16 +587,17 @@ for i in range(len(history_lists)):
     with open(history_lists[i], 'rb') as f:
         data = pickle.load(f)
     model=re.search(r'(?<=call_back_models/)[A-Za-z|_]+', history_lists[i]).group()
-    acc=max(data['val_accuracy'])
+    acc=max(data['binary_accuracy'])
     df_model_accuracy = df_model_accuracy.append(pd.DataFrame({'model':model, 'val_accuracy':acc} , index=[0]))
 
 df_model_accuracy
 ```
 
-#### visualizing learning rate
+### visualizing learning rate
 
 ```{python}
-## visualization of loss
+#| tags: []
+# visualization of loss
 import matplotlib.pyplot as plt 
 
 plt.clf()
@@ -375,22 +614,212 @@ plt.legend()
 plt.show() 
 ```
 
-#### accuracy on test data
-
 ```{python}
-## accuracy on test data
+#| tags: []
+# visualization of loss
+import matplotlib.pyplot as plt 
 
-from tensorflow import keras 
-from tensorflow.keras import layers
-
-##model = keras.models.load_model("embeddings_bidir_gru.keras") 
-print(f"Test acc: {model.evaluate(int_test_ds)[1]:.3f}")
-model.summary()
+plt.clf()
+history_dict = history.history 
+binary_accuracy = history_dict["binary_accuracy"] 
+val_binary_accuracy = history_dict["val_binary_accuracy"] 
+epochs = range(1, len(binary_accuracy) + 1) 
+plt.plot(epochs, binary_accuracy, "bo", label="Training loss") 
+plt.plot(epochs, val_binary_accuracy, "b", label="Validation loss") 
+plt.title("Training and validation loss") 
+plt.xlabel("Epochs") 
+plt.ylabel("Loss") 
+plt.legend() 
+plt.show() 
 ```
 
-## Models
+### trivial common-sense baseline
 
-### Encoding
+Asssuming that predominant class (0) within each category is our prediction
+
+```{python}
+#| tags: []
+np.mean((test_df.filter(regex='_KATEGOR$').to_numpy()==0).astype(int))
+```
+
+### accuracy on test datasets
+
+#### old
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_agent_old.evaluate(test_ds)[1]:.3f}")
+print(f"Test acc: {model_agent_old.evaluate(test_ds_new_observations)[1]:.3f}")
+test_allDATA_modelOLD= model_agent_old.evaluate(test_ds)
+test_newDATA_modelOLD= model_agent_old.evaluate(test_ds_new_observations)
+
+model_agent_old.summary()
+```
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+test_allDATA_modelOLD= model_client_old.evaluate(test_ds)
+test_newDATA_modelOLD= model_client_old.evaluate(test_ds_new_observations)
+
+model_agent_old.summary()
+```
+
+#### new_production_models
+
+```{python}
+#| tags: []
+
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_agent_new.evaluate(test_ds)[1]:.3f}")
+print(f"Test acc: {model_agent_new.evaluate(test_ds_new_observations)[1]:.3f}")
+test_allDATA_modelNEW= model_agent_new.evaluate(test_ds)
+test_newDATA_modelNEW= model_agent_new.evaluate(test_ds_new_observations)
+model_agent_new.summary()
+```
+
+```{python}
+#| tags: []
+
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+test_allDATA_modelNEW= model_client_new.evaluate(test_ds)
+test_newDATA_modelNEW= model_client_new.evaluate(test_ds_new_observations)
+model_agent_new.summary()
+```
+
+```{python}
+#| tags: []
+df_results
+```
+
+```{python}
+#| tags: []
+df_results = pd.DataFrame(data=np.stack((test_allDATA_modelOLD,
+          test_newDATA_modelOLD,
+          test_allDATA_modelNEW, 
+          test_newDATA_modelNEW)),
+             index=['allDATA_modelOLD','newDATA_modelOLD','allDATA_modelNEW','newDATA_modelNEW'],
+            columns=['loss','precision','specificity','recall','binary_accuracy'])
+
+df_results.to_csv('/data/lrabalski/DOP/files/output/results_'+typ+'.csv')
+```
+
+#### call_back_model
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_agent_old.evaluate(test_ds)[1]:.3f}")
+print(f"Test acc: {model_agent_old.evaluate(test_ds_new_observations)[1]:.3f}")
+
+model_agent_old.summary()
+```
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_bigram_dense.evaluate(tfidf_2gram_test_ds)[4]:.3f}")
+model_bigram_dense.summary()
+```
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_raw_sequence_bidir_lstm.evaluate(int_test_ds)[4]:.3f}")
+model_bigram_dense.summary()
+```
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_learned_embeddings_bidir_lstm.evaluate(int_test_ds)[4]:.3f}")
+print(f"Test acc: {model_learned_embeddings_bidir_lstm.evaluate(int_test_ds_new_observation)[1]:.3f}")
+model_learned_embeddings_bidir_lstm.summary()
+
+```
+
+```{python}
+#| tags: []
+# OLD model accuracy on test data
+from tensorflow import keras 
+from tensorflow.keras import layers
+print(f"Test acc: {model_learned_embeddings_bidir_lstm_new.evaluate(int_test_ds)[4]:.3f}")
+model_learned_embeddings_bidir_lstm_new.summary()
+```
+
+### accuracy on test dataframe - predicting
+
+```{python}
+#| tags: []
+test_df=test_df.reset_index(drop=True)
+pred_50 = pd.DataFrame((model.predict(
+    test_df[['tresc_maila_cutted_clean']].values
+    ) >0.5).astype(int))
+pred_50.columns=test_df.filter(regex=("_KATEGOR$")).columns
+pred_50=pred_50.reset_index(drop=True)
+```
+
+
+```{python}
+#| tags: []
+test_df=test_df.reset_index(drop=True)
+pred_cutoff = pd.DataFrame(model.predict(
+    test_df[['tresc_maila_cutted_clean']].values
+    ))
+pred_cutoff.columns=test_df.filter(regex=("_KATEGOR$")).columns
+pred_cutoff=pred_cutoff.reset_index(drop=True)
+
+df_cutoff = pd.read_csv('/data/lrabalski/DOP/files/input/cutoff_klient_model_version3.csv')
+for col_name_temp in pred_cutoff.columns:
+    pred_cutoff[col_name_temp] = (pred_cutoff[col_name_temp]>df_cutoff[col_name_temp].values[0]).astype(int)
+    
+```
+
+
+```{python}
+#| tags: []
+pred_50
+```
+
+```{python}
+#| tags: []
+print(np.mean(pred_50.to_numpy() == test_df.filter(regex=("_KATEGOR$")).to_numpy()))
+print(np.mean(pred_cutoff.to_numpy() == test_df.filter(regex=("_KATEGOR$")).to_numpy()))
+```
+
+
+
+```{python}
+#| tags: []
+df_pred_analysed = pred_50 #pred_50 # pred_cutoff
+for col_name_temp in pred.columns:
+    print(col_name_temp)
+    print(np.mean(test_df[col_name_temp].values))
+    print(np.mean(df_pred_analysed[col_name_temp].values))
+    print(np.mean(df_pred_analysed[col_name_temp].values==test_df[col_name_temp].values))
+    print(pd.crosstab(test_df[col_name_temp],df_pred_analysed[col_name_temp], margins = False))
+```
+
+# Models
+
+## Encoding
 
 Word embeddings are vector representations of words thatmap human language into a structured geometric space.
 Word embeddings are low-dimensional floating-point vectors (that is, dense vectors, as opposed to sparse vectors)
@@ -399,12 +828,12 @@ the vectors obtained through
  * one-hot encoding are binary, sparse (mostly made of zeros), and very high-dimensional (the same dimensionality as the number of words in the vocabulary), 
  * word embeddings are low-dimensional floating-point vectors (that is, dense vectors, as opposed to sparse vectors)
 
-#### learned word embedding
+### learned word embedding
 
-##### parameters
+#### parameters
 
 ```{python}
-##| tags: []
+#| tags: []
 model_name = 'learned_embeddings_bidir_lstm'
 max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
 max_tokens = 20000
@@ -415,11 +844,10 @@ if not os.path.exists(save_dir+model_name):
 save_dir+model_name
 ```
 
-##### learning
+#### learning
 
 ```{python}
-##| tags: []
-
+#| tags: []
 from tensorflow import keras 
 from tensorflow.keras import layers
 
@@ -444,50 +872,73 @@ int_test_ds = test_ds.map(
     lambda x, y: (text_vectorization(x), y),
     num_parallel_calls=4)
 
+
+import math
+
+BATCH_SIZE = batch_size_input
+STEPS_PER_EPOCH = math.ceil(len(train_df) / BATCH_SIZE)
+SAVE_PERIOD = 5
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+callbacks = [
+     tf.keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",
+                                     save_best_only=True,
+                                       monitor='binary_accuracy',
+                                       save_freq= int(SAVE_PERIOD * STEPS_PER_EPOCH))
+ ]
+
+
 inputs = keras.Input(shape=(None,), dtype="int64")
-embedded = layers.Embedding(input_dim=max_tokens, output_dim=256, name="embedding")(inputs)
-x = layers.Bidirectional(layers.LSTM(32))(embedded)
+embedded = layers.Embedding(input_dim=max_tokens, output_dim=128, name="embedding")(inputs)
+x = layers.Bidirectional(layers.LSTM(64))(embedded)
 x = layers.Dropout(0.5)(x)
-outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
+dense_relu_128 = tf.keras.layers.Dense(64, activation="relu")(x)  
+x2 = layers.Dropout(0.5)(dense_relu_128)
+outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x2)
 model = keras.Model(inputs, outputs)
 model.compile(optimizer="rmsprop",
               loss="binary_crossentropy",
-              metrics=["accuracy"])
+              metrics=metrics_arg)
 model.summary()
   
-callbacks = [
-     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/"+model_name+".keras",
-                                     save_best_only=True)
- ]
-history = model.fit(int_train_ds, validation_data=int_val_ds, epochs=20
+```
+
+```{python}
+#| tags: []
+
+history = model.fit(int_train_ds, validation_data=int_val_ds, epochs=5
                    , callbacks=callbacks
                    )
 
 ```
 
-##### saving history
+```{python}
+#| tags: []
+save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras"
+```
+
+#### saving history
 
 ```{python}
+#| tags: []
 import pickle
 
 with open(save_dir+model_name +'/history.pkl', 'wb') as f:
             pickle.dump(history.history, f)
             
-## with open(save_dir+model_name +'/history.pkl', 'rb') as f:
-##     data = pickle.load(f)
+# with open(save_dir+model_name +'/history.pkl', 'rb') as f:
+#     data = pickle.load(f)
 ```
 
-##### saving embeddings 
+#### saving embeddings 
 https://www.tensorflow.org/text/guide/word_embeddings
 
 ```{python}
-##| tags: []
+#| tags: []
 
-## savings for visualisation
+# savings for visualisation
 import io
 
 weights = model.get_layer('embedding').get_weights()[0]
@@ -509,32 +960,34 @@ out_v.close()
 out_m.close()
 
 
-##len(pd.read_csv(save_dir+model_name +'/vectors.tsv',encoding='UTF-8')) == len(pd.read_csv(save_dir+model_name +'/metadata.tsv',encoding='UTF-8'))
+#len(pd.read_csv(save_dir+model_name +'/vectors.tsv',encoding='UTF-8')) == len(pd.read_csv(save_dir+model_name +'/metadata.tsv',encoding='UTF-8'))
 
-## to observe 
-##http://projector.tensorflow.org/
+# to observe 
+#http://projector.tensorflow.org/
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 vocab[4]
 weights[4]
 ```
 
-##### visualizing embeddings
+#### visualizing embeddings
 https://www.tensorflow.org/tensorboard/tensorboard_projector_plugin
 https://projector.tensorflow.org/
 
-#### fine tunning
+### fine tunning
 
 ```{python}
-##| tags: []
+#| tags: []
 model_name = 'learned_embeddings_bidir_lstm'
-model = tf.keras.models.load_model(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras")
+model = tf.keras.models.load_model(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",compile=False)
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=m)
+model.summary()
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 try:
     initial_epochs = history.epoch[-1]
 except NameError:
@@ -545,7 +998,7 @@ initial_epochs=0
 from tensorflow import keras 
 from tensorflow.keras import layers
 
-fine_tune_epochs = 20
+fine_tune_epochs = 2
 total_epochs =  initial_epochs + fine_tune_epochs
 
 callbacks = [
@@ -556,19 +1009,19 @@ callbacks = [
 history_fine = model.fit(int_train_ds,
                          epochs=total_epochs,
                          initial_epoch=initial_epochs,
-                         validation_data=int_val_ds, 
-                         callbacks=callbacks
+                         validation_data=int_val_ds
+                         #,callbacks=callbacks
                         )
 
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 x = model.get_layer('embedding').get_weights()[0:2]
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 import io
 
 weights = model.get_layer('embedding').get_weights()[0]
@@ -590,21 +1043,26 @@ out_v.close()
 out_m.close()
 ```
 
-#### PRETRAINED WORD EMBEDDINGS
+### PRETRAINED WORD EMBEDDINGS
 
 The rationale behind using pretrained word embeddings in natural language processing is much the same as for using pretrained convnets in image classification: you don’t have enough data available to learn truly powerful features on your own, but you expect that the features you need are fairly generic
 
-##### my_embeddings
+#### my_embeddings
 
 ```{python}
-##| tags: []
+#| tags: []
+save_dir
+```
+
+```{python}
+#| tags: []
 model_name = 'learned_embeddings_bidir_lstm'
 metadata = pd.read_csv(save_dir+model_name+'/metadata.tsv',encoding='UTF-8', header=0,names=['word'])
 vectors = pd.read_csv(save_dir+model_name+'/vectors.tsv',encoding='UTF-8', header=0,names=['vector'])
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 import numpy
 embeddings_index = {} 
 for index, word in enumerate(metadata.word):
@@ -614,19 +1072,19 @@ for index, word in enumerate(metadata.word):
 embedding_dim = coefs.shape[0]
 embedding_dim
 
-##embeddings_index
+#embeddings_index
 ```
 
 ```{python}
-##| tags: []
-## Next, let’s build an embedding matrix that you can load into an Embedding layer. 
-##It must be a matrix of shape (max_words, embedding_dim), where each entry i contains 
-##the embedding_dim-dimensional vector for the word of index i in the reference word index 
-##(built during tokenization).
+#| tags: []
+# Next, let’s build an embedding matrix that you can load into an Embedding layer. 
+#It must be a matrix of shape (max_words, embedding_dim), where each entry i contains 
+#the embedding_dim-dimensional vector for the word of index i in the reference word index 
+#(built during tokenization).
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 vocabulary = text_vectorization.get_vocabulary()             
 word_index = dict(zip(vocabulary, range(len(vocabulary))))   
  
@@ -645,9 +1103,13 @@ embedding_layer = layers.Embedding(
 )
 ```
 
+```{python}
+#| tags: []
+help(layers.Embedding)
+```
 
 ```{python}
-##| tags: []
+#| tags: []
 inputs = keras.Input(shape=(None,), dtype="int64")
 embedded = embedding_layer(inputs)
 x = layers.Bidirectional(layers.LSTM(32))(embedded)
@@ -665,74 +1127,98 @@ print(f"Test acc: {model.evaluate(int_test_ds)[1]:.3f}")
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 list(int_val_ds)
 ```
 
-##### USE
+#### USE
 
-###### DENSE
+##### DENSE
 
 ```{python}
-##| tags: []
+#| tags: []
+import os
+import tensorflow as keras
 model_name = 'USE_dense'
 if not os.path.exists(save_dir+model_name):
    os.makedirs(save_dir+model_name)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+m = [keras.metrics.Precision(), 
+     specificity,
+     keras.metrics.Recall(), 
+    "binary_accuracy"]
 text_input = tf.keras.Input(shape=(), name="sentence", dtype=tf.string)
-text_embed = tfh.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
+text_embed = hub.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
                             name="text_embedding")(text_input)
 dense_relu_64 = tf.keras.layers.Dense(256, activation="relu")(text_embed)    
 dense_relu_64_2 = tf.keras.layers.Dense(256, activation="relu")(dense_relu_64)  
 out  =  tf.keras.layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(dense_relu_64_2)
 model = tf.keras.Model(inputs=text_input, outputs=out)
-model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=m)
 model.summary()
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+import math
+
+BATCH_SIZE = batch_size_input
+STEPS_PER_EPOCH = math.ceil(len(train_df) / BATCH_SIZE)
+SAVE_PERIOD = 5
+```
+
+```{python}
+#| tags: []
+
+
 callbacks = [
-     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
-                                     save_best_only=True)
+     tf.keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",
+                                     save_best_only=True,
+                                       monitor='binary_accuracy',
+                                       save_freq= int(SAVE_PERIOD * STEPS_PER_EPOCH))
  ]
 history = model.fit(train_ds, 
                     validation_data=val_ds, 
-                    epochs=20
+                    epochs=30
                    , callbacks=callbacks
                    )
 ```
 
-```{python}
-##| tags: []
-model_name = 'USE_embeddings_bidir_lstm'
-import pickle
 
-## with open(save_dir+model_name +'/history.pkl', 'wb') as f:
-##             pickle.dump(history.history, f)
-            
-with open(save_dir+model_name +'/history.pkl', 'rb') as f:
-    data = pickle.load(f)
+```{python}
+tf.saved_model.save(model, EXPORT_PATH)
 ```
 
-###### LSTM
+```{python}
+#| tags: []
+model_name = 'USE_dense'
+import pickle
+
+with open(save_dir+model_name +'/history.pkl', 'wb') as f:
+            pickle.dump(history.history, f)
+            
+# with open(save_dir+model_name +'/history.pkl', 'rb') as f:
+#     data = pickle.load(f)
+```
+
+##### LSTM - to raczej nie ma prawa działać
 
 ```{python}
-##| tags: []
+#| tags: []
 model_name = 'USE_LSTM'
 if not os.path.exists(save_dir+model_name):
    os.makedirs(save_dir+model_name)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 text_input = tf.keras.Input(shape=(), name="sentence", dtype=tf.string)
-text_embed = tfh.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
+text_embed = hub.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3", 
                             name="text_embedding")(text_input)
-x = layers.Bidirectional(layers.LSTM(32))(text_embed)   
+x = layers.Bidirectional(layers.LSTM(64))(text_embed)   
 x = layers.Dropout(0.5)(x) 
 outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)    
 model = keras.Model(inputs, outputs)
@@ -744,6 +1230,7 @@ model.summary()
 ```
 
 ```{python}
+#| tags: []
 callbacks = [
      keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
                                      save_best_only=True)
@@ -755,20 +1242,21 @@ history = model.fit(train_ds,
                    )
 ```
 
-### Sequence
+## Sequence
 What if, instead of manually crafting order-based features, we exposed the model to raw word sequences and let it figure out such features on its own? This is what sequence models are about.
 
-#### LSTM
+### LSTM
 
 ```{python}
+#| tags: []
 model_name = 'raw_sequence_bidir_lstm'
 if not os.path.exists(save_dir+model_name):
    os.makedirs(save_dir+model_name)
 ```
 
 ```{python}
-##| tags: []
-##Preparing integer sequence datasets
+#| tags: []
+#Preparing integer sequence datasets
 from tensorflow.keras import layers
 
 max_length = 600 #In order to keep a manageable input size, we’ll truncate the inputs after the first 600 words
@@ -789,19 +1277,25 @@ int_val_ds = val_ds.map(
 int_test_ds = test_ds.map(
     lambda x, y: (text_vectorization(x), y),
     num_parallel_calls=4)
-##**A sequence model built on one-hot encoded vector sequences**
+#**A sequence model built on one-hot encoded vector sequences**
 
 ```
 
 ```{python}
-##| tags: []
-list(int_train_ds.take(1))[0][0][0]
-##The simplest way to convert our integer sequences to vector sequences is to one-hot encode the integers (each dimension would represent one possible term in the vocabulary).
-
+#| tags: []
+#print(list(int_train_ds.take(1))[0][0][0])
+#The simplest way to convert our integer sequences to vector sequences is to one-hot encode the integers (each dimension would represent one possible term in the vocabulary).
+x=list(int_train_ds.take(1))[0][0][0]
+x
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+vocabulary=text_vectorization.get_vocabulary()
+```
+
+```{python}
+#| tags: []
 from tensorflow.keras import layers
 
 max_length = 20
@@ -811,12 +1305,13 @@ text_vectorization = layers.TextVectorization(
     output_mode="int",
     output_sequence_length=max_length,
 )
-sentence = [ "I write, erase, rewrite, Erase again, and then,A poppy blooms." ]
+sentence = [ "Łukasz to jest gość" ]
 
 text_vectorization.adapt(sentence)
 vocabulary=text_vectorization.get_vocabulary()
+print(vocabulary)
 sentence = text_vectorization(sentence)
-
+print(sentence)
 import tensorflow as tf
 inputs = keras.Input(shape=(None,), dtype="int64")
 embedded = tf.one_hot(inputs, depth=max_tokens)
@@ -827,8 +1322,8 @@ predict.shape
 ```
 
 ```{python}
-##| tags: []
-import tensorflow as tf
+#| tags: []
+
 inputs = keras.Input(shape=(None,), dtype="int64")    
 embedded = tf.one_hot(inputs, depth=max_tokens)       
 x = layers.Bidirectional(layers.LSTM(32))(embedded)   
@@ -837,30 +1332,62 @@ outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activa
 model = keras.Model(inputs, outputs)
 model.compile(optimizer="rmsprop",
               loss="binary_crossentropy",
-              metrics=["accuracy"])
+              metrics=metrics_arg)
 model.summary()
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 callbacks = [
-     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",
                                      save_best_only=True)
  ]
 model.fit(int_train_ds, 
           validation_data=int_val_ds, 
-          epochs=2,
+          epochs=200,
           callbacks=callbacks)
 ```
 
-##### Wnioski
+#### Wnioski
 
 A first observation: this model trains very slowly, especially compared to the lightweight model of the previous section. This is because our inputs are quite large: each input sample is encoded as a matrix of size (600, 20000) (600 words per sample, 20,000 possible words). That’s 12,000,000 floats for a single movie review.
 
-#### Transformers
+#### Explainig LSTM
 
 ```{python}
-##| tags: []
+#| tags: []
+from tensorflow.keras import layers
+import tensorflow.keras as keras
+
+
+inputs = keras.Input(shape=(None,), dtype="int64")    
+embedded = tf.one_hot(inputs, depth=max_tokens)       
+#outputs = layers.Bidirectional(layers.LSTM(16))(embedded)   
+
+
+
+#x = layers.LSTM(16, return_sequences=False)(embedded)   
+#outputs = layers.Dense(1, activation="tanh")(x)
+
+model = keras.Model(inputs, outputs)
+model.compile(optimizer="rmsprop",
+              loss="binary_crossentropy",
+              metrics=metrics_arg)
+
+data = np.array([0.1, 0.2]).reshape((1,2,1))
+data
+```
+
+```{python}
+#| tags: []
+# make and show prediction
+print(model.predict(data))
+```
+
+### Transformers
+
+```{python}
+#| tags: []
 import os
 model_name = "full_transformer_encoder"
 if not os.path.exists(save_dir+model_name):
@@ -869,7 +1396,7 @@ if not os.path.exists(save_dir+model_name):
 
 
 ```{python}
-##| tags: []
+#| tags: []
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -940,12 +1467,12 @@ class TransformerEncoder(layers.Layer):
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 vocab_size = 20000 
 sequence_length = 600 
 embed_dim = 256 
 num_heads = 2 
-dense_dim = 32 
+dense_dim = 64 
   
 inputs = keras.Input(shape=(None,), dtype="int64")
 x = PositionalEmbedding(sequence_length, vocab_size, embed_dim)(inputs)   
@@ -956,30 +1483,23 @@ outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activa
 model = keras.Model(inputs, outputs)
 model.compile(optimizer="rmsprop",
               loss="binary_crossentropy",
-              metrics=["accuracy"])
+              metrics=metrics_arg)
 model.summary()
   
-```
-
-```{python}
-##| tags: []
 callbacks = [
-    keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
+    keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",
                                     save_best_only=True)
 ] 
-model.fit(int_train_ds, validation_data=int_val_ds, epochs=2, callbacks=callbacks)
 ```
 
 ```{python}
-##| tags: []
-model_name = 'full_transformer_encoder'
-model = tf.keras.models.load_model(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
-                                  custom_objects={"TransformerEncoder": TransformerEncoder,
-                    "PositionalEmbedding": PositionalEmbedding})
+#| tags: []
+
+history = model.fit(int_train_ds, validation_data=int_val_ds, epochs=7, callbacks=callbacks)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 try:
     initial_epochs = history.epoch[-1]
 except NameError:
@@ -1008,15 +1528,34 @@ history_fine = model.fit(int_train_ds,
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 history_fine.history
 ```
 
-#### BERT
+```{python}
+#| tags: []
+model.summary()
+#weights_before_training = model.get_layer('positional_embedding_2').get_weights()[0]
+weights_after_training = model.get_layer('positional_embedding_2').get_weights()[0]
+```
 
 ```{python}
-##| tags: []
-bert_model_name = 'small_bert/bert_en_uncased_L-4_H-512_A-8' 
+#| tags: []
+weights_after_training[0]
+weights_before_training[0]
+```
+
+### BERT
+
+```{python}
+model_name = 'bert'
+if not os.path.exists(save_dir+model_name):
+   os.makedirs(save_dir+model_name)
+```
+
+```{python}
+#| tags: []
+bert_model_name = 'bert_multi_cased_L-12_H-768_A-12' 
 
 map_name_to_handle = {
     'bert_en_uncased_L-12_H-768_A-12':
@@ -1164,12 +1703,13 @@ print(f'Preprocess model auto-selected: {tfhub_handle_preprocess}')
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+#preprocessing model
 bert_preprocess_model = hub.KerasLayer(tfhub_handle_preprocess)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 text_test = ['this is such an amazing movie!']
 text_preprocessed = bert_preprocess_model(text_test)
 
@@ -1181,12 +1721,12 @@ print(f'Type Ids   : {text_preprocessed["input_type_ids"][0, :12]}')
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 bert_model = hub.KerasLayer(tfhub_handle_encoder)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 bert_results = bert_model(text_preprocessed)
 
 print(f'Loaded BERT: {tfhub_handle_encoder}')
@@ -1196,23 +1736,84 @@ print(f'Sequence Outputs Shape:{bert_results["sequence_output"].shape}')
 print(f'Sequence Outputs Values:{bert_results["sequence_output"][0, :12]}')
 ```
 
-
-### Bag of words
-
-#### Unigram
+```{python}
+#| tags: []
+def build_classifier_model():
+  text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
+  preprocessing_layer = hub.KerasLayer(tfhub_handle_preprocess, name='preprocessing')
+  encoder_inputs = preprocessing_layer(text_input)
+  encoder = hub.KerasLayer(tfhub_handle_encoder, trainable=True, name='BERT_encoder')
+  outputs = encoder(encoder_inputs)
+  net = outputs['pooled_output']
+  net = tf.keras.layers.Dropout(0.1)(net)
+  net = tf.keras.layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation=None, name='classifier')(net)
+  return tf.keras.Model(text_input, net)
+```
 
 ```{python}
-##| tags: []
-import os
+#| tags: []
+classifier_model = build_classifier_model()
+bert_raw_result = classifier_model(tf.constant(text_test))
+print(tf.sigmoid(bert_raw_result))
+```
+
+```{python}
+#| tags: []
+from official.nlp import optimization  # to create AdamW optimizer
+```
+
+```{python}
+#| tags: []
+loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+
+
+steps_per_epoch = tf.data.experimental.cardinality(train_ds).numpy()
+num_train_steps = steps_per_epoch * epochs
+num_warmup_steps = int(0.1*num_train_steps)
+
+init_lr = 3e-5
+optimizer = optimization.create_optimizer(init_lr=init_lr,
+                                          num_train_steps=num_train_steps,
+                                          num_warmup_steps=num_warmup_steps,
+                                          optimizer_type='adamw')
+
+classifier_model.compile(optimizer=optimizer,
+                         loss=loss,
+                         metrics=metrics_arg)
+
+callbacks = [
+     keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+'_'+arg_dane+".keras",
+                                     save_best_only=True)
+ ]
+```
+
+```{python}
+#| tags: []
+print(f'Training model with {tfhub_handle_encoder}')
+
+history = classifier_model.fit(x=train_ds,
+                               validation_data=val_ds,
+                               epochs=5,
+                               callbacks=callbacks)
+```
+
+
+
+## Bag of words
+
+### Unigram
+
+```{python}
+#| tags: []
 model_name = 'Unigram_dense'
 if not os.path.exists(save_dir+model_name):
    os.makedirs(save_dir+model_name)
 ```
 
-##### text vectorization
+#### text vectorization
 
 ```{python}
-##| tags: []
+#| tags: []
 from tensorflow.keras.layers import TextVectorization
 
 text_vectorization = TextVectorization(
@@ -1221,7 +1822,7 @@ text_vectorization = TextVectorization(
 )
 text_vectorization.adapt(text_only_train_ds)
 
-##Prepare processed versions of our training, validation, and test dataset. Make sure to specify num_parallel_calls to leverage multiple CPU cores
+#Prepare processed versions of our training, validation, and test dataset. Make sure to specify num_parallel_calls to leverage multiple CPU cores
 
 binary_1gram_train_ds = train_ds.map(               
     lambda x, y: (text_vectorization(x), y),        
@@ -1244,10 +1845,10 @@ for inputs, targets in binary_1gram_train_ds:
     break
 ```
 
-###### playground
+##### playground
 
 ```{python}
-##| tags: []
+#| tags: []
 text_only_train_ds = tf.data.Dataset.from_tensor_slices(train_df['tresc_maila_cutted_clean'])
 text_vectorization.adapt(text_only_train_ds)
 
@@ -1255,51 +1856,54 @@ vocabulary = text_vectorization.get_vocabulary()
 ```
 
 ```{python}
-##| tags: []
-vocabulary[0:5]
+#| tags: []
+vocabulary[0:40]
 ```
 
 ```{python}
-##| tags: []
-test_sentence = "do do na na nie proszę proszę" 
+#| tags: []
+test_sentence = "do do na na mail proszę proszę" 
 encoded_sentence = text_vectorization(test_sentence)
+print(encoded_sentence.shape)
 encoded_sentence[0:100]
 ```
 
 
 ```{python}
-##| tags: []
+#| tags: []
 inverse_vocab = dict(enumerate(vocabulary))
 inverse_vocab[1]
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 decoded_sentence = " ".join(inverse_vocab[int(i)] for i, check in enumerate(encoded_sentence.numpy()) if check==1)
 decoded_sentence
 ```
 
-##### building model
+#### building model
 
 ```{python}
-##| tags: []
+#| tags: []
 from tensorflow import keras 
 from tensorflow.keras import layers
   
-def get_model(max_tokens=20000, hidden_dim=16):
+def get_model(max_tokens=20000, hidden_dim_1=256, hidden_dim_2=128):
     inputs = keras.Input(shape=(max_tokens,))
-    x = layers.Dense(hidden_dim, activation="relu")(inputs)
+    x = layers.Dense(hidden_dim_1, activation="relu")(inputs)
+    x = layers.Dropout(0.5)(x)
+    x = layers.Dense(hidden_dim_2, activation="relu")(inputs)
     x = layers.Dropout(0.5)(x)
     outputs = layers.Dense(len(train_df.filter(regex=("_KATEGOR$")).columns), activation="sigmoid")(x)
     model = keras.Model(inputs, outputs)
     model.compile(optimizer="rmsprop",
                   loss="binary_crossentropy",
-                  metrics=["accuracy"])
+                  metrics=metrics_arg)
     return model
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 model = get_model()
 model.summary()
 callbacks = [
@@ -1307,7 +1911,7 @@ callbacks = [
                                      save_best_only=True)
  ]
 
-##We call cache() on the datasets to cache them in memory: this way, we will only do the preprocessing once, during the first epoch, and we’ll reuse the preprocessed texts for the following epochs. This can only be done if the data is small enough to fit in memory.                  
+#We call cache() on the datasets to cache them in memory: this way, we will only do the preprocessing once, during the first epoch, and we’ll reuse the preprocessed texts for the following epochs. This can only be done if the data is small enough to fit in memory.                  
 history=model.fit(binary_1gram_train_ds.cache(), 
           validation_data=binary_1gram_val_ds.cache(),     
           epochs=100,
@@ -1315,32 +1919,34 @@ history=model.fit(binary_1gram_train_ds.cache(),
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 import pickle
 
 with open(save_dir+model_name +'/history.pkl', 'wb') as f:
             pickle.dump(history.history, f)
 ```
 
-#### BIGRAMS WITH TF-IDF ENCODING 
+### BIGRAMS WITH TF-IDF ENCODING 
 
 ```{python}
-##TF-IDF stands for “term frequency, inverse document frequency.”
+#TF-IDF stands for “term frequency, inverse document frequency.”
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 model_name = 'bigram_dense'
 if not os.path.exists(save_dir+model_name):
    os.makedirs(save_dir+model_name)
 ```
 
-##### text vectorization
+#### text vectorization
 
 ```{python}
-##| tags: []
+#| tags: []
+text_only_train_ds = tf.data.Dataset.from_tensor_slices(train_df['tresc_maila_cutted_clean'])
+
 text_vectorization = TextVectorization(
-    ngrams=3,
+    ngrams=2,
     max_tokens=20000, 
     #output_mode="count" #counting how many times each word or N-gram occurs
     output_mode="tf_idf"
@@ -1351,18 +1957,18 @@ text_vectorization.adapt(text_only_train_ds)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 vocabulary = text_vectorization.get_vocabulary()
-vocabulary
+print(len(vocabulary))
+text='wysyłam fakturę salam elejkum, poprosze fakturę mail od lukasza'
+text='dlaczego to takie drogie, cena powinna być niższa, co z cena bagażu'
+from itertools import compress
+tfidf_2gram_take_temp = text_vectorization(text)
+print(list(compress(vocabulary, np.array(tfidf_2gram_take_temp)!=0)))
 ```
 
 ```{python}
-##| tags: []
-train_ds
-```
-
-```{python}
-##| tags: []
+#| tags: []
 tfidf_2gram_train_ds = train_ds.map(
     lambda x, y: (text_vectorization(x), y),
     num_parallel_calls=4)
@@ -1375,22 +1981,114 @@ tfidf_2gram_test_ds = test_ds.map(
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
 model_name = 'bigram_dense'
-model = get_model()
+model = get_model(max_tokens=20000,hidden_dim_1=256, hidden_dim_2=128)
 model.summary()
 callbacks = [
      keras.callbacks.ModelCheckpoint(save_dir+model_name+"/model_"+typ+'_'+model_name+".keras",
                                      save_best_only=True)
  ]
+```
+
+```{python}
+#| tags: []
 model.fit(tfidf_2gram_train_ds.cache(),
           validation_data=tfidf_2gram_val_ds.cache(),
-          epochs=100,
+          epochs=40,
           callbacks=callbacks)
 ```
 
 ```{python}
-##| tags: []
+#| tags: []
+model.evaluate(tfidf_2gram_test_ds)
+```
+
+#### preparing inference_model
+
+```{python}
+#| tags: []
+inputs = keras.Input(shape=(1,), dtype="string")   
+processed_inputs = text_vectorization(inputs)      
+outputs = model(processed_inputs)                  
+inference_model = keras.Model(inputs, outputs)     
+```
+
+```{python}
+#| tags: []
+tf.keras.models.save_model(inference_model, "/data/lrabalski/DOP/files/models/new_"+typ)
+```
+
+#### checking inference model
+
+```{python}
+#| tags: []
+x =test_ds.take(1)
+y=list(x)[0]
+type(x)
+```
+
+```{python}
+#| tags: []
+text=y[0][0]
+resulsts=y[1][0]
+
+text='wysyłam fakturę salam elejkum, poprosze fakturę mail od lukasza'
+
+
+tfidf_2gram_take_temp = text_vectorization(text)
+```
+
+```{python}
+#| tags: []
+tfidf_2gram_take_temp[0:10]
+```
+
+```{python}
+#| tags: []
+raw_text_data = tf.convert_to_tensor([text])
+predictions = inference_model(raw_text_data) 
+predcitions_raw_model = model(np.array(tfidf_2gram_take_temp).reshape(1,20000))
+#https://stackoverflow.com/questions/26311277/evaluate-utf-8-literal-escape-sequences-in-a-string-in-python3
+print(str(text).encode().decode('unicode-escape').encode('latin1').decode('utf-8'))
+results = pd.DataFrame({'category':columns_count_to_select,
+                        'pred':pd.Series((predictions>0.5)[0]),
+                        'pred_raw_model':pd.Series((predcitions_raw_model>0.5)[0]),
+                        'reality':pd.Series(resulsts)})
+print(results)
+pd.crosstab(results.pred, results.reality)
+```
+
+```{python}
+#| tags: []
+import tensorflow_datasets
+```
+
+```{python}
+#| tags: []
+predictions = inference_model(df_clean.tresc_maila_cutted_clean.values) 
+
+# creating the dataframe
+df_predictions = pd.DataFrame(data = np.array( predictions >0.5)
+                  ,columns = columns_count_to_select
+                 )
+df_predictions['tresc_maila_cutted_clean'] = df_clean.tresc_maila_cutted_clean.values
+
+df_predictions = df_predictions.melt(id_vars=['tresc_maila_cutted_clean'])
+df_real = df_clean.filter(regex=("_KATEGOR$"))==1
+df_real=df_real.melt()
+
+df_final = df_predictions.join(df_real, lsuffix='_pred', rsuffix='_real')
+pd.crosstab(df_final.value_pred,df_final.value_real)
+```
+
+```{python}
+#| tags: []
+df_final[df_final.tresc_maila_cutted_clean.str.contains('kalimera kontaktuję się państwem ponieważ mieliśmy no show klienci rez nie wylecieli')]
+```
+
+```{python}
+#| tags: []
 import pickle
 
 with open(save_dir+model_name +'/history.pkl', 'wb') as f:

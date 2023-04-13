@@ -4093,12 +4093,12 @@ vertical-align: -.125em;
   import pandas as pd
   from datetime import datetime
   from time import sleep
-  pd_results_temp=pd.DataFrame(columns=[&#39;a&#39;,&#39;b&#39;,&#39;started&#39;])
+  pd_results_temp=pd.DataFrame(columns=[&#39;a&#39;,&#39;sleep_time&#39;,&#39;started&#39;])
   started = datetime.now()
-  a = args_temp[0]
-  b = args_temp[1]
-  pd_results_temp = pd_results_temp.append({&#39;a&#39;:a,&#39;b&#39;:b,&#39;started&#39;:started}, ignore_index=True)
-  sleep(b)
+  arg_a = args_temp[0]
+  arg_sleep_time = args_temp[1]
+  pd_results_temp = pd_results_temp.append({&#39;a&#39;:arg_a,&#39;sleep_time&#39;:arg_sleep_time,&#39;started&#39;:started}, ignore_index=True)
+  sleep(arg_sleep_time)
   return pd_results_temp</code></pre>
 </div>
 </div>
@@ -4119,7 +4119,7 @@ vertical-align: -.125em;
 <span id="cb3-7"><a href="#cb3-7"></a>array_with_args <span class="op">=</span> np.append(array_with_args,array_with_args, axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb3-8"><a href="#cb3-8"></a></span>
 <span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a>pd_results<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>[<span class="st">&#39;a&#39;</span>,<span class="st">&#39;b&#39;</span>,<span class="st">&#39;started&#39;</span>])</span>
+<span id="cb3-10"><a href="#cb3-10"></a>pd_results<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>[<span class="st">&#39;a&#39;</span>,<span class="st">&#39;sleep_time&#39;</span>,<span class="st">&#39;started&#39;</span>])</span>
 <span id="cb3-11"><a href="#cb3-11"></a><span class="bu">print</span>(array_with_args)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -4165,19 +4165,19 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="bu">print</span>(pd_results.sort_values(<span class="st">&#39;started&#39;</span>, ascending<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>     a    b                    started
-0  1.0  1.0 2023-02-12 23:56:25.244727
-0  2.0  1.0 2023-02-12 23:56:25.244964
-0  3.0  0.5 2023-02-12 23:56:26.253726
-0  1.0  1.0 2023-02-12 23:56:26.254853
-0  2.0  1.0 2023-02-12 23:56:26.763148
-0  3.0  0.5 2023-02-12 23:56:27.264556
-0  1.0  1.0 2023-02-12 23:56:27.771028
-0  2.0  1.0 2023-02-12 23:56:27.772237
-0  3.0  0.5 2023-02-12 23:56:28.777644
-0  1.0  1.0 2023-02-12 23:56:28.778334
-0  2.0  1.0 2023-02-12 23:56:29.282815
-0  3.0  0.5 2023-02-12 23:56:29.784650</code></pre>
+<pre><code>     a  sleep_time                    started
+0  1.0         1.0 2023-04-12 16:13:41.263101
+0  2.0         1.0 2023-04-12 16:13:41.263192
+0  3.0         0.5 2023-04-12 16:13:42.268062
+0  1.0         1.0 2023-04-12 16:13:42.271946
+0  2.0         1.0 2023-04-12 16:13:42.777710
+0  3.0         0.5 2023-04-12 16:13:43.279977
+0  1.0         1.0 2023-04-12 16:13:43.786203
+0  2.0         1.0 2023-04-12 16:13:43.789216
+0  3.0         0.5 2023-04-12 16:13:44.795354
+0  1.0         1.0 2023-04-12 16:13:44.796345
+0  2.0         1.0 2023-04-12 16:13:45.304032
+0  3.0         0.5 2023-04-12 16:13:45.809290</code></pre>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -4420,7 +4420,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-20"><a href="#cb13-20"></a><span class="an">warning:</span><span class="co"> FALSE</span></span>
 <span id="cb13-21"><a href="#cb13-21"></a><span class="an">message:</span><span class="co"> FALSE</span></span>
 <span id="cb13-22"><a href="#cb13-22"></a><span class="an">error:</span><span class="co"> FALSE</span></span>
-<span id="cb13-23"><a href="#cb13-23"></a><span class="an">draft:</span><span class="co"> TRUE</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="an">draft:</span><span class="co"> FALSE</span></span>
 <span id="cb13-24"><a href="#cb13-24"></a><span class="co">---</span></span>
 <span id="cb13-25"><a href="#cb13-25"></a></span>
 <span id="cb13-26"><a href="#cb13-26"></a><span class="in">```{r eval=TRUE, include=FALSE}</span></span>
@@ -4474,7 +4474,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-78"><a href="#cb13-78"></a>array_with_args <span class="op">=</span> np.append(array_with_args,array_with_args, axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb13-79"><a href="#cb13-79"></a></span>
 <span id="cb13-80"><a href="#cb13-80"></a></span>
-<span id="cb13-81"><a href="#cb13-81"></a>pd_results<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>[<span class="st">&#39;a&#39;</span>,<span class="st">&#39;b&#39;</span>,<span class="st">&#39;started&#39;</span>])</span>
+<span id="cb13-81"><a href="#cb13-81"></a>pd_results<span class="op">=</span>pd.DataFrame(columns<span class="op">=</span>[<span class="st">&#39;a&#39;</span>,<span class="st">&#39;sleep_time&#39;</span>,<span class="st">&#39;started&#39;</span>])</span>
 <span id="cb13-82"><a href="#cb13-82"></a><span class="bu">print</span>(array_with_args)</span>
 <span id="cb13-83"><a href="#cb13-83"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
 <span id="cb13-84"><a href="#cb13-84"></a>    <span class="cf">with</span> Pool(processes<span class="op">=</span><span class="dv">2</span>) <span class="im">as</span> pool:</span>
