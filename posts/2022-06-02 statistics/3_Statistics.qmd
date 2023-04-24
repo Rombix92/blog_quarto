@@ -109,7 +109,7 @@ Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzros
 
 df_aug <- augment(model, type.predict = "response") # without response argument, the fitted value will be on log-odds scale
 #https://stats.stackexchange.com/questions/354098/calculating-confidence-intervals-for-a-logistic-regression
-p <-predict(model,data.frame(list('independent'=c(1,2))), type = "response",se.fit=TRUE)
+p <-predict(model,data.frame(list('independent'=c(1,2))), type = "response",se.fit=FALSE)
 p1 = p[1]
 p2 = p[2]
 
