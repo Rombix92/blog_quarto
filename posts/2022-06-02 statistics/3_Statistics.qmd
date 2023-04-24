@@ -99,8 +99,23 @@ print(paste0('according to model probability of surving the trip if the independ
 
 ```{r}
 #Tak przemnozone wspolczynniki interpretujemy nastepujaco:
+broom::tidy(model)
+
+
+
+
+
 #  o ile % wzrosnie odds wystapienia zdarzenia jezeli wzrosnie nam wartosc predyktora o 1
 exp(coef(model))
+
+# wyliczam confidence interval
+confint(model)
+
+paste0('CI of coefficient between ',
+       round(broom::tidy(model)$estimate[2] - broom::tidy(model)$std.error[2]*1.95,3),
+       ' and ',
+       round(broom::tidy(model)$estimate[2] + broom::tidy(model)$std.error[2]*1.95,3)
+)
 ```
 
 Ponizej w sposob matematyczny pokazuje ze to wlasnie oznacza interpretacja wzrostu parametra stajacego przy predyktorze.
