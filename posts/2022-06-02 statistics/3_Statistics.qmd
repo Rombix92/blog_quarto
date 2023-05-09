@@ -22,6 +22,8 @@ message: FALSE
 error: FALSE
 ---
 
+## Linear Regression
+
 ## Logistic Regression
 
 inspirations: 
