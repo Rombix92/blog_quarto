@@ -896,8 +896,8 @@ df_NN_final.index=df_NN_final.time
 
 plt.clf()
 fig = plt.figure()
-plt.scatter(df_NN_final.index[-10000:-1],df_NN_final[column_name][-10000:-1], color='green', label = 'Anomaly_2',alpha=0.02, marker='*')
-plt.scatter(df_NN_final.index[-10000:-1],df_NN_final['predict'][-10000:-1], color='blue', label = 'Anomaly_2',alpha=0.02, marker='*')
+plt.scatter(df_NN_final.index[-10000:-1],df_NN_final[column_name][-10000:-1], color='green', label = 'Anomaly_2',alpha=0.2, marker='*')
+plt.scatter(df_NN_final.index[-10000:-1],df_NN_final['predict'][-10000:-1], color='blue', label = 'Anomaly_2',alpha=0.2, marker='*')
 plt.ylim((0.4,0.8))
 plt.show();
 ```
